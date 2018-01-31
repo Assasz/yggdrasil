@@ -1,0 +1,21 @@
+{
+  "name": "yggdrasil/framework",
+  "description": "Clean architecture PHP framework",
+  "type": "library",
+  "author": {
+    "name": "Paweł Antosiak",
+    "email": "contact@pawelantosiak.com"
+  },
+  "autoload": {
+    "psr-4": {
+      "Yggdrasil\\": "src/Yggdrasil/"
+    }
+  },
+  "require": {
+    "php": "^7.1",
+    "symfony/http-foundation": "^4.0",
+    "doctrine/orm": "^2.6",
+    "twig/twig": "^2.4",
+    "filp/whoops": "^2.1"
+  }
+}
