@@ -22,9 +22,9 @@ abstract class Controller
 
     protected function getEntityManager()
     {
-        $entityPaths = [dirname(dirname(__DIR__)) . '/Domain/Entity/'];
+        $entityPaths = [dirname(__DIR__, 6) . '/src/AppModule/Domain/Entity/'];
         $config = Setup::createAnnotationMetadataConfiguration($entityPaths, true);
-        $config->addEntityNamespace('Entity', 'Yggdrasil\Domain\Entity');
+        $config->addEntityNamespace('Entity', 'AppModule\Domain\Entity');
 
         return EntityManager::create($this->drivers['connection'], $config);
     }
