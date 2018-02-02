@@ -5,8 +5,6 @@ namespace Yggdrasil\Core;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
 use Yggdrasil\Core\Routing\Router;
 
 abstract class Controller
@@ -22,11 +20,7 @@ abstract class Controller
 
     protected function getEntityManager()
     {
-        $entityPaths = [dirname(__DIR__, 6) . '/src/AppModule/Domain/Entity/'];
-        $config = Setup::createAnnotationMetadataConfiguration($entityPaths, true);
-        $config->addEntityNamespace('Entity', 'AppModule\Domain\Entity');
-
-        return EntityManager::create($this->drivers['dbConnection'], $config);
+        return $this->drivers['entityManager'];
     }
 
     protected function getRequest()
@@ -47,5 +41,10 @@ abstract class Controller
         $router = new Router();
         $query = $router->getQuery($alias, $params);
         return new RedirectResponse($query);
+    }
+
+    protected function getContainer()
+    {
+        return $this->drivers['container'];
     }
 }

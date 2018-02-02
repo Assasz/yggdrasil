@@ -9,7 +9,7 @@ abstract class Configuration
 
     public function __construct()
     {
-        $this->configuration = parse_ini_file(dirname(__DIR__, 6).'/src/AppModule/Infrastructure/Config/config.ini');
+        $this->configuration = parse_ini_file(dirname(__DIR__, 6).'/src/AppModule/Infrastructure/Config/config.ini', true);
     }
 
     public function loadDrivers()
