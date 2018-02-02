@@ -41,7 +41,7 @@ class Router
 
         $query = implode('/', $queryParams);
 
-        return $query;
+        return BASE_URL.$query;
     }
 
     public function setDefaults(array $defaults)

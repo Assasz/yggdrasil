@@ -28,6 +28,7 @@ class Kernel
             return call_user_func_array([$controller, $route->getAction()], $route->getActionParams());
         }
 
-        return new Response("No route found", Response::HTTP_NOT_FOUND);
+        throw new \Exception("No route found.");
+        //return new Response("No route found", Response::HTTP_NOT_FOUND);
     }
 }
