@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Component\TwigComponent;
 
+use Symfony\Component\HttpFoundation\Request;
 use Yggdrasil\Core\Routing\Router;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -27,5 +28,10 @@ class TwigFunctions
         $session->set('csrf_token', $token);
 
         echo '<input type="hidden" id="csrf_token" name="csrf_token" value="'.$token.'"/>';
+    }
+
+    public static function isPjax(Request $request)
+    {
+        return ($request->headers->get('X-PJAX') != null);
     }
 }

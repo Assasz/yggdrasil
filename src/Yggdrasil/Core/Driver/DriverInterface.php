@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Core;
+namespace Yggdrasil\Core\Driver;
 
 interface DriverInterface
 {

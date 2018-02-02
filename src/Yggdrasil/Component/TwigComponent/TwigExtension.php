@@ -11,7 +11,8 @@ class TwigExtension extends \Twig_Extension
         return [
             new \Twig_Function('path', $namespace.'::path'),
             new \Twig_Function('asset', $namespace.'::asset'),
-            new \Twig_Function('csrf_token', $namespace.'::csrfToken')
+            new \Twig_Function('csrf_token', $namespace.'::csrfToken'),
+            new \Twig_Function('is_pjax', $namespace.'::isPjax')
         ];
     }
 }

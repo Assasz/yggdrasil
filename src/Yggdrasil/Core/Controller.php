@@ -26,7 +26,7 @@ abstract class Controller
         $config = Setup::createAnnotationMetadataConfiguration($entityPaths, true);
         $config->addEntityNamespace('Entity', 'AppModule\Domain\Entity');
 
-        return EntityManager::create($this->drivers['connection'], $config);
+        return EntityManager::create($this->drivers['dbConnection'], $config);
     }
 
     protected function getRequest()
@@ -36,6 +36,7 @@ abstract class Controller
 
     protected function render($view, array $params = [])
     {
+        $params['app']['request'] = $this->getRequest();
         $template = $this->drivers['templateEngine']->render($view, $params);
 
         return new Response($template);
