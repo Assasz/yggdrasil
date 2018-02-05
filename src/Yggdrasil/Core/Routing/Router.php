@@ -11,10 +11,7 @@ class Router
 
     public function __construct()
     {
-        $this->defaults = [
-            'controller' => 'DefaultController',
-            'action' => 'indexAction'
-        ];
+        $this->defaults = [];
         $this->routeParams = [];
     }
 

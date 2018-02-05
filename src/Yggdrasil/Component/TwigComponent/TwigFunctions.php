@@ -2,7 +2,9 @@
 
 namespace Yggdrasil\Component\TwigComponent;
 
+use AppModule\Infrastructure\Config\AppConfiguration;
 use Symfony\Component\HttpFoundation\Request;
+use Yggdrasil\Core\Driver\RoutingDriver;
 use Yggdrasil\Core\Routing\Router;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -10,7 +12,10 @@ class TwigFunctions
 {
     public static function getPath($alias, array $params = [])
     {
-        $router = new Router();
+        $appConfig = new AppConfiguration();
+        $config = $appConfig->getConfiguration();
+        $router = RoutingDriver::getInstance($config);
+
         return $router->getQuery($alias, $params);
     }
 

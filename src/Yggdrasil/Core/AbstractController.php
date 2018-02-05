@@ -50,7 +50,7 @@ abstract class AbstractController
 
     protected function redirectToAction($alias, array $params = [])
     {
-        $router = new Router();
+        $router = $this->drivers['router'];
         $query = $router->getQuery($alias, $params);
 
         return new RedirectResponse($query);
@@ -58,7 +58,7 @@ abstract class AbstractController
 
     protected function redirectWithCookie($alias, Cookie $cookie, array $params = [])
     {
-        $router = new Router();
+        $router = $this->drivers['router'];
         $query = $router->getQuery($alias, $params);
 
         $response = new RedirectResponse($query);

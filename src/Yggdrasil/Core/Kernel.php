@@ -19,7 +19,7 @@ class Kernel
 
     public function handle(Request $request)
     {
-        $router = new Router();
+        $router = $this->drivers['router'];
         $route = $router->getRoute($request);
 
         if(method_exists($route->getController(), $route->getAction())){
