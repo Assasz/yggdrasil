@@ -5,9 +5,11 @@ namespace Yggdrasil\Core;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Cookie;
 use Yggdrasil\Core\Routing\Router;
 
-abstract class Controller
+abstract class AbstractController
 {
     protected $drivers;
     protected $request;
@@ -18,9 +20,19 @@ abstract class Controller
         $this->request = $request;
     }
 
+    protected function getDriver($name)
+    {
+        return $this->drivers[$name];
+    }
+
     protected function getEntityManager()
     {
         return $this->drivers['entityManager'];
+    }
+
+    protected function getContainer()
+    {
+        return $this->drivers['container'];
     }
 
     protected function getRequest()
@@ -40,11 +52,34 @@ abstract class Controller
     {
         $router = new Router();
         $query = $router->getQuery($alias, $params);
+
         return new RedirectResponse($query);
     }
 
-    protected function getContainer()
+    protected function redirectWithCookie($alias, Cookie $cookie, array $params = [])
     {
-        return $this->drivers['container'];
+        $router = new Router();
+        $query = $router->getQuery($alias, $params);
+
+        $response = new RedirectResponse($query);
+        $response->headers->setCookie($cookie);
+
+        return $response;
+    }
+
+    protected function isGranted()
+    {
+        $session = new Session();
+        return $session->get('is_granted', false);
+    }
+
+    protected function accessDenied($message = 'Access denied.')
+    {
+        return new Response($message, Response::HTTP_FORBIDDEN);
+    }
+
+    protected function notFound($message = 'Not found.')
+    {
+        return new Response($message, Response::HTTP_NOT_FOUND);
     }
 }

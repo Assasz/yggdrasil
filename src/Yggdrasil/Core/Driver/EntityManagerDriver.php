@@ -29,7 +29,7 @@ class EntityManagerDriver implements DriverInterface
                 'charset' => $configuration['database']['charset']
             ];
 
-            $entityPaths = [dirname(__DIR__, 6) . '/src/AppModule/Domain/Entity/'];
+            $entityPaths = [dirname(__DIR__, 7) . '/src/AppModule/Domain/Entity/'];
             $config = Setup::createAnnotationMetadataConfiguration($entityPaths, true);
             $config->addEntityNamespace('Entity', 'AppModule\Domain\Entity');
 

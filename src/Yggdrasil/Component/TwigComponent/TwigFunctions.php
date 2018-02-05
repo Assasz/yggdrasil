@@ -8,23 +8,22 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class TwigFunctions
 {
-    public static function path($alias, array $params = [])
+    public static function getPath($alias, array $params = [])
     {
         $router = new Router();
         return $router->getQuery($alias, $params);
     }
 
-    public static function asset($path)
+    public static function getAsset($path)
     {
         return BASE_URL.ltrim($path, '/');
     }
 
-    public static function csrfToken()
+    public static function getCsrfToken()
     {
         $token = bin2hex(random_bytes(32));
 
         $session = new Session();
-        $session->start();
         $session->set('csrf_token', $token);
 
         echo '<input type="hidden" id="csrf_token" name="csrf_token" value="'.$token.'"/>';
@@ -33,5 +32,23 @@ class TwigFunctions
     public static function isPjax(Request $request)
     {
         return ($request->headers->get('X-PJAX') != null);
+    }
+
+    public static function getFlashBag($type)
+    {
+        $session = new Session();
+        return $session->getFlashBag()->get($type);
+    }
+
+    public static function isGranted()
+    {
+        $session = new Session();
+        return $session->get('is_granted', false);
+    }
+
+    public static function getUser()
+    {
+        $session = new Session();
+        return $session->get('user');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Yggdrasil\Core;
 
-abstract class Configuration
+abstract class AbstractConfiguration
 {
     protected $configuration;
     protected $drivers;
