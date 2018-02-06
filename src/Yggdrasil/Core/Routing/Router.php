@@ -28,6 +28,17 @@ class Router
         return $route;
     }
 
+    public function getPassiveActionRoute($alias)
+    {
+        $this->routeParams = explode(':', $alias);
+
+        $route = new Route();
+        $route->setController($this->resolveController());
+        $route->setAction($this->resolvePassiveAction());
+
+        return $route;
+    }
+
     public function getQuery($alias, array $actionParams = [])
     {
         $queryParams = explode(':', mb_strtolower($alias));
@@ -48,7 +59,7 @@ class Router
         }
     }
 
-    public function resolveController()
+    private function resolveController()
     {
         $namespace = '\AppModule\Ports\Controller\\';
         $controller = (!empty($this->routeParams[0])) ? $namespace.ucfirst($this->routeParams[0]).'Controller' : $namespace.$this->defaults['controller'];
@@ -56,14 +67,21 @@ class Router
         return $controller;
     }
 
-    public function resolveAction()
+    private function resolveAction()
     {
         $action = (!empty($this->routeParams[1])) ? $this->routeParams[1].'Action' : $this->defaults['action'];
 
         return $action;
     }
 
-    public function resolveActionParams()
+    private function resolvePassiveAction()
+    {
+        $action = $this->routeParams[1].'PassiveAction';
+
+        return $action;
+    }
+
+    private function resolveActionParams()
     {
         $actionParams = [];
 

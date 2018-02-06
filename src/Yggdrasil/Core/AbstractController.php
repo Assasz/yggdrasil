@@ -13,11 +13,13 @@ abstract class AbstractController
 {
     protected $drivers;
     protected $request;
+    protected $response;
 
-    public function __construct(array $drivers, Request $request)
+    public function __construct(array $drivers, Request $request, Response $response)
     {
         $this->drivers = $drivers;
         $this->request = $request;
+        $this->response = $response;
     }
 
     protected function getDriver($name)
@@ -40,31 +42,26 @@ abstract class AbstractController
         return $this->request;
     }
 
+    protected function getResponse()
+    {
+        return $this->response;
+    }
+
     protected function render($view, array $params = [])
     {
         $params['app']['request'] = $this->getRequest();
         $template = $this->drivers['templateEngine']->render($view, $params);
 
-        return new Response($template);
+        return $this->getResponse()->setContent($template);
     }
 
     protected function redirectToAction($alias, array $params = [])
     {
         $router = $this->drivers['router'];
         $query = $router->getQuery($alias, $params);
+        $headers = $this->getResponse()->headers->all();
 
-        return new RedirectResponse($query);
-    }
-
-    protected function redirectWithCookie($alias, Cookie $cookie, array $params = [])
-    {
-        $router = $this->drivers['router'];
-        $query = $router->getQuery($alias, $params);
-
-        $response = new RedirectResponse($query);
-        $response->headers->setCookie($cookie);
-
-        return $response;
+        return new RedirectResponse($query, Response::HTTP_FOUND, $headers);
     }
 
     protected function isGranted()
@@ -75,11 +72,11 @@ abstract class AbstractController
 
     protected function accessDenied($message = 'Access denied.')
     {
-        return new Response($message, Response::HTTP_FORBIDDEN);
+        return $this->getResponse()->setContent($message)->setStatusCode(Response::HTTP_FORBIDDEN);
     }
 
     protected function notFound($message = 'Not found.')
     {
-        return new Response($message, Response::HTTP_NOT_FOUND);
+        return $this->getResponse()->setContent($message)->setStatusCode(Response::HTTP_NOT_FOUND);
     }
 }
