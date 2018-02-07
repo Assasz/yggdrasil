@@ -5,7 +5,7 @@ namespace Yggdrasil\Core\Driver;
 use Yggdrasil\Component\TwigComponent\TwigExtension;
 use Yggdrasil\Core\Driver\DriverInterface;
 
-class TemplateDriver implements DriverInterface
+class TemplateEngineDriver implements DriverInterface
 {
     private static $engineInstance;
 

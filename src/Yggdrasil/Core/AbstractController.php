@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Core;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,9 +12,9 @@ use Yggdrasil\Core\Routing\Router;
 
 abstract class AbstractController
 {
-    protected $drivers;
-    protected $request;
-    protected $response;
+    private $drivers;
+    private $request;
+    private $response;
 
     public function __construct(array $drivers, Request $request, Response $response)
     {
@@ -78,5 +79,11 @@ abstract class AbstractController
     protected function notFound($message = 'Not found.')
     {
         return $this->getResponse()->setContent($message)->setStatusCode(Response::HTTP_NOT_FOUND);
+    }
+
+    protected function json($data = [])
+    {
+        $headers = $this->getResponse()->headers->all();
+        return new JsonResponse($data, Response::HTTP_OK, $headers);
     }
 }

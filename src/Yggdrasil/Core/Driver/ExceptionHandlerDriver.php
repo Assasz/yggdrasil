@@ -6,7 +6,7 @@ use Yggdrasil\Core\Driver\DriverInterface;
 use Whoops\Run;
 use Whoops\Handler\PrettyPageHandler;
 
-class ExceptionDriver implements DriverInterface
+class ExceptionHandlerDriver implements DriverInterface
 {
     private static $driverInstance;
 

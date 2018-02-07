@@ -6,7 +6,7 @@ use AppModule\Infrastructure\Config\AppConfiguration;
 
 abstract class AbstractService
 {
-    protected $drivers;
+    private $drivers;
 
     public function __construct(AppConfiguration $configuration)
     {
@@ -21,5 +21,20 @@ abstract class AbstractService
     protected function getEntityManager()
     {
         return $this->drivers['entityManager'];
+    }
+
+    protected function getValidator()
+    {
+        return $this->drivers['validator'];
+    }
+
+    protected function getMailer()
+    {
+        return $this->drivers['mailer'];
+    }
+
+    protected function getContainer()
+    {
+        return $this->drivers['container'];
     }
 }
