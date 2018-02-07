@@ -2,6 +2,7 @@
   "name": "assasz/yggdrasil",
   "description": "Clean architecture PHP framework",
   "type": "library",
+  "license": "MIT",
   "author": {
     "name": "Paweł Antosiak",
     "email": "contact@pawelantosiak.com"
