@@ -25,6 +25,7 @@ class EntityManagerDriver implements DriverInterface
                 'user' => $configuration['database']['user'],
                 'password' => $configuration['database']['password'],
                 'host' => $configuration['database']['host'],
+                'port' => $configuration['database']['port'],
                 'driver' => $configuration['database']['driver'],
                 'charset' => $configuration['database']['charset']
             ];
@@ -34,6 +35,7 @@ class EntityManagerDriver implements DriverInterface
             $config->addEntityNamespace('Entity', 'AppModule\Domain\Entity');
 
             $connection = DriverManager::getConnection($connectionParams, $config);
+            $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
             self::$managerInstance = EntityManager::create($connection, $config);
         }

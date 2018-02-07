@@ -19,6 +19,7 @@
     "doctrine/orm": "^2.6",
     "twig/twig": "^2.4",
     "filp/whoops": "^2.1",
-    "league/container": "^2.4"
+    "league/container": "^2.4",
+    "swiftmailer/swiftmailer": "^6.0"
   }
 }
