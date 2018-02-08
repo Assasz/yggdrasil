@@ -2,7 +2,8 @@
 
 namespace Yggdrasil\Core\Driver;
 
-use Yggdrasil\Core\Driver\DriverInterface;
+use AppModule\Infrastructure\Config\AppConfiguration;
+use Yggdrasil\Core\Driver\Base\DriverInterface;
 use Whoops\Run;
 use Whoops\Handler\PrettyPageHandler;
 
@@ -14,7 +15,7 @@ class ExceptionHandlerDriver implements DriverInterface
 
     private function __clone() {}
 
-    public static function getInstance($configuration)
+    public static function getInstance(AppConfiguration $appConfiguration)
     {
         if(self::$driverInstance === null) {
             $driver = new Run();

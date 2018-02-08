@@ -2,7 +2,9 @@
 
 namespace Yggdrasil\Core\Driver;
 
+use AppModule\Infrastructure\Config\AppConfiguration;
 use Symfony\Component\Validator\Validation;
+use Yggdrasil\Core\Driver\Base\DriverInterface;
 
 class ValidatorDriver implements DriverInterface
 {
@@ -12,7 +14,7 @@ class ValidatorDriver implements DriverInterface
 
     private function __clone(){}
 
-    public static function getInstance($configuration)
+    public static function getInstance(AppConfiguration $appConfiguration)
     {
         if(self::$validatorInstance === null){
             $validator = Validation::createValidatorBuilder()

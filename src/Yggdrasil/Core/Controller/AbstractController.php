@@ -1,41 +1,28 @@
 <?php
 
-namespace Yggdrasil\Core;
+namespace Yggdrasil\Core\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Cookie;
-use Yggdrasil\Core\Routing\Router;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
+use Yggdrasil\Core\Driver\Base\DriverInstanceCollection;
 
 abstract class AbstractController
 {
-    private $drivers;
     private $request;
     private $response;
 
-    public function __construct(array $drivers, Request $request, Response $response)
+    use DriverAccessorTrait;
+
+    public function __construct(DriverInstanceCollection $drivers, Request $request, Response $response)
     {
         $this->drivers = $drivers;
         $this->request = $request;
         $this->response = $response;
-    }
-
-    protected function getDriver($name)
-    {
-        return $this->drivers[$name];
-    }
-
-    protected function getEntityManager()
-    {
-        return $this->drivers['entityManager'];
-    }
-
-    protected function getContainer()
-    {
-        return $this->drivers['container'];
     }
 
     protected function getRequest()
@@ -51,15 +38,14 @@ abstract class AbstractController
     protected function render($view, array $params = [])
     {
         $params['app']['request'] = $this->getRequest();
-        $template = $this->drivers['templateEngine']->render($view, $params);
+        $template = $this->getTemplateEngine()->render($view, $params);
 
         return $this->getResponse()->setContent($template);
     }
 
     protected function redirectToAction($alias, array $params = [])
     {
-        $router = $this->drivers['router'];
-        $query = $router->getQuery($alias, $params);
+        $query = $this->getRouter()->getQuery($alias, $params);
         $headers = $this->getResponse()->headers->all();
 
         return new RedirectResponse($query, Response::HTTP_FOUND, $headers);

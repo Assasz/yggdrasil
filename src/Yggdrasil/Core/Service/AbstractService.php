@@ -3,38 +3,14 @@
 namespace Yggdrasil\Core\Service;
 
 use AppModule\Infrastructure\Config\AppConfiguration;
+use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 
 abstract class AbstractService
 {
-    private $drivers;
+    use DriverAccessorTrait;
 
-    public function __construct(AppConfiguration $configuration)
+    public function __construct(AppConfiguration $appConfiguration)
     {
-        $this->drivers = $configuration->loadDrivers();
-    }
-
-    protected function getDriver($name)
-    {
-        return $this->drivers[$name];
-    }
-
-    protected function getEntityManager()
-    {
-        return $this->drivers['entityManager'];
-    }
-
-    protected function getValidator()
-    {
-        return $this->drivers['validator'];
-    }
-
-    protected function getMailer()
-    {
-        return $this->drivers['mailer'];
-    }
-
-    protected function getContainer()
-    {
-        return $this->drivers['container'];
+        $this->drivers = $appConfiguration->loadDrivers();
     }
 }

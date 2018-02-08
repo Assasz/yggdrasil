@@ -41,6 +41,10 @@ class FormHandler
 
     public function getData($key)
     {
+        if(!$this->hasData($key)){
+            //exception
+        }
+
         return $this->dataCollection[$key];
     }
 

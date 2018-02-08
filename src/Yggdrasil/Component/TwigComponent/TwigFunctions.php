@@ -4,8 +4,6 @@ namespace Yggdrasil\Component\TwigComponent;
 
 use AppModule\Infrastructure\Config\AppConfiguration;
 use Symfony\Component\HttpFoundation\Request;
-use Yggdrasil\Core\Driver\RoutingDriver;
-use Yggdrasil\Core\Routing\Router;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class TwigFunctions
@@ -13,8 +11,7 @@ class TwigFunctions
     public static function getPath($alias, array $params = [])
     {
         $appConfig = new AppConfiguration();
-        $config = $appConfig->getConfiguration();
-        $router = RoutingDriver::getInstance($config);
+        $router = $appConfig->loadDriver('router');
 
         return $router->getQuery($alias, $params);
     }
@@ -36,7 +33,7 @@ class TwigFunctions
 
     public static function isPjax(Request $request)
     {
-        return ($request->headers->get('X-PJAX') != null);
+        return ($request->headers->get('X-PJAX') !== null);
     }
 
     public static function getFlashBag($type)

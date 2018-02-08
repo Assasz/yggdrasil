@@ -4,6 +4,7 @@ namespace Yggdrasil\Core\Driver;
 
 use AppModule\Infrastructure\Config\AppConfiguration;
 use League\Container\Container;
+use Yggdrasil\Core\Driver\Base\DriverInterface;
 
 class ContainerDriver implements DriverInterface
 {
@@ -13,13 +14,16 @@ class ContainerDriver implements DriverInterface
 
     private function __clone(){}
 
-    public static function getInstance($configuration)
+    public static function getInstance(AppConfiguration $appConfiguration)
     {
         if(self::$containerInstance === null) {
             $container = new Container();
+            $configuration = $appConfiguration->getConfiguration();
 
-            foreach ($configuration['service'] as $name => $service){
-                $container->add($name, $service)->withArgument(new AppConfiguration());
+            if(array_key_exists('service', $configuration)) {
+                foreach ($configuration['service'] as $name => $service) {
+                    $container->add($name, $service)->withArgument($appConfiguration);
+                }
             }
 
             self::$containerInstance = $container;
