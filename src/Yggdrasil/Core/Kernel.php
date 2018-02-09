@@ -4,9 +4,9 @@ namespace Yggdrasil\Core;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppModule\Infrastructure\Config\AppConfiguration;
+use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
-use Yggdrasil\Core\Routing\Router;
+use Yggdrasil\Core\Exception\ActionNotFoundException;
 
 class Kernel
 {
@@ -14,7 +14,7 @@ class Kernel
 
     use DriverAccessorTrait;
 
-    public function __construct(AppConfiguration $appConfiguration)
+    public function __construct(ConfigurationInterface $appConfiguration)
     {
         $this->configuration = $appConfiguration->getConfiguration();
         $this->drivers = $appConfiguration->loadDrivers();
@@ -34,11 +34,13 @@ class Kernel
             foreach ($this->configuration['passive_action'] as $action) {
                 $route = $this->getRouter()->getPassiveActionRoute($action);
 
-                if (method_exists($route->getController(), $route->getAction())) {
-                    $controllerName = $route->getController();
-                    $controller = new $controllerName($this->drivers, $request, $response);
-                    $response = $controller->{$route->getAction()}();
+                if (!method_exists($route->getController(), $route->getAction())) {
+                    throw new ActionNotFoundException($action. ' passive action is present in your configuration, but can\'t be found or is improperly configured.');
                 }
+
+                $controllerName = $route->getController();
+                $controller = new $controllerName($this->drivers, $request, $response);
+                $response = $controller->{$route->getAction()}();
             }
         }
 
@@ -49,12 +51,16 @@ class Kernel
     {
         $route = $this->getRouter()->getRoute($request);
 
-        if(method_exists($route->getController(), $route->getAction())){
-            $controllerName = $route->getController();
-            $controller = new $controllerName($this->drivers, $request, $response);
-            return call_user_func_array([$controller, $route->getAction()], $route->getActionParams());
+        if(!method_exists($route->getController(), $route->getAction())){
+            if(!DEBUG) {
+                return new Response("Not found.", Response::HTTP_NOT_FOUND);
+            }
+
+            throw new ActionNotFoundException($route->getAction().' for '.$route->getController().' not found.');
         }
 
-        return new Response("Not found.", Response::HTTP_NOT_FOUND);
+        $controllerName = $route->getController();
+        $controller = new $controllerName($this->drivers, $request, $response);
+        return call_user_func_array([$controller, $route->getAction()], $route->getActionParams());
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Yggdrasil\Core\Driver\Base;
 
+use Yggdrasil\Core\Exception\DriverNotFoundException;
+
 class DriverInstanceCollection
 {
     private $instances;
@@ -14,7 +16,7 @@ class DriverInstanceCollection
     public function add($key, $instance)
     {
         if($this->has($key)){
-            //exception
+            throw new \InvalidArgumentException($key.' driver that you want to add already exist.');
         }
 
         $this->instances[$key] = $instance;
@@ -23,7 +25,7 @@ class DriverInstanceCollection
     public function get($key)
     {
         if(!$this->has($key)){
-            //exception
+            throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that '.$key.' driver is configured.');
         }
 
         return $this->instances[$key];
@@ -37,7 +39,7 @@ class DriverInstanceCollection
     public function remove($key)
     {
         if(!$this->has($key)){
-            //exception
+            throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that '.$key.' driver is configured.');
         }
 
         unset($this->instances[$key]);

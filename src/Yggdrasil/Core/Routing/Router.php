@@ -55,7 +55,7 @@ class Router
     public function setDefaults(array $defaults)
     {
         if(!array_key_exists('controller', $defaults) && !array_key_exists('action', $defaults)){
-            //exception
+            throw new \InvalidArgumentException('Keys controller and action need to be specified in array to configure default routing.');
         }
 
         $this->defaults = $defaults;

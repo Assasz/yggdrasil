@@ -2,7 +2,6 @@
 
 namespace Yggdrasil\Component\TwigComponent;
 
-use AppModule\Infrastructure\Config\AppConfiguration;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -10,10 +9,15 @@ class TwigFunctions
 {
     public static function getPath($alias, array $params = [])
     {
-        $appConfig = new AppConfiguration();
-        $router = $appConfig->loadDriver('router');
+        $queryParams = explode(':', mb_strtolower($alias));
 
-        return $router->getQuery($alias, $params);
+        foreach($params as $param){
+            $queryParams[] = $param;
+        }
+
+        $query = implode('/', $queryParams);
+
+        return BASE_URL.$query;
     }
 
     public static function getAsset($path)

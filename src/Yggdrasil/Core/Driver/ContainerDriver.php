@@ -2,8 +2,8 @@
 
 namespace Yggdrasil\Core\Driver;
 
-use AppModule\Infrastructure\Config\AppConfiguration;
 use League\Container\Container;
+use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverInterface;
 
 class ContainerDriver implements DriverInterface
@@ -14,7 +14,7 @@ class ContainerDriver implements DriverInterface
 
     private function __clone(){}
 
-    public static function getInstance(AppConfiguration $appConfiguration)
+    public static function getInstance(ConfigurationInterface $appConfiguration)
     {
         if(self::$containerInstance === null) {
             $container = new Container();

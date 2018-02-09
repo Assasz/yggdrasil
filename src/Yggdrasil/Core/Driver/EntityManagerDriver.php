@@ -2,12 +2,13 @@
 
 namespace Yggdrasil\Core\Driver;
 
-use AppModule\Infrastructure\Config\AppConfiguration;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
+use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverInterface;
+use Yggdrasil\Core\Exception\MissingConfigurationException;
 
 class EntityManagerDriver implements DriverInterface
 {
@@ -17,14 +18,14 @@ class EntityManagerDriver implements DriverInterface
 
     private function __clone() {}
 
-    public static function getInstance(AppConfiguration $appConfiguration)
+    public static function getInstance(ConfigurationInterface $appConfiguration)
     {
         if(self::$managerInstance === null) {
             $config = new Configuration();
             $configuration = $appConfiguration->getConfiguration();
 
             if(!$appConfiguration->isConfigured(['name', 'user', 'password', 'host'], 'database')){
-                //exception
+                throw new MissingConfigurationException('There are missing parameters in your configuration. name, user, password and host are required to connect to database.');
             }
 
             $connectionParams = [
@@ -37,7 +38,7 @@ class EntityManagerDriver implements DriverInterface
                 'charset' => $configuration['database']['charset'] ?? 'UTF8'
             ];
 
-            $entityPaths = [dirname(__DIR__, 7) . '/src/AppModule/Domain/Entity/'];
+            $entityPaths = [dirname(__DIR__, 7) . '/src/'.$configuration['application']['entity_path'].'/'];
             $config = Setup::createAnnotationMetadataConfiguration($entityPaths, true);
             $config->addEntityNamespace('Entity', 'AppModule\Domain\Entity');
 

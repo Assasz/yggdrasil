@@ -2,8 +2,9 @@
 
 namespace Yggdrasil\Core\Driver;
 
-use AppModule\Infrastructure\Config\AppConfiguration;
+use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverInterface;
+use Yggdrasil\Core\Exception\MissingConfigurationException;
 
 class MailerDriver implements DriverInterface
 {
@@ -13,13 +14,13 @@ class MailerDriver implements DriverInterface
 
     private function __clone(){}
 
-    public static function getInstance(AppConfiguration $appConfiguration)
+    public static function getInstance(ConfigurationInterface $appConfiguration)
     {
         if(self::$mailerInstance === null){
             $configuration = $appConfiguration->getConfiguration();
 
             if(!$appConfiguration->isConfigured(['host', 'username', 'password'], 'mailer')){
-                //exception
+                throw new MissingConfigurationException('There are missing parameters in your configuration. host, username and password are required to make mailer work.');
             }
 
             $transport = new \Swift_SmtpTransport($configuration['mailer']['host'], $configuration['mailer']['port'] ?? 465, $configuration['mailer']['encryption'] ?? 'ssl');

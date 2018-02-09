@@ -1,23 +1,25 @@
 <?php
 
-namespace Yggdrasil\Core;
+namespace Yggdrasil\Core\Configuration;
 
 use Yggdrasil\Core\Driver\Base\DriverInstanceCollection;
+use Yggdrasil\Core\Exception\ConfigurationNotFoundException;
+use Yggdrasil\Core\Exception\DriverNotFoundException;
 
 abstract class AbstractConfiguration
 {
     private $configuration;
     protected $drivers;
 
-    public function __construct()
+    public function __construct($configPath)
     {
-        $configPath = dirname(__DIR__, 6).'/src/AppModule/Infrastructure/Config/config.ini';
+        $configFilePath = dirname(__DIR__, 7).'/src/'.$configPath.'/config.ini';
 
-        if(!file_exists($configPath)){
-            //exception
+        if(!file_exists($configFilePath)){
+            throw new ConfigurationNotFoundException('Configuration file in '.$configFilePath.' not found.');
         }
 
-        $this->configuration = parse_ini_file($configPath, true);
+        $this->configuration = parse_ini_file($configFilePath, true);
     }
 
     public function loadDrivers()
@@ -34,7 +36,7 @@ abstract class AbstractConfiguration
     public function loadDriver($key)
     {
         if(!array_key_exists($key, $this->drivers)){
-            //exception
+            throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that '.$key.' driver is configured.');
         }
 
         return $this->drivers[$key]::getInstance($this);

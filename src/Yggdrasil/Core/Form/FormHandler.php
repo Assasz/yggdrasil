@@ -4,6 +4,7 @@ namespace Yggdrasil\Core\Form;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Yggdrasil\Core\Exception\InvalidCsrfTokenException;
 
 class FormHandler
 {
@@ -19,8 +20,12 @@ class FormHandler
         $session = new Session();
 
         if($request->request->has('csrf_token')) {
-            if ($session->get('csrf_token') !== $request->request->get('csrf_token')) {
+            if(!$session->has('csrf_token')){
                 return false;
+            }
+
+            if($session->get('csrf_token') !== $request->request->get('csrf_token')) {
+                throw new InvalidCsrfTokenException('Invalid CSRF token.');
             }
 
             $request->request->remove('csrf_token');
@@ -42,7 +47,7 @@ class FormHandler
     public function getData($key)
     {
         if(!$this->hasData($key)){
-            //exception
+            throw new \InvalidArgumentException($key.' not found in form data, that you submitted.');
         }
 
         return $this->dataCollection[$key];

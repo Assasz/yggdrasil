@@ -2,9 +2,9 @@
 
 namespace Yggdrasil\Core\Driver\Base;
 
-use AppModule\Infrastructure\Config\AppConfiguration;
+use Yggdrasil\Core\Configuration\ConfigurationInterface;
 
 interface DriverInterface
 {
-    public static function getInstance(AppConfiguration $appConfiguration);
+    public static function getInstance(ConfigurationInterface $appConfiguration);
 }

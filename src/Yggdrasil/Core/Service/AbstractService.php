@@ -2,14 +2,14 @@
 
 namespace Yggdrasil\Core\Service;
 
-use AppModule\Infrastructure\Config\AppConfiguration;
+use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 
 abstract class AbstractService
 {
     use DriverAccessorTrait;
 
-    public function __construct(AppConfiguration $appConfiguration)
+    public function __construct(ConfigurationInterface $appConfiguration)
     {
         $this->drivers = $appConfiguration->loadDrivers();
     }
