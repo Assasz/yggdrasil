@@ -39,7 +39,7 @@ class RouterDriver implements DriverInterface
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure router
      * @return Router
      *
-     * @throws MissingConfigurationException if default controller, action and controller namespace are not configured
+     * @throws MissingConfigurationException if default controller, action or controller namespace are not configured
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): Router
     {

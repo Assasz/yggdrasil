@@ -39,6 +39,8 @@ class ContainerDriver implements DriverInterface
      *
      * @param ConfigurationInterface $appConfiguration Configuration needed to get registered services
      * @return Container
+     *
+     * @throws MissingConfigurationException if service_namespace is not configured
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): Container
     {

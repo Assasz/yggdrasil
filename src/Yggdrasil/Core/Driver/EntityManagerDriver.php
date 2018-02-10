@@ -44,7 +44,7 @@ class EntityManagerDriver implements DriverInterface
      * @param ConfigurationInterface $appConfiguration Configuration needed to connect to database and configure entity manager
      * @return EntityManager
      *
-     * @throws MissingConfigurationException if name, host, user and password of database or entity_path are not configured
+     * @throws MissingConfigurationException if name, host, user or password of database or entity_namespace are not configured
      * @throws DBALException
      * @throws ORMException
      */
