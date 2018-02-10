@@ -53,12 +53,8 @@ class EntityManagerDriver implements DriverInterface
         if(self::$managerInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['name', 'user', 'password', 'host'], 'database')){
-                throw new MissingConfigurationException('There are missing parameters in your configuration. name, user, password and host are required to connect to database.');
-            }
-
-            if(!$appConfiguration->isConfigured(['entity_path'], 'application')){
-                throw new MissingConfigurationException('There are missing parameters in your configuration. entity_path is required for entity manager to work.');
+            if(!$appConfiguration->isConfigured(['name', 'user', 'password', 'host'], 'database') || !$appConfiguration->isConfigured(['entity_path'], 'application')){
+                throw new MissingConfigurationException('There are missing parameters in your configuration: name, user, password or host in section database or entity_namespace in section application.');
             }
 
             $connectionParams = [
@@ -71,11 +67,11 @@ class EntityManagerDriver implements DriverInterface
                 'charset' => $configuration['database']['charset'] ?? 'UTF8'
             ];
 
-            $entityPaths = [dirname(__DIR__, 7) . '/src/'.$configuration['application']['entity_path'].'/'];
-            $entityNamespace = implode('\\', explode('/', $configuration['application']['entity_path']));
+            $entityPath = implode('/', explode('\\', $configuration['application']['entity_namespace']));
+            $entityPaths = [dirname(__DIR__, 7) . '/src/'.$entityPath.'/'];
 
             $config = Setup::createAnnotationMetadataConfiguration($entityPaths, DEBUG);
-            $config->addEntityNamespace('Entity', $entityNamespace);
+            $config->addEntityNamespace('Entity', $configuration['application']['entity_namespace']);
 
             $connection = DriverManager::getConnection($connectionParams, $config);
             $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');

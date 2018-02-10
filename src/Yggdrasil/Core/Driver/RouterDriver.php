@@ -47,8 +47,8 @@ class RouterDriver implements DriverInterface
             $configuration = $appConfiguration->getConfiguration();
             $router = new Router();
 
-            if(!$appConfiguration->isConfigured(['default_controller', 'default_action', 'controller_namespace'], 'routing')){
-                throw new MissingConfigurationException('There are missing parameters in your configuration. default_controller, default_action and controller_namespace are required for router to work properly.');
+            if(!$appConfiguration->isConfigured(['default_controller', 'default_action'], 'routing') || !$appConfiguration->isConfigured(['controller_namespace'], 'application')){
+                throw new MissingConfigurationException('There are missing parameters in your configuration: default_controller or default_action in section routing or controller_path in section application.');
             }
 
             $defaults = [
@@ -57,7 +57,7 @@ class RouterDriver implements DriverInterface
             ];
 
             $router->setDefaults($defaults);
-            $router->setControllerNamespace($configuration['routing']['controller_namespace']);
+            $router->setControllerNamespace($configuration['application']['controller_namespace']);
 
             self::$routerInstance = $router;
         }
