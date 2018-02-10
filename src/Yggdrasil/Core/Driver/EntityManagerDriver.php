@@ -53,7 +53,7 @@ class EntityManagerDriver implements DriverInterface
         if(self::$managerInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['name', 'user', 'password', 'host'], 'database') || !$appConfiguration->isConfigured(['entity_path'], 'application')){
+            if(!$appConfiguration->isConfigured(['name', 'user', 'password', 'host'], 'database') || !$appConfiguration->isConfigured(['entity_namespace'], 'application')){
                 throw new MissingConfigurationException('There are missing parameters in your configuration: name, user, password or host in section database or entity_namespace in section application.');
             }
 
