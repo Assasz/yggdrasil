@@ -5,6 +5,7 @@ namespace Yggdrasil\Core\Driver;
 use League\Container\Container;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverInterface;
+use Yggdrasil\Core\Exception\MissingConfigurationException;
 
 /**
  * Class ContainerDriver
@@ -45,9 +46,13 @@ class ContainerDriver implements DriverInterface
             $container = new Container();
             $configuration = $appConfiguration->getConfiguration();
 
+            if(!$appConfiguration->isConfigurder(['service_namespace'], 'application')){
+                throw new MissingConfigurationException('There are missing parameters in your configuration. service_namespace is required for services to work.');
+            }
+
             if(array_key_exists('service', $configuration)) {
                 foreach ($configuration['service'] as $name => $service) {
-                    $container->add($name, $service)->withArgument($appConfiguration);
+                    $container->add($name, $configuration['application']['service_namespace'].$service)->withArgument($appConfiguration);
                 }
             }
 
