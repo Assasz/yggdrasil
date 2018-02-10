@@ -19,7 +19,7 @@ use Yggdrasil\Core\Exception\ActionNotFoundException;
 class Kernel
 {
     /**
-     * Application's configuration
+     * Application configuration
      *
      * @var array
      */
@@ -33,7 +33,7 @@ class Kernel
     /**
      * Kernel constructor.
      *
-     * Gets application's configuration and load drivers
+     * Gets application configuration and loads drivers
      *
      * @param ConfigurationInterface $appConfiguration
      */
