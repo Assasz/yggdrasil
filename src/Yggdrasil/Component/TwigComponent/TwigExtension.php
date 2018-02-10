@@ -2,9 +2,22 @@
 
 namespace Yggdrasil\Component\TwigComponent;
 
+/**
+ * Class TwigExtension
+ *
+ * Provides extension for Twig
+ *
+ * @package Yggdrasil\Component\TwigComponent
+ * @author Paweł Antosiak <contact@pawelantosiak.com>
+ */
 class TwigExtension extends \Twig_Extension
 {
-    public function getFunctions()
+    /**
+     * Returns set of functions
+     *
+     * @return array
+     */
+    public function getFunctions(): array
     {
         $namespace = 'Yggdrasil\Component\TwigComponent\TwigFunctions';
 

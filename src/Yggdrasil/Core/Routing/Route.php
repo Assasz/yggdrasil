@@ -2,38 +2,93 @@
 
 namespace Yggdrasil\Core\Routing;
 
+/**
+ * Class Route
+ *
+ * Object representation of route
+ *
+ * @package Yggdrasil\Core\Routing
+ * @author Paweł Antosiak <contact@pawelantosiak.com>
+ */
 class Route
 {
+    /**
+     * Name of controller
+     *
+     * @var string
+     */
     private $controller;
+
+    /**
+     * Name of action
+     *
+     * @var string
+     */
     private $action;
+
+    /**
+     * Set of action parameters
+     *
+     * @var array
+     */
     private $actionParams;
 
-    public function getController()
+    /**
+     * Returns controller name
+     *
+     * @return string
+     */
+    public function getController(): string
     {
         return $this->controller;
     }
 
-    public function setController($controller)
+    /**
+     * Sets controller name
+     *
+     * @param string $controller
+     */
+    public function setController(string $controller): void
     {
         $this->controller = $controller;
     }
 
-    public function getAction()
+    /**
+     * Returns action name
+     *
+     * @return string
+     */
+    public function getAction(): string
     {
         return $this->action;
     }
 
-    public function setAction($action)
+    /**
+     * Sets action name
+     *
+     * @param string $action
+     */
+    public function setAction(string $action): void
     {
         $this->action = $action;
     }
 
-    public function getActionParams()
+    /**
+     * Returns action parameters
+     *
+     * @return array
+     */
+    public function getActionParams(): array
     {
         return $this->actionParams;
     }
 
-    public function setActionParams(array $actionParams)
+    /**
+     * Sets action parameters
+     *
+     * @param array $actionParams
+     */
+    public function setActionParams(array $actionParams): void
     {
         $this->actionParams = $actionParams;
     }

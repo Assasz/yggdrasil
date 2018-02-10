@@ -5,9 +5,24 @@ namespace Yggdrasil\Component\TwigComponent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+/**
+ * Class TwigFunctions
+ *
+ * Provides set of functions for TwigExtension
+ *
+ * @package Yggdrasil\Component\TwigComponent
+ * @author Paweł Antosiak <contact@pawelantosiak.com>
+ */
 class TwigFunctions
 {
-    public static function getPath($alias, array $params = [])
+    /**
+     * Returns absolute path for requested action
+     *
+     * @param string $alias  Alias of action like Controller:action
+     * @param array  $params Set of action parameters
+     * @return string
+     */
+    public static function getPath(string $alias, array $params = []): string
     {
         $queryParams = explode(':', mb_strtolower($alias));
 
@@ -20,12 +35,23 @@ class TwigFunctions
         return BASE_URL.$query;
     }
 
-    public static function getAsset($path)
+    /**
+     * Returns absolute path for requested asset like CSS file
+     *
+     * @param string $path
+     * @return string
+     */
+    public static function getAsset(string $path): string
     {
         return BASE_URL.ltrim($path, '/');
     }
 
-    public static function getCsrfToken()
+    /**
+     * Generates CSRF token
+     *
+     * @throws \Exception if any rand function can't be found in OS
+     */
+    public static function getCsrfToken(): void
     {
         $token = bin2hex(random_bytes(32));
 
@@ -35,24 +61,46 @@ class TwigFunctions
         echo '<input type="hidden" id="csrf_token" name="csrf_token" value="'.$token.'"/>';
     }
 
-    public static function isPjax(Request $request)
+    /**
+     * Checks if website is requested with Pjax
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public static function isPjax(Request $request): bool
     {
         return ($request->headers->get('X-PJAX') !== null);
     }
 
-    public static function getFlashBag($type)
+    /**
+     * Returns flash by type
+     *
+     * @param string $type
+     * @return array
+     */
+    public static function getFlashBag(string $type): array
     {
         $session = new Session();
         return $session->getFlashBag()->get($type);
     }
 
-    public static function isGranted()
+    /**
+     * Checks if user is authenticated
+     *
+     * @return bool
+     */
+    public static function isGranted(): bool
     {
         $session = new Session();
         return $session->get('is_granted', false);
     }
 
-    public static function getUser()
+    /**
+     * Returns instance of user that is authenticated, null otherwise
+     *
+     * @return mixed
+     */
+    public static function getUser(): mixed
     {
         $session = new Session();
         return $session->get('user');

@@ -6,16 +6,42 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Yggdrasil\Core\Exception\InvalidCsrfTokenException;
 
+/**
+ * Class FormHandler
+ *
+ * Handles form submission, in current state rather helper class
+ *
+ * @package Yggdrasil\Core\Form
+ * @author Paweł Antosiak <contact@pawelantosiak.com>
+ */
 class FormHandler
 {
+    /**
+     * Collection od form data
+     *
+     * @var array
+     */
     private $dataCollection;
 
+    /**
+     * FormHandler constructor.
+     *
+     * Initialises array of $dataCollection
+     */
     public function __construct()
     {
         $this->dataCollection = [];
     }
 
-    public function handle(Request $request)
+    /**
+     * Returns result of form submission
+     *
+     * @param Request $request
+     * @return bool
+     *
+     * @throws InvalidCsrfTokenException if received CSRF token doesn't match token stored in session
+     */
+    public function handle(Request $request): bool
     {
         $session = new Session();
 
@@ -39,12 +65,25 @@ class FormHandler
         return true;
     }
 
-    public function getDataCollection()
+    /**
+     * Returns all form data collection
+     *
+     * @return array
+     */
+    public function getDataCollection(): array
     {
         return $this->dataCollection;
     }
 
-    public function getData($key)
+    /**
+     * Returns given form data
+     *
+     * @param string $key Key of form data, equivalent to input name
+     * @return mixed
+     *
+     * @throws \InvalidArgumentException if data can't be found
+     */
+    public function getData(string $key): mixed
     {
         if(!$this->hasData($key)){
             throw new \InvalidArgumentException($key.' not found in form data, that you submitted.');
@@ -53,12 +92,26 @@ class FormHandler
         return $this->dataCollection[$key];
     }
 
-    public function hasData($key)
+    /**
+     * Checks if given form data exist in collection
+     *
+     * @param string $key Key of form data, equivalent to input name
+     * @return bool
+     */
+    public function hasData(string $key): bool
     {
         return array_key_exists($key, $this->dataCollection);
     }
 
-    public function serializeData($object)
+    /**
+     * Helper method that serialize form data into given object
+     * Sets form data value using object setter resolved by data key, if setter doesn't exist, nothing is done
+     * Can be useful only in particular cases
+     *
+     * @param mixed $object
+     * @return mixed
+     */
+    public function serializeData(mixed $object): mixed
     {
         foreach ($this->dataCollection as $key => $value){
             $setter = 'set'.ucfirst(str_replace(['_', '-', '.'], '', $key));

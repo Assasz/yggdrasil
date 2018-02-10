@@ -5,19 +5,47 @@ namespace Yggdrasil\Core\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\Base\DriverInstanceCollection;
 
+/**
+ * Class AbstractController
+ *
+ * Base class for application controllers, provides some helper methods
+ *
+ * @package Yggdrasil\Core\Controller
+ * @author Paweł Antosiak <contact@pawelantosiak.com>
+ */
 abstract class AbstractController
 {
+    /**
+     * Request from client
+     *
+     * @var Request
+     */
     private $request;
+
+    /**
+     * Response prepared to return
+     *
+     * @var Response
+     */
     private $response;
 
+    /**
+ * Trait that provides access to drivers
+ */
     use DriverAccessorTrait;
 
+    /**
+     * AbstractController constructor.
+     *
+     * @param DriverInstanceCollection $drivers
+     * @param Request $request
+     * @param Response $response
+     */
     public function __construct(DriverInstanceCollection $drivers, Request $request, Response $response)
     {
         $this->drivers = $drivers;
@@ -25,17 +53,38 @@ abstract class AbstractController
         $this->response = $response;
     }
 
-    protected function getRequest()
+    /**
+     * Returns request
+     *
+     * @return Request
+     */
+    protected function getRequest(): Request
     {
         return $this->request;
     }
 
-    protected function getResponse()
+    /**
+     * Returns response
+     *
+     * @return Response
+     */
+    protected function getResponse(): Response
     {
         return $this->response;
     }
 
-    protected function render($view, array $params = [])
+    /**
+     * Renders given view
+     *
+     * @param string $view   Name of view file
+     * @param array  $params Parameters supposed to be passed to the view
+     * @return Response
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    protected function render(string $view, array $params = []): Response
     {
         $params['app']['request'] = $this->getRequest();
         $template = $this->getTemplateEngine()->render($view, $params);
@@ -43,7 +92,14 @@ abstract class AbstractController
         return $this->getResponse()->setContent($template);
     }
 
-    protected function redirectToAction($alias, array $params = [])
+    /**
+     * Redirects to given action
+     *
+     * @param string $alias  Alias of action like Controller:action
+     * @param array  $params Parameters supposed to be passed to the action
+     * @return RedirectResponse
+     */
+    protected function redirectToAction(string $alias, array $params = []): RedirectResponse
     {
         $query = $this->getRouter()->getQuery($alias, $params);
         $headers = $this->getResponse()->headers->all();
@@ -51,23 +107,46 @@ abstract class AbstractController
         return new RedirectResponse($query, Response::HTTP_FOUND, $headers);
     }
 
-    protected function isGranted()
+    /**
+     * Checks if user is authenticated
+     *
+     * @return bool
+     */
+    protected function isGranted(): bool
     {
         $session = new Session();
         return $session->get('is_granted', false);
     }
 
-    protected function accessDenied($message = 'Access denied.')
+    /**
+     * Returns Forbidden (403) response
+     *
+     * @param string $message
+     * @return Response
+     */
+    protected function accessDenied(string $message = 'Access denied.'): Response
     {
         return $this->getResponse()->setContent($message)->setStatusCode(Response::HTTP_FORBIDDEN);
     }
 
-    protected function notFound($message = 'Not found.')
+    /**
+     * Returns Not Found (404) response
+     *
+     * @param string $message
+     * @return Response
+     */
+    protected function notFound(string $message = 'Not found.')
     {
         return $this->getResponse()->setContent($message)->setStatusCode(Response::HTTP_NOT_FOUND);
     }
 
-    protected function json($data = [])
+    /**
+     * Returns Json encoded response
+     *
+     * @param array $data Data supposed to be returned
+     * @return JsonResponse
+     */
+    protected function json(array $data = []): JsonResponse
     {
         $headers = $this->getResponse()->headers->all();
         return new JsonResponse($data, Response::HTTP_OK, $headers);
