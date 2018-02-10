@@ -135,7 +135,7 @@ abstract class AbstractController
      * @param string $message
      * @return Response
      */
-    protected function notFound(string $message = 'Not found.')
+    protected function notFound(string $message = 'Not found.'): Response
     {
         return $this->getResponse()->setContent($message)->setStatusCode(Response::HTTP_NOT_FOUND);
     }

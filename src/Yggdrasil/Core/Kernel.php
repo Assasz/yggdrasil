@@ -66,7 +66,7 @@ class Kernel
      *
      * @throws ActionNotFoundException if passive action can't be found, but exists in configuration
      */
-    private function executePassiveActions(Request $request, Response $response)
+    private function executePassiveActions(Request $request, Response $response): Response
     {
         if(array_key_exists('passive_action', $this->configuration)) {
             foreach ($this->configuration['passive_action'] as $action) {

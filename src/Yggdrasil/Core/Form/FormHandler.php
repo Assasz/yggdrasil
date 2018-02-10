@@ -83,7 +83,7 @@ class FormHandler
      *
      * @throws \InvalidArgumentException if data can't be found
      */
-    public function getData(string $key): mixed
+    public function getData(string $key)
     {
         if(!$this->hasData($key)){
             throw new \InvalidArgumentException($key.' not found in form data, that you submitted.');
@@ -111,7 +111,7 @@ class FormHandler
      * @param mixed $object
      * @return mixed
      */
-    public function serializeData(mixed $object): mixed
+    public function serializeData($object)
     {
         foreach ($this->dataCollection as $key => $value){
             $setter = 'set'.ucfirst(str_replace(['_', '-', '.'], '', $key));

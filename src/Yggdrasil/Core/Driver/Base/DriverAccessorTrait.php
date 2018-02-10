@@ -33,7 +33,7 @@ trait DriverAccessorTrait
      * @param string $key Name of driver
      * @return mixed
      */
-    protected function getDriver(string $key): mixed
+    protected function getDriver(string $key)
     {
         return $this->drivers->get($key);
     }

@@ -57,7 +57,7 @@ class DriverInstanceCollection
      *
      * @throws DriverNotFoundException if requested driver doesn't exist
      */
-    public function get(string $key): mixed
+    public function get(string $key)
     {
         if(!$this->has($key)){
             throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that '.$key.' driver is properly configured.');

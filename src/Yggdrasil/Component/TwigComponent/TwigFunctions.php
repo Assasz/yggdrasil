@@ -100,7 +100,7 @@ class TwigFunctions
      *
      * @return mixed
      */
-    public static function getUser(): mixed
+    public static function getUser()
     {
         $session = new Session();
         return $session->get('user');

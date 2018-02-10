@@ -135,7 +135,7 @@ class Router
      */
     private function resolveController(): string
     {
-        $controller = (!empty($this->routeParams[0])) ? $this->namespace.ucfirst($this->routeParams[0]).'Controller' : $this->namespace.$this->defaults['controller'];
+        $controller = (!empty($this->routeParams[0])) ? $this->controllerNamespace.ucfirst($this->routeParams[0]).'Controller' : $this->controllerNamespace.$this->defaults['controller'];
 
         return $controller;
     }

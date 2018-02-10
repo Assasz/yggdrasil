@@ -72,7 +72,7 @@ abstract class AbstractConfiguration
      *
      * @throws DriverNotFoundException if given driver doesn't exist
      */
-    public function loadDriver(string $key): mixed
+    public function loadDriver(string $key)
     {
         if(!array_key_exists($key, $this->drivers)){
             throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that '.$key.' driver is properly configured.');
