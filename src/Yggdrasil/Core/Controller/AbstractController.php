@@ -35,8 +35,8 @@ abstract class AbstractController
     private $response;
 
     /**
- * Trait that provides access to drivers
- */
+     * Trait that provides access to drivers
+     */
     use DriverAccessorTrait;
 
     /**
