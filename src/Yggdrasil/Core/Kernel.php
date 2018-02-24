@@ -78,7 +78,7 @@ class Kernel
 
                 $controllerName = $route->getController();
                 $controller = new $controllerName($this->drivers, $request, $response);
-                $response = $controller->{$route->getAction()}();
+                $response = call_user_func_array([$controller, $route->getAction()], $route->getActionParams());
             }
         }
 

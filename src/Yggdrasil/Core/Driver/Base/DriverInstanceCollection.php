@@ -7,7 +7,7 @@ use Yggdrasil\Core\Exception\DriverNotFoundException;
 /**
  * Class DriverInstanceCollection
  *
- * Collection of objects instances returned by drivers (no drivers itself), so it keeps various types of objects
+ * Collection of objects instances returned by drivers (not drivers itself), so it keeps various types of objects
  * For convenience purpose let's just call it drivers instances
  *
  * @package Yggdrasil\Core\Driver\Base
@@ -79,7 +79,7 @@ class DriverInstanceCollection
 
     /**
      * Removes given driver from collection
-     * Generally driver should be removed in AppConfiguration of your application, but it may be used in runtime
+     * Generally driver should be removed in AppConfiguration of your application, but it may be used in particular cases
      *
      * @param string $key Name of driver
      *

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 class Router
 {
     /**
-     * Set of default controller and action names
+     * Names of default controller and action
      *
      * @var array
      */
@@ -68,7 +68,7 @@ class Router
     /**
      * Returns route for requested passive action
      *
-     * @param string $alias Alias of passive action like Controller:action
+     * @param string $alias Alias of passive action like Controller:action:parameters where parameters are optional
      * @return Route
      */
     public function getPassiveActionRoute(string $alias): Route
@@ -78,6 +78,7 @@ class Router
         $route = new Route();
         $route->setController($this->resolveController());
         $route->setAction($this->resolvePassiveAction());
+        $route->setActionParams($this->resolveActionParams());
 
         return $route;
     }

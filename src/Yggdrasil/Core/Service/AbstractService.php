@@ -8,7 +8,7 @@ use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 /**
  * Class AbstractService
  *
- * Base class for application services, provides some helper methods
+ * Base class for application services, provides access to application drivers
  *
  * @package Yggdrasil\Core\Service
  * @author Paweł Antosiak <contact@pawelantosiak.com>
