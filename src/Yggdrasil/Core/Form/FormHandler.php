@@ -5,6 +5,7 @@ namespace Yggdrasil\Core\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Yggdrasil\Core\Exception\InvalidCsrfTokenException;
+use Yggdrasil\Core\Service\ServiceRequestInterface;
 
 /**
  * Class FormHandler
@@ -104,22 +105,22 @@ class FormHandler
     }
 
     /**
-     * Helper method that serialize form data into given object
-     * Sets form data value using object setter resolved by data key, if setter doesn't exist, nothing is done
+     * Helper method that serializes form data into service request
+     * Sets form data value using request object setter resolved by data key, if setter doesn't exist, nothing is done
      * Can be useful only in particular cases
      *
-     * @param mixed $object
-     * @return mixed
+     * @param ServiceRequestInterface $request
+     * @return ServiceRequestInterface
      */
-    public function serializeData($object)
+    public function serializeData(ServiceRequestInterface $request): ServiceRequestInterface
     {
         foreach ($this->dataCollection as $key => $value){
             $setter = 'set'.ucfirst(str_replace(['_', '-', '.'], '', $key));
-            if(method_exists($object, $setter)){
-                $object->{$setter}($value);
+            if(method_exists($request, $setter)){
+                $request->{$setter}($value);
             }
         }
 
-        return $object;
+        return $request;
     }
 }

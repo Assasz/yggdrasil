@@ -65,7 +65,7 @@ abstract class AbstractConfiguration
     }
 
     /**
-     * Load given driver and returns it's instance directly
+     * Loads given driver and returns it's instance directly
      *
      * @param string $key Name of driver
      * @return mixed
