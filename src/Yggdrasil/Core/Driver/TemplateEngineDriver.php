@@ -47,14 +47,15 @@ class TemplateEngineDriver implements DriverInterface
         if(self::$engineInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['view_path'], 'application')){
-                throw new MissingConfigurationException('There are missing parameters in your configuration. view_path is required for template engine to work properly.');
+            if(!$appConfiguration->isConfigured(['view_path, application_name'], 'application')){
+                throw new MissingConfigurationException('There are missing parameters in your configuration. view_path and application_name is required for template engine to render views properly.');
             }
 
             $loader = new \Twig_Loader_Filesystem(dirname(__DIR__, 7) . '/src/'.$configuration['application']['view_path']);
             $twig = new \Twig_Environment($loader);
 
             $twig->addExtension(new TwigExtension());
+            $twig->addGlobal('app.name', $configuration['application']['application_name']);
 
             self::$engineInstance = $twig;
         }
