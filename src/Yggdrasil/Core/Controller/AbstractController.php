@@ -86,8 +86,9 @@ abstract class AbstractController
      */
     protected function render(string $view, array $params = []): Response
     {
-        $params['app']['request'] = $this->getRequest();
-        $template = $this->getTemplateEngine()->render($view, $params);
+        $templating = $this->getTemplateEngine();
+        $templating->addGlobal('_request', $this->getRequest());
+        $template = $templating->render($view, $params);
 
         return $this->getResponse()->setContent($template);
     }

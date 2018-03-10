@@ -55,7 +55,7 @@ class TemplateEngineDriver implements DriverInterface
             $twig = new \Twig_Environment($loader);
 
             $twig->addExtension(new TwigExtension());
-            $twig->addGlobal('app.name', $configuration['application']['application_name']);
+            $twig->addGlobal('_appname', $configuration['application']['application_name']);
 
             self::$engineInstance = $twig;
         }
