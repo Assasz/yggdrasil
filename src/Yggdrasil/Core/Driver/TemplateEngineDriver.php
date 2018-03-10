@@ -47,7 +47,7 @@ class TemplateEngineDriver implements DriverInterface
         if(self::$engineInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['view_path, application_name'], 'application')){
+            if(!$appConfiguration->isConfigured(['view_path', 'application_name'], 'application')){
                 throw new MissingConfigurationException('There are missing parameters in your configuration. view_path and application_name is required for template engine to render views properly.');
             }
 
