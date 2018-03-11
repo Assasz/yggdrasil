@@ -47,7 +47,7 @@ class Router
     }
 
     /**
-     * Returns route for requested resource
+     * Returns route for requested action
      *
      * @param Request $request
      * @return Route
@@ -66,18 +66,24 @@ class Router
     }
 
     /**
-     * Returns route for requested passive action
+     * Returns route for requested action by alias, useful for passive actions
      *
-     * @param string $alias Alias of passive action like Controller:action:parameters where parameters are optional
+     * @param string $alias   Alias of action like Controller:action:parameters where parameters are optional
+     * @param array  $params  Additional action parameters
+     * @param bool   $passive Indicates if requested action is passive
      * @return Route
      */
-    public function getPassiveActionRoute(string $alias): Route
+    public function getAliasedRoute(string $alias, array $params = [], bool $passive = false): Route
     {
         $this->routeParams = explode(':', $alias);
 
+        foreach ($params as $param) {
+            $this->routeParams[] = $param;
+        }
+
         $route = new Route();
         $route->setController($this->resolveController());
-        $route->setAction($this->resolvePassiveAction());
+        $route->setAction(($passive) ? $this->resolvePassiveAction() : $this->resolveAction());
         $route->setActionParams($this->resolveActionParams());
 
         return $route;

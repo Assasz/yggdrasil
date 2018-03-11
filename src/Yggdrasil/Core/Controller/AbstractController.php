@@ -76,21 +76,23 @@ abstract class AbstractController
     /**
      * Renders given view
      *
-     * @param string $view   Name of view file
-     * @param array  $params Parameters supposed to be passed to the view
-     * @return Response
+     * @param string $view    Name of view file
+     * @param array  $params  Parameters supposed to be passed to the view
+     * @param bool   $partial Indicates if rendered view is partial
+     * @return Response|string
      *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    protected function render(string $view, array $params = []): Response
+    protected function render(string $view, array $params = [], bool $partial = false)
     {
         $templating = $this->getTemplateEngine();
         $templating->addGlobal('_request', $this->getRequest());
+        $templating->addGlobal('_user', $this->getUser());
         $template = $templating->render($view, $params);
 
-        return $this->getResponse()->setContent($template);
+        return (!$partial) ? $this->getResponse()->setContent($template): $template;
     }
 
     /**
@@ -106,17 +108,6 @@ abstract class AbstractController
         $headers = $this->getResponse()->headers->all();
 
         return new RedirectResponse($query, Response::HTTP_FOUND, $headers);
-    }
-
-    /**
-     * Checks if user is authenticated
-     *
-     * @return bool
-     */
-    protected function isGranted(): bool
-    {
-        $session = new Session();
-        return $session->get('is_granted', false);
     }
 
     /**
@@ -151,5 +142,30 @@ abstract class AbstractController
     {
         $headers = $this->getResponse()->headers->all();
         return new JsonResponse($data, Response::HTTP_OK, $headers);
+    }
+
+    /**
+     * Checks if user is authenticated
+     *
+     * @return bool
+     */
+    protected function isGranted(): bool
+    {
+        $session = new Session();
+        return $session->get('is_granted', false);
+    }
+
+    /**
+     * Returns authenticated user instance
+     *
+     * @return mixed
+     */
+    protected function getUser()
+    {
+        $session = new Session();
+
+        if($this->isGranted()){
+            return $session->get('user');
+        }
     }
 }

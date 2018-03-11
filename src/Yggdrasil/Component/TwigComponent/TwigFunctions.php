@@ -96,13 +96,12 @@ class TwigFunctions
     }
 
     /**
-     * Returns instance of user that is authenticated, null otherwise
+     * Embeds partial view
      *
-     * @return mixed
+     * @param string $view Rendered partial view
      */
-    public static function getUser()
+    public static function partial(string $view): void
     {
-        $session = new Session();
-        return $session->get('user');
+        echo $view;
     }
 }

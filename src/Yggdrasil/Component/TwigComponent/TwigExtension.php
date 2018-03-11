@@ -28,7 +28,8 @@ class TwigExtension extends \Twig_Extension
             new \Twig_Function('flashbag', $namespace.'::getFlashBag'),
             new \Twig_Function('user', $namespace.'::getUser'),
             new \Twig_Function('is_granted', $namespace.'::isGranted'),
-            new \Twig_Function('is_pjax', $namespace.'::isPjax')
+            new \Twig_Function('is_pjax', $namespace.'::isPjax'),
+            new \Twig_Function('partial', $namespace.'::partial')
         ];
     }
 }

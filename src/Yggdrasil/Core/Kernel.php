@@ -70,7 +70,7 @@ class Kernel
     {
         if(array_key_exists('passive_action', $this->configuration)) {
             foreach ($this->configuration['passive_action'] as $action) {
-                $route = $this->getRouter()->getPassiveActionRoute($action);
+                $route = $this->getRouter()->getAliasedRoute($action, [], true);
 
                 if (!method_exists($route->getController(), $route->getAction())) {
                     throw new ActionNotFoundException($action. ' passive action is present in your configuration, but can\'t be found or is improperly configured.');
