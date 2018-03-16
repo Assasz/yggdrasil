@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 use Yggdrasil\Core\Exception\ActionNotFoundException;
+use Yggdrasil\Core\Exception\WrongActionRequestedException;
 
 /**
  * Class Kernel
@@ -93,6 +94,7 @@ class Kernel
      * @return mixed|Response
      *
      * @throws ActionNotFoundException if requested action can't be found, but only in debug mode
+     * @throws WrongActionRequestedException if requested action is partial or passive
      */
     private function executeAction(Request $request, Response $response)
     {
@@ -104,6 +106,10 @@ class Kernel
             }
 
             throw new ActionNotFoundException($route->getAction().' for '.$route->getController().' not found.');
+        }
+
+        if(preg_match('(partial|passive)', strtolower($route->getAction())) === 1){
+            throw new WrongActionRequestedException('Partial and passive actions cannot be requested by user.');
         }
 
         $controllerName = $route->getController();
