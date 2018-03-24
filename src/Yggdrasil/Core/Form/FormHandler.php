@@ -62,7 +62,9 @@ class FormHandler
             return false;
         }
 
-        $this->dataCollection = $request->request->all();
+        $dataCollection = array_merge($request->request->all(), $request->files->all());
+        $this->dataCollection = $dataCollection;
+
         return true;
     }
 
