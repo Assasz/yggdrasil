@@ -2,37 +2,31 @@
 
 namespace Yggdrasil\Component\TwigComponent;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
-
 /**
- * Class TwigFunctions
+ * Class StandardExtension
  *
- * Provides set of functions for TwigExtension
+ * Provides standard extension for Twig
  *
  * @package Yggdrasil\Component\TwigComponent
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class TwigFunctions
+class StandardExtension extends \Twig_Extension
 {
     /**
-     * Returns absolute path for requested action
+     * Returns set of functions
      *
-     * @param string $alias  Alias of action like Controller:action
-     * @param array  $params Set of action parameters
-     * @return string
+     * @return array
      */
-    public static function getPath(string $alias, array $params = []): string
+    public function getFunctions(): array
     {
-        $queryParams = explode(':', mb_strtolower($alias));
-
-        foreach($params as $param){
-            $queryParams[] = $param;
-        }
-
-        $query = implode('/', $queryParams);
-
-        return BASE_URL.$query;
+        return [
+            new \Twig_Function('asset', [$this, 'getAsset']),
+            new \Twig_Function('csrf_token', [$this, 'generateCsrfToken']),
+            new \Twig_Function('flashbag', [$this, 'getFlashBag']),
+            new \Twig_Function('is_granted', [$this, 'isGranted']),
+            new \Twig_Function('is_pjax', [$this, 'isPjax']),
+            new \Twig_Function('partial', [$this, 'embedPartial'])
+        ];
     }
 
     /**
@@ -41,7 +35,7 @@ class TwigFunctions
      * @param string $path
      * @return string
      */
-    public static function getAsset(string $path): string
+    public function getAsset(string $path): string
     {
         return BASE_URL.ltrim($path, '/');
     }
@@ -51,7 +45,7 @@ class TwigFunctions
      *
      * @throws \Exception if any rand function can't be found in OS
      */
-    public static function getCsrfToken(): void
+    public function generateCsrfToken(): void
     {
         $token = bin2hex(random_bytes(32));
 
@@ -67,7 +61,7 @@ class TwigFunctions
      * @param Request $request
      * @return bool
      */
-    public static function isPjax(Request $request): bool
+    public function isPjax(Request $request): bool
     {
         return ($request->headers->get('X-PJAX') !== null);
     }
@@ -78,7 +72,7 @@ class TwigFunctions
      * @param string $type
      * @return array
      */
-    public static function getFlashBag(string $type): array
+    public function getFlashBag(string $type): array
     {
         $session = new Session();
         return $session->getFlashBag()->get($type);
@@ -89,7 +83,7 @@ class TwigFunctions
      *
      * @return bool
      */
-    public static function isGranted(): bool
+    public function isGranted(): bool
     {
         $session = new Session();
         return $session->get('is_granted', false);
@@ -100,7 +94,7 @@ class TwigFunctions
      *
      * @param string $view Rendered partial view
      */
-    public static function partial(string $view): void
+    public function embedPartial(string $view): void
     {
         echo $view;
     }

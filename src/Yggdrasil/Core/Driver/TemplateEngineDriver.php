@@ -2,7 +2,8 @@
 
 namespace Yggdrasil\Core\Driver;
 
-use Yggdrasil\Component\TwigComponent\TwigExtension;
+use Yggdrasil\Component\TwigComponent\RoutingExtension;
+use Yggdrasil\Component\TwigComponent\StandardExtension;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverInterface;
 use Yggdrasil\Core\Exception\MissingConfigurationException;
@@ -54,7 +55,8 @@ class TemplateEngineDriver implements DriverInterface
             $loader = new \Twig_Loader_Filesystem(dirname(__DIR__, 7) . '/src/'.$configuration['application']['view_path']);
             $twig = new \Twig_Environment($loader);
 
-            $twig->addExtension(new TwigExtension());
+            $twig->addExtension(new StandardExtension());
+            $twig->addExtension(new RoutingExtension($appConfiguration->loadDriver('router')));
             $twig->addGlobal('_appname', $configuration['application']['application_name']);
 
             self::$engineInstance = $twig;

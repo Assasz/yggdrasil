@@ -104,6 +104,14 @@ class Router
             $queryParams[] = $param;
         }
 
+        if($queryParams[1].'Action' === $this->defaults['action']){
+            unset($queryParams[1]);
+
+            if(ucfirst($queryParams[0]).'Controller' === $this->defaults['controller']){
+                unset($queryParams[0]);
+            }
+        }
+
         $query = implode('/', $queryParams);
 
         return BASE_URL.$query;
