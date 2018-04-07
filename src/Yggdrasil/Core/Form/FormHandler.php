@@ -44,9 +44,13 @@ class FormHandler
      */
     public function handle(Request $request): bool
     {
-        $session = new Session();
+        if(!$request->isMethod('POST')){
+            return false;
+        }
 
         if($request->request->has('csrf_token')) {
+            $session = new Session();
+
             if(!$session->has('csrf_token')){
                 return false;
             }
@@ -56,10 +60,6 @@ class FormHandler
             }
 
             $request->request->remove('csrf_token');
-        }
-
-        if(!$request->isMethod('POST')){
-            return false;
         }
 
         $dataCollection = array_merge($request->request->all(), $request->files->all());
@@ -107,8 +107,7 @@ class FormHandler
     }
 
     /**
-     * Helper method that serializes form data into service request
-     * Sets form data value using request object setter resolved by data key, if setter doesn't exist, nothing is done
+     * Helper method that serializes form data into service request object
      * Can be useful only in particular cases
      *
      * @param ServiceRequestInterface $request
