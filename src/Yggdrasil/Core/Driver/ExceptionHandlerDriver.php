@@ -8,7 +8,7 @@ use Whoops\Run;
 use Whoops\Handler\PrettyPageHandler;
 
 /**
- * Class RouterDriver
+ * Class ExceptionHandlerDriver
  *
  * Exception handler driver, necessary for exception handling to work
  * Whoops is framework default exception handler
@@ -23,7 +23,7 @@ class ExceptionHandlerDriver implements DriverInterface
      *
      * @var Run
      */
-    private static $driverInstance;
+    private static $handlerInstance;
 
     /**
      * ExceptionHandlerDriver constructor.
@@ -42,14 +42,14 @@ class ExceptionHandlerDriver implements DriverInterface
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): Run
     {
-        if(self::$driverInstance === null) {
+        if(self::$handlerInstance === null) {
             $driver = new Run();
             $driver->pushHandler(new PrettyPageHandler());
             $driver->register();
 
-            self::$driverInstance = $driver;
+            self::$handlerInstance = $driver;
         }
 
-        return self::$driverInstance;
+        return self::$handlerInstance;
     }
 }

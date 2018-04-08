@@ -14,7 +14,7 @@ namespace Yggdrasil\Core\Service;
 interface ServiceInterface
 {
     /**
-     * Processes service task and returns specified response
+     * Processes service task
      *
      * @param ServiceRequestInterface $request Input port request
      * @return ServiceResponseInterface        Output port response
