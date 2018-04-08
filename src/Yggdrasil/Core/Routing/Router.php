@@ -104,7 +104,7 @@ class Router
             $queryParams[] = $param;
         }
 
-        if($queryParams[1].'Action' === $this->defaults['action']){
+        if(empty($queryParams[2]) && $queryParams[1].'Action' === $this->defaults['action']){
             unset($queryParams[1]);
 
             if(ucfirst($queryParams[0]).'Controller' === $this->defaults['controller']){
