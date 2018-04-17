@@ -90,6 +90,10 @@ abstract class AbstractController
         $templating = $this->getTemplateEngine();
         $templating->addGlobal('_request', $this->getRequest());
         $templating->addGlobal('_user', $this->getUser());
+
+        $session = new Session();
+        $templating->addGlobal('_session', $session);
+
         $template = $templating->render($view, $params);
 
         return (!$partial) ? $this->getResponse()->setContent($template): $template;

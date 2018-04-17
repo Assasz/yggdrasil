@@ -90,7 +90,7 @@ class Kernel
      * Executes action and returns response
      *
      * @param Request  $request
-     * @param Response $response Response returned by passive actions if exists, can be modified or not
+     * @param Response $response Response returned by passive actions if exists, can be modified
      * @return mixed|Response
      *
      * @throws ActionNotFoundException if requested action can't be found, but only in debug mode
