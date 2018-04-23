@@ -160,7 +160,7 @@ abstract class AbstractController
     }
 
     /**
-     * Returns authenticated user instance
+     * Returns authenticated user instance from session
      *
      * @return mixed
      */

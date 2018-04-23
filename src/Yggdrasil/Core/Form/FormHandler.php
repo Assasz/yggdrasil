@@ -60,6 +60,7 @@ class FormHandler
             }
 
             $request->request->remove('csrf_token');
+            $session->set('csrf_token', null);
         }
 
         $dataCollection = array_merge($request->request->all(), $request->files->all());
