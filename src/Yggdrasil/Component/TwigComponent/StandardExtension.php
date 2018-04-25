@@ -46,14 +46,21 @@ class StandardExtension extends \Twig_Extension
     /**
      * Generates CSRF token
      *
+     * @param bool $onlyToken Useful if multiple tokens are needed on one page
+     * @return mixed
+     *
      * @throws \Exception if any rand function can't be found in OS
      */
-    public function generateCsrfToken(): void
+    public function generateCsrfToken(bool $onlyToken = false)
     {
         $token = bin2hex(random_bytes(32));
 
         $session = new Session();
         $session->set('csrf_token', $token);
+
+        if($onlyToken){
+            return $token;
+        }
 
         echo '<input type="hidden" id="csrf_token" name="csrf_token" value="'.$token.'"/>';
     }
