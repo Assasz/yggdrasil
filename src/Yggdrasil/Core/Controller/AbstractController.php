@@ -137,6 +137,39 @@ abstract class AbstractController
     }
 
     /**
+     * Returns Method Not Allowed (405) response
+     *
+     * @param string $message
+     * @return Response
+     */
+    protected function wrongMethod(string $message = "Wrong method."): Response
+    {
+        return $this->getResponse()->setContent($message)->setStatusCode(Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+
+    /**
+     * Enables CORS with specified headers
+     *
+     * @param array $origins
+     * @param array $methods
+     * @param array $headers
+     * @param bool  $credentials
+     * @param int   $maxAge
+     */
+    protected function enableCors(array $origins = ['*'], array $methods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], array $headers = ['*'], bool $credentials = true, int $maxAge = 3600): void
+    {
+        $origins = implode(', ', $origins);
+        $methods = implode(', ', $methods);
+        $headers = implode(', ', $headers);
+
+        $this->getResponse()->headers->set('Access-Control-Allow-Origin', $origins);
+        $this->getResponse()->headers->set('Access-Control-Allow-Methods', $methods);
+        $this->getResponse()->headers->set('Access-Control-Allow-Headers', $headers);
+        $this->getResponse()->headers->set('Access-Control-Allow-Credentials', $credentials);
+        $this->getResponse()->headers->set('Access-Control-Max-Age', $maxAge);
+    }
+
+    /**
      * Returns Json encoded response
      *
      * @param array $data Data supposed to be returned
@@ -144,7 +177,9 @@ abstract class AbstractController
      */
     protected function json(array $data = []): JsonResponse
     {
+        $this->getResponse()->headers->set('Content-Type', 'application/json');
         $headers = $this->getResponse()->headers->all();
+
         return new JsonResponse($data, Response::HTTP_OK, $headers);
     }
 
