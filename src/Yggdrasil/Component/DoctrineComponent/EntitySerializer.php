@@ -7,15 +7,15 @@ use Doctrine\Common\Collections\Collection;
 /**
  * Class EntitySerializer
  *
- * Serializes Doctrine entities into array
+ * Serializes Doctrine entities
  *
- * @package Yggdrasil\Core\Helper
+ * @package Yggdrasil\Component\DoctrineComponent
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 class EntitySerializer
 {
     /**
-     * Does the job
+     * Serializes entities into array
      *
      * @param array $entities Array of entities to serialize
      * @param int   $depth    Association depth
