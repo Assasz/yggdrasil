@@ -102,13 +102,17 @@ class Kernel
 
         if(!method_exists($route->getController(), $route->getAction())){
             if(!DEBUG) {
-                return new Response("Not found.", Response::HTTP_NOT_FOUND);
+                return new Response($this->configuration['error_message']['http_not_found'], Response::HTTP_NOT_FOUND);
             }
 
             throw new ActionNotFoundException($route->getAction().' for '.$route->getController().' not found.');
         }
 
         if(preg_match('(partial|passive)', strtolower($route->getAction())) === 1){
+            if(!DEBUG) {
+                return new Response($this->configuration['error_message']['http_forbidden'], Response::HTTP_FORBIDDEN);
+            }
+
             throw new WrongActionRequestedException('Partial and passive actions cannot be requested by user.');
         }
 
