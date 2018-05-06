@@ -102,7 +102,7 @@ class Kernel
 
         if(!method_exists($route->getController(), $route->getAction())){
             if(!DEBUG) {
-                return new Response($this->configuration['routing']['http_not_found_message'] ?? 'Not found.', Response::HTTP_NOT_FOUND);
+                return new Response($this->configuration['application']['http_not_found_message'] ?? 'Not found.', Response::HTTP_NOT_FOUND);
             }
 
             throw new ActionNotFoundException($route->getAction().' for '.$route->getController().' not found.');
