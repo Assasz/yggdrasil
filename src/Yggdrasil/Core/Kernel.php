@@ -61,7 +61,7 @@ class Kernel
         $response = $this->executePassiveActions($request, $response);
         $response = $this->executeAction($request, $response);
 
-        if(!$response->isSuccessful()){
+        if($response->isClientError() || $response->isServerError()){
             return $this->handleError($request, $response);
         }
 
