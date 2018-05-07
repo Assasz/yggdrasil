@@ -49,13 +49,23 @@ class Kernel
      *
      * @param Request $request
      * @return mixed|Response
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function handle(Request $request)
     {
         $response = new Response();
 
         $response = $this->executePassiveActions($request, $response);
-        return $this->executeAction($request, $response);
+        $response = $this->executeAction($request, $response);
+
+        if(!$response->isSuccessful()){
+            return $this->handleError($request, $response);
+        }
+
+        return $response;
     }
 
     /**
@@ -102,7 +112,9 @@ class Kernel
 
         if(!method_exists($route->getController(), $route->getAction())){
             if(!DEBUG) {
-                return new Response($this->configuration['application']['http_not_found_message'] ?? 'Not found.', Response::HTTP_NOT_FOUND);
+                return $response
+                    ->setContent('Not found.')
+                    ->setStatusCode(Response::HTTP_NOT_FOUND);
             }
 
             throw new ActionNotFoundException($route->getAction().' for '.$route->getController().' not found.');
@@ -110,7 +122,9 @@ class Kernel
 
         if(preg_match('(partial|passive)', strtolower($route->getAction())) === 1){
             if(!DEBUG) {
-                return new Response('Forbidden.', Response::HTTP_FORBIDDEN);
+                return $response
+                    ->setContent('Access denied.')
+                    ->setStatusCode(Response::HTTP_FORBIDDEN);
             }
 
             throw new WrongActionRequestedException('Partial and passive actions cannot be requested by user.');
@@ -119,5 +133,42 @@ class Kernel
         $controllerName = $route->getController();
         $controller = new $controllerName($this->drivers, $request, $response);
         return call_user_func_array([$controller, $route->getAction()], $route->getActionParams());
+    }
+
+    /**
+     * Handles HTTP errors
+     *
+     * @param Request  $request
+     * @param Response $response Response returned by action execution
+     * @return Response
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    private function handleError(Request $request, Response $response)
+    {
+        $this->getTemplateEngine()->addGlobal('_request', $request);
+
+        switch($response->getStatusCode()){
+            case 404:
+                $template = $this->getTemplateEngine()->render('error/404.html.twig', [
+                    'message' => $response->getContent()
+                ]);
+                break;
+            case 403:
+                $template = $this->getTemplateEngine()->render('error/403.html.twig', [
+                    'message' => $response->getContent()
+                ]);
+                break;
+            default:
+                $template = $this->getTemplateEngine()->render('error/default.html.twig', [
+                    'message' => $response->getContent(),
+                    'status' => $response->getStatusCode()
+                ]);
+                break;
+        }
+
+        return $response->setContent($template);
     }
 }

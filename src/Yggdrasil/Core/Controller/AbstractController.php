@@ -122,7 +122,9 @@ abstract class AbstractController
      */
     protected function accessDenied(string $message = 'Access denied.'): Response
     {
-        return $this->getResponse()->setContent($message)->setStatusCode(Response::HTTP_FORBIDDEN);
+        return $this->getResponse()
+            ->setContent($message)
+            ->setStatusCode(Response::HTTP_FORBIDDEN);
     }
 
     /**
@@ -133,7 +135,9 @@ abstract class AbstractController
      */
     protected function notFound(string $message = 'Not found.'): Response
     {
-        return $this->getResponse()->setContent($message)->setStatusCode(Response::HTTP_NOT_FOUND);
+        return $this->getResponse()
+            ->setContent($message)
+            ->setStatusCode(Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -144,7 +148,9 @@ abstract class AbstractController
      */
     protected function wrongMethod(string $message = "Wrong method."): Response
     {
-        return $this->getResponse()->setContent($message)->setStatusCode(Response::HTTP_METHOD_NOT_ALLOWED);
+        return $this->getResponse()
+            ->setContent($message)
+            ->setStatusCode(Response::HTTP_METHOD_NOT_ALLOWED);
     }
 
     /**
