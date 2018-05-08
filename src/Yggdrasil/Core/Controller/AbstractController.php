@@ -87,14 +87,8 @@ abstract class AbstractController
      */
     protected function render(string $view, array $params = [], bool $partial = false)
     {
-        $templating = $this->getTemplateEngine();
-        $templating->addGlobal('_request', $this->getRequest());
-        $templating->addGlobal('_user', $this->getUser());
-
-        $session = new Session();
-        $templating->addGlobal('_session', $session);
-
-        $template = $templating->render($view, $params);
+        $this->getTemplateEngine()->addGlobal('_request', $this->getRequest());
+        $template = $this->getTemplateEngine()->render($view, $params);
 
         return (!$partial) ? $this->getResponse()->setContent($template): $template;
     }
@@ -197,6 +191,7 @@ abstract class AbstractController
     protected function isGranted(): bool
     {
         $session = new Session();
+
         return $session->get('is_granted', false);
     }
 

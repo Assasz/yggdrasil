@@ -7,6 +7,7 @@ use Yggdrasil\Component\TwigComponent\StandardExtension;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverInterface;
 use Yggdrasil\Core\Exception\MissingConfigurationException;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class TemplateEngineDriver
@@ -57,6 +58,10 @@ class TemplateEngineDriver implements DriverInterface
 
             $twig->addExtension(new StandardExtension());
             $twig->addExtension(new RoutingExtension($appConfiguration->loadDriver('router')));
+
+            $session = new Session();
+            $twig->addGlobal('_session', $session);
+            $twig->addGlobal('_user', $session->get('user'));
             $twig->addGlobal('_appname', $configuration['application']['application_name']);
 
             self::$engineInstance = $twig;
