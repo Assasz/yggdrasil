@@ -1,7 +1,8 @@
 # Yggdrasil
 
-PHP framework for clean architecture based web applications. Under development.
-See [Yggdrasil Skeleton](https://github.com/Assasz/yggdrasil-skeleton).
+PHP framework for Clean Architecture based web applications. Under development.
+
+It's only framework core. See [Yggdrasil Skeleton](https://github.com/Assasz/yggdrasil-skeleton).
 
 
 ### Installation
