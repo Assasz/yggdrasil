@@ -84,30 +84,11 @@ abstract class AbstractController
     /**
      * Returns JSON encoded response
      *
-     * @param array $resources          Resources supposed to be returned
-     * @param int   $serializationDepth Entity association depth to be pursued by serialization
+     * @param array $data Data supposed to be returned
      * @return JsonResponse
      */
-    protected function json(array $resources = [], int $serializationDepth = 1): JsonResponse
+    protected function json(array $data = []): JsonResponse
     {
-        $data = [];
-
-        foreach ($resources as $rKey => $resource) {
-            if (is_array($resource)) {
-                foreach ($resource as $iKey => $item) {
-                    if ($item instanceof SerializableEntityInterface) {
-                        $data[$rKey][$iKey] = EntitySerializer::toArray([$item], $serializationDepth);
-                    } else {
-                        $data[$rKey][$iKey] = $item;
-                    }
-                }
-            } elseif ($resource instanceof SerializableEntityInterface) {
-                $data[$rKey] = EntitySerializer::toArray([$resource], $serializationDepth);
-            } else {
-                $data[$rKey] = $resource;
-            }
-        }
-
         $this->getResponse()->headers->set('Content-Type', 'application/json');
         $headers = $this->getResponse()->headers->all();
 

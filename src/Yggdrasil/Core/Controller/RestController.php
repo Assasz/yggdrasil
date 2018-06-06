@@ -48,19 +48,16 @@ abstract class RestController
      * Enables CORS with specified headers
      *
      * @param array $origins
-     * @param array $methods
      * @param array $headers
      * @param bool  $credentials
      * @param int   $maxAge
      */
-    protected function enableCors(array $origins = ['*'], array $methods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], array $headers = ['*'], bool $credentials = true, int $maxAge = 3600): void
+    protected function enableCors(array $origins = ['*'], array $headers = ['*'], bool $credentials = true, int $maxAge = 3600): void
     {
         $origins = implode(', ', $origins);
-        $methods = implode(', ', $methods);
         $headers = implode(', ', $headers);
 
         $this->getResponse()->headers->set('Access-Control-Allow-Origin', $origins);
-        $this->getResponse()->headers->set('Access-Control-Allow-Methods', $methods);
         $this->getResponse()->headers->set('Access-Control-Allow-Headers', $headers);
         $this->getResponse()->headers->set('Access-Control-Allow-Credentials', $credentials);
         $this->getResponse()->headers->set('Access-Control-Max-Age', $maxAge);
@@ -76,10 +73,14 @@ abstract class RestController
      */
     protected function fromBody(string $key)
     {
-        if($this->getRequest()->isMethod('POST')){
-            $dataCollection = array_merge($this->getRequest()->request->all(), $this->getRequest()->files->all());
+        if($this->getRequest()->headers->get('Content-Type') === 'application/json'){
+            $dataCollection = json_decode(file_get_contents('php://input'), true);
         } else {
-            parse_str(file_get_contents('php://input'), $dataCollection);
+            if($this->getRequest()->isMethod('POST')){
+                $dataCollection = array_merge($this->getRequest()->request->all(), $this->getRequest()->files->all());
+            } else {
+                parse_str(file_get_contents('php://input'), $dataCollection);
+            }
         }
 
         if(empty($dataCollection[$key])){
@@ -110,30 +111,11 @@ abstract class RestController
     /**
      * Returns JSON encoded response
      *
-     * @param array $resources          Resources supposed to be returned
-     * @param int   $serializationDepth Entity association depth to be pursued by serialization
+     * @param array $data Data supposed to be returned
      * @return JsonResponse
      */
-    protected function json(array $resources = [], int $serializationDepth = 1): JsonResponse
+    protected function json(array $data = []): JsonResponse
     {
-        $data = [];
-
-        foreach ($resources as $rKey => $resource) {
-            if (is_array($resource)) {
-                foreach ($resource as $iKey => $item) {
-                    if ($item instanceof SerializableEntityInterface) {
-                        $data[$rKey][$iKey] = EntitySerializer::toArray([$item], $serializationDepth);
-                    } else {
-                        $data[$rKey][$iKey] = $item;
-                    }
-                }
-            } elseif ($resource instanceof SerializableEntityInterface) {
-                $data[$rKey] = EntitySerializer::toArray([$resource], $serializationDepth);
-            } else {
-                $data[$rKey] = $resource;
-            }
-        }
-
         $this->getResponse()->headers->set('Content-Type', 'application/json');
         $headers = $this->getResponse()->headers->all();
 
