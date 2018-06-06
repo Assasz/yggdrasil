@@ -18,7 +18,7 @@ class EntitySerializer
      * Serializes entities into array
      *
      * @param array $entities Array of entities to serialize
-     * @param int   $depth    Association depth
+     * @param int   $depth    Entity association depth to be pursued by serialization
      * @return array
      */
     public static function toArray(array $entities, int $depth = 1): array
@@ -32,6 +32,10 @@ class EntitySerializer
         $i = 0;
 
         foreach ($entities as $entity){
+            if(!$entity instanceof SerializableEntityInterface){
+                continue;
+            }
+
             $methods[$i] = get_class_methods($entity);
 
             foreach ($methods[$i] as $method){

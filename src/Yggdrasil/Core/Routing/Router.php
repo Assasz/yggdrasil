@@ -193,7 +193,7 @@ class Router
      * @param string $method HTTP method
      * @return string
      */
-    public function resolveApiAction(string $method): string
+    private function resolveApiAction(string $method): string
     {
         $method = ucfirst(strtolower($method));
         $action = (!empty($this->routeParams[1])) ? $this->routeParams[1].$method.'Action' : $this->defaults['action'];

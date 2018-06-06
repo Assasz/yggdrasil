@@ -9,11 +9,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\Base\DriverInstanceCollection;
+use Yggdrasil\Component\DoctrineComponent\EntitySerializer;
+use Yggdrasil\Component\DoctrineComponent\SerializableEntityInterface;
 
 /**
  * Class AbstractController
  *
- * Base class for application controllers, provides some helper methods
+ * Base class for application controllers
  *
  * @package Yggdrasil\Core\Controller
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -21,18 +23,9 @@ use Yggdrasil\Core\Driver\Base\DriverInstanceCollection;
 abstract class AbstractController
 {
     /**
-     * Request from client
-     *
-     * @var Request
+     * Trait that makes controller a HTTP port component
      */
-    private $request;
-
-    /**
-     * Response prepared to return
-     *
-     * @var Response
-     */
-    private $response;
+    use HttpControllerTrait;
 
     /**
      * Trait that provides access to drivers
@@ -51,26 +44,6 @@ abstract class AbstractController
         $this->drivers = $drivers;
         $this->request = $request;
         $this->response = $response;
-    }
-
-    /**
-     * Returns request
-     *
-     * @return Request
-     */
-    protected function getRequest(): Request
-    {
-        return $this->request;
-    }
-
-    /**
-     * Returns response
-     *
-     * @return Response
-     */
-    protected function getResponse(): Response
-    {
-        return $this->response;
     }
 
     /**
@@ -109,74 +82,32 @@ abstract class AbstractController
     }
 
     /**
-     * Returns Forbidden (403) response
+     * Returns JSON encoded response
      *
-     * @param string $message
-     * @return Response
-     */
-    protected function accessDenied(string $message = 'Access denied.'): Response
-    {
-        return $this->getResponse()
-            ->setContent($message)
-            ->setStatusCode(Response::HTTP_FORBIDDEN);
-    }
-
-    /**
-     * Returns Not Found (404) response
-     *
-     * @param string $message
-     * @return Response
-     */
-    protected function notFound(string $message = 'Not found.'): Response
-    {
-        return $this->getResponse()
-            ->setContent($message)
-            ->setStatusCode(Response::HTTP_NOT_FOUND);
-    }
-
-    /**
-     * Returns Method Not Allowed (405) response
-     *
-     * @param string $message
-     * @return Response
-     */
-    protected function wrongMethod(string $message = "Wrong method."): Response
-    {
-        return $this->getResponse()
-            ->setContent($message)
-            ->setStatusCode(Response::HTTP_METHOD_NOT_ALLOWED);
-    }
-
-    /**
-     * Enables CORS with specified headers
-     *
-     * @param array $origins
-     * @param array $methods
-     * @param array $headers
-     * @param bool  $credentials
-     * @param int   $maxAge
-     */
-    protected function enableCors(array $origins = ['*'], array $methods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], array $headers = ['*'], bool $credentials = true, int $maxAge = 3600): void
-    {
-        $origins = implode(', ', $origins);
-        $methods = implode(', ', $methods);
-        $headers = implode(', ', $headers);
-
-        $this->getResponse()->headers->set('Access-Control-Allow-Origin', $origins);
-        $this->getResponse()->headers->set('Access-Control-Allow-Methods', $methods);
-        $this->getResponse()->headers->set('Access-Control-Allow-Headers', $headers);
-        $this->getResponse()->headers->set('Access-Control-Allow-Credentials', $credentials);
-        $this->getResponse()->headers->set('Access-Control-Max-Age', $maxAge);
-    }
-
-    /**
-     * Returns Json encoded response
-     *
-     * @param array $data Data supposed to be returned
+     * @param array $resources          Resources supposed to be returned
+     * @param int   $serializationDepth Entity association depth to be pursued by serialization
      * @return JsonResponse
      */
-    protected function json(array $data = []): JsonResponse
+    protected function json(array $resources = [], int $serializationDepth = 1): JsonResponse
     {
+        $data = [];
+
+        foreach ($resources as $rKey => $resource) {
+            if (is_array($resource)) {
+                foreach ($resource as $iKey => $item) {
+                    if ($item instanceof SerializableEntityInterface) {
+                        $data[$rKey][$iKey] = EntitySerializer::toArray([$item], $serializationDepth);
+                    } else {
+                        $data[$rKey][$iKey] = $item;
+                    }
+                }
+            } elseif ($resource instanceof SerializableEntityInterface) {
+                $data[$rKey] = EntitySerializer::toArray([$resource], $serializationDepth);
+            } else {
+                $data[$rKey] = $resource;
+            }
+        }
+
         $this->getResponse()->headers->set('Content-Type', 'application/json');
         $headers = $this->getResponse()->headers->all();
 
