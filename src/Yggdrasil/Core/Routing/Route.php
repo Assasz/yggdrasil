@@ -34,6 +34,23 @@ class Route
     private $actionParams;
 
     /**
+     * Indicates if api was called
+     *
+     * @var bool
+     */
+    private $apiCall;
+
+    /**
+     * Route constructor.
+     *
+     * Sets default value to $apiCall
+     */
+    public function __construct()
+    {
+        $this->apiCall = false;
+    }
+
+    /**
      * Returns controller name
      *
      * @return string
@@ -91,5 +108,25 @@ class Route
     public function setActionParams(array $actionParams): void
     {
         $this->actionParams = $actionParams;
+    }
+
+    /**
+     * Returns true is api was called, false otherwise
+     *
+     * @return bool
+     */
+    public function isApiCall(): bool
+    {
+        return $this->apiCall;
+    }
+
+    /**
+     * Sets api call flag
+     *
+     * @param bool $apiCall
+     */
+    public function setApiCall(bool $apiCall): void
+    {
+        $this->apiCall = $apiCall;
     }
 }

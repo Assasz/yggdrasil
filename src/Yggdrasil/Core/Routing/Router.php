@@ -58,8 +58,16 @@ class Router
         $this->routeParams = explode('/', trim($query, '/'));
 
         $route = new Route();
+
+        if($this->routeParams[0] === 'api'){
+            unset($this->routeParams[0]);
+            $this->routeParams = array_values($this->routeParams);
+
+            $route->setApiCall(true);
+        }
+
         $route->setController($this->resolveController());
-        $route->setAction($this->resolveAction());
+        $route->setAction(($route->isApiCall()) ? $this->resolveApiAction($request->getMethod()) : $this->resolveAction());
         $route->setActionParams($this->resolveActionParams());
 
         return $route;
@@ -175,6 +183,20 @@ class Router
     private function resolvePassiveAction(): string
     {
         $action = $this->routeParams[1].'PassiveAction';
+
+        return $action;
+    }
+
+    /**
+     * Resolves api action depending on route parameter and HTTP method
+     *
+     * @param string $method HTTP method
+     * @return string
+     */
+    public function resolveApiAction(string $method): string
+    {
+        $method = ucfirst(strtolower($method));
+        $action = (!empty($this->routeParams[1])) ? $this->routeParams[1].$method.'Action' : $this->defaults['action'];
 
         return $action;
     }
