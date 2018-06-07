@@ -55,12 +55,12 @@ abstract class ApiController
     protected function fromBody(string $key)
     {
         if($this->getRequest()->headers->get('Content-Type') === 'application/json'){
-            $dataCollection = json_decode(file_get_contents('php://input'), true);
+            $dataCollection = json_decode($this->getRequest()->getContent(), true);
         } else {
             if($this->getRequest()->isMethod('POST')){
                 $dataCollection = array_merge($this->getRequest()->request->all(), $this->getRequest()->files->all());
             } else {
-                parse_str(file_get_contents('php://input'), $dataCollection);
+                parse_str($this->getRequest()->getContent(), $dataCollection);
             }
         }
 
