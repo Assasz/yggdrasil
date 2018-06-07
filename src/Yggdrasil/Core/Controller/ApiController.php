@@ -11,14 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Class RestController
+ * Class ApiController
  *
  * Base class for REST api controllers
  *
  * @package Yggdrasil\Core\Controller
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-abstract class RestController
+abstract class ApiController
 {
     /**
      * Trait that makes controller a HTTP port component
@@ -42,25 +42,6 @@ abstract class RestController
         $this->drivers = $drivers;
         $this->request = $request;
         $this->response = $response;
-    }
-
-    /**
-     * Enables CORS with specified headers
-     *
-     * @param array $origins
-     * @param array $headers
-     * @param bool  $credentials
-     * @param int   $maxAge
-     */
-    protected function enableCors(array $origins = ['*'], array $headers = ['*'], bool $credentials = true, int $maxAge = 3600): void
-    {
-        $origins = implode(', ', $origins);
-        $headers = implode(', ', $headers);
-
-        $this->getResponse()->headers->set('Access-Control-Allow-Origin', $origins);
-        $this->getResponse()->headers->set('Access-Control-Allow-Headers', $headers);
-        $this->getResponse()->headers->set('Access-Control-Allow-Credentials', $credentials);
-        $this->getResponse()->headers->set('Access-Control-Max-Age', $maxAge);
     }
 
     /**

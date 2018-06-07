@@ -56,7 +56,7 @@ class Kernel
      */
     public function handle(Request $request)
     {
-        $response = new Response();
+        $response = $this->prepareResponse();
 
         $response = $this->executePassiveActions($request, $response);
         $response = $this->executeAction($request, $response);
@@ -148,6 +148,10 @@ class Kernel
      */
     private function handleError(Request $request, Response $response)
     {
+        if(!$this->drivers->has('templateEngine')){
+            return $response->setContent($response->getStatusCode() . ' error');
+        }
+
         $this->getTemplateEngine()->addGlobal('_request', $request);
 
         switch($response->getStatusCode()){
@@ -170,5 +174,35 @@ class Kernel
         }
 
         return $response->setContent($template);
+    }
+
+    /**
+     * Prepares response before action execution
+     *
+     * @return Response
+     */
+    private function prepareResponse(): Response
+    {
+        $response = new Response();
+
+        if(array_key_exists('cors', $this->configuration)){
+            $response->headers->set(
+                'Access-Control-Allow-Origin',
+                $this->configuration['cors']['allow_origin'] ?? '*');
+            $response->headers->set(
+                'Access-Control-Allow-Methods',
+                $this->configuration['cors']['allow_methods'] ?? 'GET, POST, PUT, DELETE, OPTIONS');
+            $response->headers->set(
+                'Access-Control-Allow-Headers',
+                $this->configuration['cors']['allow_headers'] ?? '*');
+            $response->headers->set(
+                'Access-Control-Allow-Credentials',
+                $this->configuration['cors']['allow_credentials'] ?? true);
+            $response->headers->set(
+                'Access-Control-Allow-Max-Age',
+                $this->configuration['cors']['max_age'] ?? 3600);
+        }
+
+        return $response;
     }
 }
