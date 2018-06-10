@@ -148,7 +148,7 @@ class Kernel
      */
     private function handleError(Request $request, Response $response)
     {
-        if($response->headers->get('Content-Type') === 'application/json' || !$this->drivers->has('templateEngine')){
+        if(!$this->drivers->has('templateEngine')){
             return $response;
         }
 
