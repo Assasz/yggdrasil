@@ -50,6 +50,19 @@ trait HttpControllerTrait
     }
 
     /**
+     * Returns Bad Request (400) response
+     *
+     * @param string $message
+     * @return Response
+     */
+    protected function badRequest($message = 'Bad request.'): Response
+    {
+        return $this->getResponse()
+            ->setContent($message)
+            ->setStatusCode(Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
      * Returns Forbidden (403) response
      *
      * @param string $message
