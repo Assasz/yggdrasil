@@ -64,8 +64,8 @@ abstract class ApiController
             }
         }
 
-        if(empty($dataCollection[$key])){
-            throw new \InvalidArgumentException('Data with key ' . $key . ' doesn\'t exist.');
+        if(!isset($dataCollection[$key])){
+            throw new \InvalidArgumentException('Data with key ' . $key . ' doesn\'t exist in request body.');
         }
 
         return $dataCollection[$key];
