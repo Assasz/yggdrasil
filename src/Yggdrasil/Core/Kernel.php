@@ -148,8 +148,8 @@ class Kernel
      */
     private function handleError(Request $request, Response $response)
     {
-        if(!$this->drivers->has('templateEngine')){
-            return $response->setContent($response->getStatusCode() . ' error');
+        if($response->headers->get('Content-Type') === 'application/json' || !$this->drivers->has('templateEngine')){
+            return $response;
         }
 
         $this->getTemplateEngine()->addGlobal('_request', $request);
