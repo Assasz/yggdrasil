@@ -49,7 +49,7 @@ abstract class AbstractConfiguration
     }
 
     /**
-     * Loads registered drivers and returns collection of their instances
+     * Gets registered drivers and returns collection of their component instances
      *
      * @return DriverInstanceCollection
      */
@@ -65,7 +65,7 @@ abstract class AbstractConfiguration
     }
 
     /**
-     * Loads given driver and returns it's instance directly
+     * Gets given driver and returns it's component instance directly
      *
      * @param string $key Name of driver
      * @return mixed

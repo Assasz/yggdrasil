@@ -15,9 +15,9 @@ use Yggdrasil\Core\Configuration\ConfigurationInterface;
 interface DriverInterface
 {
     /**
-     * Returns specific instance of object (not driver itself), that is used by application, e.g. entity manager
+     * Returns instance of component (not driver itself), that application want to use, e.g. instance of Entity Manager from EntityManagerDriver
      *
-     * @param ConfigurationInterface $appConfiguration Configuration needed to configure driver
+     * @param ConfigurationInterface $appConfiguration Configuration needed to configure component
      * @return mixed
      */
     public static function getInstance(ConfigurationInterface $appConfiguration);

@@ -25,7 +25,7 @@ abstract class AbstractService
      *
      * Loads drivers from configuration
      *
-     * @param ConfigurationInterface $appConfiguration
+     * @param ConfigurationInterface $appConfiguration Configuration passed by ContainerDriver
      */
     public function __construct(ConfigurationInterface $appConfiguration)
     {

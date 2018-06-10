@@ -35,7 +35,7 @@ abstract class AbstractController
     /**
      * AbstractController constructor.
      *
-     * @param DriverInstanceCollection $drivers
+     * @param DriverInstanceCollection $drivers Drivers passed by Kernel
      * @param Request $request
      * @param Response $response
      */
@@ -63,7 +63,7 @@ abstract class AbstractController
         $this->getTemplateEngine()->addGlobal('_request', $this->getRequest());
         $template = $this->getTemplateEngine()->render($view, $params);
 
-        return (!$partial) ? $this->getResponse()->setContent($template): $template;
+        return (!$partial) ? $this->getResponse()->setContent($template) : $template;
     }
 
     /**
@@ -93,6 +93,18 @@ abstract class AbstractController
         $headers = $this->getResponse()->headers->all();
 
         return new JsonResponse($data, Response::HTTP_OK, $headers);
+    }
+
+    /**
+     * Adds flash to session flash bag
+     *
+     * @param string       $type    Type of flash bag
+     * @param string|array $message Message of flash
+     */
+    protected function addFlash(string $type, $message): void
+    {
+        $session = new Session();
+        $session->getFlashBag()->set($type, $message);
     }
 
     /**
