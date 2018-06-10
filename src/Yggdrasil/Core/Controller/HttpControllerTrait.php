@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Core\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -53,10 +54,18 @@ trait HttpControllerTrait
      * Returns Bad Request (400) response
      *
      * @param string $message
-     * @return Response
+     * @param bool $json Returns JsonResponse if true
+     * @return Response|JsonResponse
      */
-    protected function badRequest($message = 'Bad request.'): Response
+    protected function badRequest($message = 'Bad request.', bool $json = false)
     {
+        if($json){
+            $this->getResponse()->headers->set('Content-Type', 'application/json');
+            $headers = $this->getResponse()->headers->all();
+
+            return new JsonResponse($message, Response::HTTP_BAD_REQUEST, $headers);
+        }
+
         return $this->getResponse()
             ->setContent($message)
             ->setStatusCode(Response::HTTP_BAD_REQUEST);
@@ -66,10 +75,18 @@ trait HttpControllerTrait
      * Returns Forbidden (403) response
      *
      * @param string $message
-     * @return Response
+     * @param bool $json Returns JsonResponse if true
+     * @return Response|JsonResponse
      */
-    protected function accessDenied(string $message = 'Access denied.'): Response
+    protected function accessDenied(string $message = 'Access denied.', bool $json = false)
     {
+        if($json){
+            $this->getResponse()->headers->set('Content-Type', 'application/json');
+            $headers = $this->getResponse()->headers->all();
+
+            return new JsonResponse($message, Response::HTTP_FORBIDDEN, $headers);
+        }
+
         return $this->getResponse()
             ->setContent($message)
             ->setStatusCode(Response::HTTP_FORBIDDEN);
@@ -79,10 +96,18 @@ trait HttpControllerTrait
      * Returns Not Found (404) response
      *
      * @param string $message
-     * @return Response
+     * @param bool $json Returns JsonResponse if true
+     * @return Response|JsonResponse
      */
-    protected function notFound(string $message = 'Not found.'): Response
+    protected function notFound(string $message = 'Not found.', bool $json = false)
     {
+        if($json){
+            $this->getResponse()->headers->set('Content-Type', 'application/json');
+            $headers = $this->getResponse()->headers->all();
+
+            return new JsonResponse($message, Response::HTTP_NOT_FOUND, $headers);
+        }
+
         return $this->getResponse()
             ->setContent($message)
             ->setStatusCode(Response::HTTP_NOT_FOUND);
@@ -92,10 +117,18 @@ trait HttpControllerTrait
      * Returns Method Not Allowed (405) response
      *
      * @param string $message
-     * @return Response
+     * @param bool $json Returns JsonResponse if true
+     * @return Response|JsonResponse
      */
-    protected function wrongMethod(string $message = "Wrong method."): Response
+    protected function wrongMethod(string $message = "Wrong method.", bool $json = false)
     {
+        if($json){
+            $this->getResponse()->headers->set('Content-Type', 'application/json');
+            $headers = $this->getResponse()->headers->all();
+
+            return new JsonResponse($message, Response::HTTP_METHOD_NOT_ALLOWED, $headers);
+        }
+
         return $this->getResponse()
             ->setContent($message)
             ->setStatusCode(Response::HTTP_METHOD_NOT_ALLOWED);
