@@ -49,7 +49,7 @@ class ValidatorDriver implements DriverInterface
             $configuration = $appConfiguration->getConfiguration();
 
             if(!$appConfiguration->isConfigured(['validation_path'], 'validator')){
-                throw new MissingConfigurationException('There are missing parameter in your configuration: validation_path in validator section.');
+                throw new MissingConfigurationException('There is missing parameter in your configuration: validation_path in validator section.');
             }
 
             $validator = Validation::createValidatorBuilder()

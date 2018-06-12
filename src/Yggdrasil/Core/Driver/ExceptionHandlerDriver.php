@@ -5,6 +5,7 @@ namespace Yggdrasil\Core\Driver;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverInterface;
 use Whoops\Run;
+use Yggdrasil\Core\Exception\MissingConfigurationException;
 
 /**
  * Class ExceptionHandlerDriver
@@ -43,6 +44,11 @@ class ExceptionHandlerDriver implements DriverInterface
     {
         if(self::$handlerInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
+
+            if(!$appConfiguration->isConfigured(['handler'], 'exception_handler')){
+                throw new MissingConfigurationException('There is missing parameter in your configuration: handler in exception_handler section.');
+            }
+
             $handler = 'Whoops\Handler\\'.$configuration['exception_handler']['handler'] ?? 'PrettyPageHandler';
 
             $driver = new Run();
