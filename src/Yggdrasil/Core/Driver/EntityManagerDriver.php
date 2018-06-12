@@ -44,7 +44,7 @@ class EntityManagerDriver implements DriverInterface
      * @param ConfigurationInterface $appConfiguration Configuration needed to connect to database and configure entity manager
      * @return EntityManager
      *
-     * @throws MissingConfigurationException if name, host, user or password of database or entity_namespace are not configured
+     * @throws MissingConfigurationException if db_name, db_host, db_user, db_password or entity_namespace are not configured
      * @throws DBALException
      * @throws ORMException
      */
@@ -53,25 +53,25 @@ class EntityManagerDriver implements DriverInterface
         if(self::$managerInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['name', 'user', 'password', 'host'], 'database') || !$appConfiguration->isConfigured(['entity_namespace'], 'application')){
-                throw new MissingConfigurationException('There are missing parameters in your configuration: name, user, password or host in section database or entity_namespace in section application.');
+            if(!$appConfiguration->isConfigured(['db_name', 'db_user', 'db_password', 'db_host', 'entity_namespace'], 'entity_manager')){
+                throw new MissingConfigurationException('There are missing parameters in your configuration: db_name, db_user, db_password, db_host or entity_namespace in section entity_manager.');
             }
 
             $connectionParams = [
-                'dbname' => $configuration['database']['name'],
-                'user' => $configuration['database']['user'],
-                'password' => $configuration['database']['password'],
-                'host' => $configuration['database']['host'],
-                'port' => $configuration['database']['port'] ?? 3306,
-                'driver' => $configuration['database']['driver'] ?? 'pdo_mysql',
-                'charset' => $configuration['database']['charset'] ?? 'UTF8'
+                'dbname' => $configuration['entity_manager']['db_name'],
+                'user' => $configuration['entity_manager']['db_user'],
+                'password' => $configuration['entity_manager']['db_password'],
+                'host' => $configuration['entity_manager']['db_host'],
+                'port' => $configuration['entity_manager']['db_port'] ?? 3306,
+                'driver' => $configuration['entity_manager']['db_driver'] ?? 'pdo_mysql',
+                'charset' => $configuration['entity_manager']['db_charset'] ?? 'UTF8'
             ];
 
-            $entityPath = implode('/', explode('\\', $configuration['application']['entity_namespace']));
+            $entityPath = implode('/', explode('\\', $configuration['entity_manager']['entity_namespace']));
             $entityPath = [dirname(__DIR__, 7) . '/src/'.$entityPath.'/'];
 
             $config = Setup::createAnnotationMetadataConfiguration($entityPath, true);
-            $config->addEntityNamespace('Entity', $configuration['application']['entity_namespace']);
+            $config->addEntityNamespace('Entity', $configuration['entity_manager']['entity_namespace']);
 
             $connection = DriverManager::getConnection($connectionParams, $config);
             $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');

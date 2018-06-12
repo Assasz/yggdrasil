@@ -5,7 +5,6 @@ namespace Yggdrasil\Core\Driver;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverInterface;
 use Whoops\Run;
-use Whoops\Handler\PrettyPageHandler;
 
 /**
  * Class ExceptionHandlerDriver
@@ -43,8 +42,11 @@ class ExceptionHandlerDriver implements DriverInterface
     public static function getInstance(ConfigurationInterface $appConfiguration): Run
     {
         if(self::$handlerInstance === null) {
+            $configuration = $appConfiguration->getConfiguration();
+            $handler = 'Whoops\Handler\\'.$configuration['exception_handler']['handler'] ?? 'PrettyPageHandler';
+
             $driver = new Run();
-            $driver->pushHandler(new PrettyPageHandler());
+            $driver->pushHandler(new $handler());
             $driver->register();
 
             self::$handlerInstance = $driver;

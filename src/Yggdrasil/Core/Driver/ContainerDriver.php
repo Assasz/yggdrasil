@@ -48,14 +48,16 @@ class ContainerDriver implements DriverInterface
             $container = new Container();
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['service_namespace'], 'application')){
-                throw new MissingConfigurationException('There are missing parameters in your configuration: service_namespace in application section.');
+            if(!$appConfiguration->isConfigured(['service_namespace'], 'container')){
+                throw new MissingConfigurationException('There are missing parameter in your configuration: service_namespace in container section.');
             }
 
-            if(array_key_exists('service', $configuration)) {
-                foreach ($configuration['service'] as $name => $service) {
-                    $container->add($name, $configuration['application']['service_namespace'].$service)->withArgument($appConfiguration);
+            foreach ($configuration['container'] as $name => $service) {
+                if($name === 'service_namespace'){
+                    continue;
                 }
+
+                $container->add($name, $configuration['container']['service_namespace'].$service)->withArgument($appConfiguration);
             }
 
             self::$containerInstance = $container;

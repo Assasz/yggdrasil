@@ -39,7 +39,7 @@ class MailerDriver implements DriverInterface
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure mailer
      * @return \Swift_Mailer
      *
-     * @throws MissingConfigurationException if host, username and password of mailer are not configured
+     * @throws MissingConfigurationException if host, username or password are not configured
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): \Swift_Mailer
     {
@@ -47,7 +47,7 @@ class MailerDriver implements DriverInterface
             $configuration = $appConfiguration->getConfiguration();
 
             if(!$appConfiguration->isConfigured(['host', 'username', 'password'], 'mailer')){
-                throw new MissingConfigurationException('There are missing parameters in your configuration. host, username and password are required to make mailer work.');
+                throw new MissingConfigurationException('There are missing parameters in your configuration. host, username or password in section mailer');
             }
 
             $transport = new \Swift_SmtpTransport($configuration['mailer']['host'], $configuration['mailer']['port'] ?? 465, $configuration['mailer']['encryption'] ?? 'ssl');

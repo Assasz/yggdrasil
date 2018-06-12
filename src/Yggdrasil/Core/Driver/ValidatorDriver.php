@@ -48,12 +48,12 @@ class ValidatorDriver implements DriverInterface
         if(self::$validatorInstance === null){
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['validation_path'], 'application')){
-                throw new MissingConfigurationException('There are missing parameters in your configuration. validation_path is required for validator to work properly.');
+            if(!$appConfiguration->isConfigured(['validation_path'], 'validator')){
+                throw new MissingConfigurationException('There are missing parameter in your configuration: validation_path in validator section.');
             }
 
             $validator = Validation::createValidatorBuilder()
-                ->addYamlMapping(dirname(__DIR__, 7).'/src/'.$configuration['application']['validation_path'].'/validation.yaml')
+                ->addYamlMapping(dirname(__DIR__, 7).'/src/'.$configuration['validator']['validation_path'].'/validation.yaml')
                 ->getValidator();
 
             self::$validatorInstance = $validator;

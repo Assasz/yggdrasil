@@ -42,18 +42,18 @@ class TemplateEngineDriver implements DriverInterface
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure template engine
      * @return \Twig_Environment
      *
-     * @throws MissingConfigurationException if view path is not configured
+     * @throws MissingConfigurationException if view path or application_name is not configured
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): \Twig_Environment
     {
         if(self::$engineInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['view_path', 'application_name'], 'application')){
-                throw new MissingConfigurationException('There are missing parameters in your configuration. view_path and application_name is required for template engine to render views properly.');
+            if(!$appConfiguration->isConfigured(['view_path', 'application_name'], 'template_engine')){
+                throw new MissingConfigurationException('There are missing parameters in your configuration: view_path or application_name in template_engine section.');
             }
 
-            $loader = new \Twig_Loader_Filesystem(dirname(__DIR__, 7) . '/src/'.$configuration['application']['view_path']);
+            $loader = new \Twig_Loader_Filesystem(dirname(__DIR__, 7) . '/src/'.$configuration['template_engine']['view_path']);
             $twig = new \Twig_Environment($loader);
 
             $twig->addExtension(new StandardExtension());
@@ -62,7 +62,7 @@ class TemplateEngineDriver implements DriverInterface
             $session = new Session();
             $twig->addGlobal('_session', $session);
             $twig->addGlobal('_user', $session->get('user'));
-            $twig->addGlobal('_appname', $configuration['application']['application_name']);
+            $twig->addGlobal('_appname', $configuration['template_engine']['application_name']);
 
             self::$engineInstance = $twig;
         }
