@@ -142,13 +142,23 @@ class Router
     }
 
     /**
-     * Sets namespace of controllers
+     * Sets controllers namespace
      *
      * @param string $namespace
      */
     public function setControllerNamespace(string $namespace): void
     {
         $this->controllerNamespace = $namespace;
+    }
+
+    /**
+     * Returns controllers namespace
+     *
+     * @return string
+     */
+    public function getControllerNamespace(): string
+    {
+        return $this->controllerNamespace;
     }
 
     /**

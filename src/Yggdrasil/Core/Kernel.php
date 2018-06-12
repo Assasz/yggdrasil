@@ -49,10 +49,6 @@ class Kernel
      *
      * @param Request $request
      * @return mixed|Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public function handle(Request $request)
     {
@@ -132,6 +128,7 @@ class Kernel
 
         $controllerName = $route->getController();
         $controller = new $controllerName($this->drivers, $request, $response);
+
         return call_user_func_array([$controller, $route->getAction()], $route->getActionParams());
     }
 
@@ -140,40 +137,24 @@ class Kernel
      *
      * @param Request  $request
      * @param Response $response Response returned by action execution
-     * @return Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @return mixed|Response
      */
     private function handleError(Request $request, Response $response)
     {
-        if(!$this->drivers->has('templateEngine')){
-            return $response;
+        $controllerName = $this->getRouter()->getControllerNamespace() . 'ErrorController';
+        $actionName = 'code' . $response->getStatusCode() . 'Action';
+
+        if(!method_exists($controllerName, $actionName)){
+            $actionName = 'defaultAction';
+
+            if(!method_exists($controllerName, $actionName)) {
+                return $response;
+            }
         }
 
-        $this->getTemplateEngine()->addGlobal('_request', $request);
+        $controller = new $controllerName($this->drivers, $request, $response);
 
-        switch($response->getStatusCode()){
-            case 404:
-                $template = $this->getTemplateEngine()->render('error/404.html.twig', [
-                    'message' => $response->getContent()
-                ]);
-                break;
-            case 403:
-                $template = $this->getTemplateEngine()->render('error/403.html.twig', [
-                    'message' => $response->getContent()
-                ]);
-                break;
-            default:
-                $template = $this->getTemplateEngine()->render('error/default.html.twig', [
-                    'message' => $response->getContent(),
-                    'status' => $response->getStatusCode()
-                ]);
-                break;
-        }
-
-        return $response->setContent($template);
+        return call_user_func([$controller, $actionName]);
     }
 
     /**

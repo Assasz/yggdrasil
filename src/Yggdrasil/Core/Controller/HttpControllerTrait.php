@@ -69,7 +69,7 @@ trait HttpControllerTrait
      * @param string $message
      * @return Response|JsonResponse
      */
-    protected function accessDenied(string $message = 'Access denied.')
+    protected function forbidden(string $message = 'Forbidden.')
     {
         return $this->getResponse()
             ->setContent($message)
@@ -95,7 +95,7 @@ trait HttpControllerTrait
      * @param string $message
      * @return Response|JsonResponse
      */
-    protected function wrongMethod(string $message = "Wrong method.")
+    protected function methodNotAllowed(string $message = "Method not allowed.")
     {
         return $this->getResponse()
             ->setContent($message)
