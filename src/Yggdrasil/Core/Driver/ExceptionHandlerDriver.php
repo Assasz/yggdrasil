@@ -42,14 +42,14 @@ class ExceptionHandlerDriver implements DriverInterface
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): Run
     {
-        if(self::$handlerInstance === null) {
+        if (self::$handlerInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['handler'], 'exception_handler')){
+            if (!$appConfiguration->isConfigured(['handler'], 'exception_handler')) {
                 throw new MissingConfigurationException('There is missing parameter in your configuration: handler in exception_handler section.');
             }
 
-            $handler = 'Whoops\Handler\\'.$configuration['exception_handler']['handler'] ?? 'PrettyPageHandler';
+            $handler = 'Whoops\Handler\\' . $configuration['exception_handler']['handler'] ?? 'PrettyPageHandler';
 
             $driver = new Run();
             $driver->pushHandler(new $handler());

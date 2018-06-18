@@ -50,10 +50,10 @@ class EntityManagerDriver implements DriverInterface
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): EntityManager
     {
-        if(self::$managerInstance === null) {
+        if (self::$managerInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['db_name', 'db_user', 'db_password', 'db_host', 'entity_namespace'], 'entity_manager')){
+            if (!$appConfiguration->isConfigured(['db_name', 'db_user', 'db_password', 'db_host', 'entity_namespace'], 'entity_manager')) {
                 throw new MissingConfigurationException('There are missing parameters in your configuration: db_name, db_user, db_password, db_host or entity_namespace in section entity_manager.');
             }
 
@@ -68,9 +68,9 @@ class EntityManagerDriver implements DriverInterface
             ];
 
             $entityPath = implode('/', explode('\\', $configuration['entity_manager']['entity_namespace']));
-            $entityPath = [dirname(__DIR__, 7) . '/src/'.$entityPath.'/'];
+            $entityPath = [dirname(__DIR__, 7) . '/src/' . $entityPath . '/'];
 
-            $config = Setup::createAnnotationMetadataConfiguration($entityPath, true);
+            $config = Setup::createAnnotationMetadataConfiguration($entityPath, DEBUG);
             $config->addEntityNamespace('Entity', $configuration['entity_manager']['entity_namespace']);
 
             $connection = DriverManager::getConnection($connectionParams, $config);

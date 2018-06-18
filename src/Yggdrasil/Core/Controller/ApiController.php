@@ -54,17 +54,20 @@ abstract class ApiController
      */
     protected function fromBody(string $key)
     {
-        if($this->getRequest()->headers->get('Content-Type') === 'application/json'){
+        if ($this->getRequest()->headers->get('Content-Type') === 'application/json') {
             $dataCollection = json_decode($this->getRequest()->getContent(), true);
         } else {
-            if($this->getRequest()->isMethod('POST')){
-                $dataCollection = array_merge($this->getRequest()->request->all(), $this->getRequest()->files->all());
+            if ($this->getRequest()->isMethod('POST')) {
+                $dataCollection = array_merge(
+                    $this->getRequest()->request->all(),
+                    $this->getRequest()->files->all()
+                );
             } else {
                 parse_str($this->getRequest()->getContent(), $dataCollection);
             }
         }
 
-        if(!isset($dataCollection[$key])){
+        if (!isset($dataCollection[$key])) {
             throw new \InvalidArgumentException('Data with key ' . $key . ' doesn\'t exist in request body.');
         }
 

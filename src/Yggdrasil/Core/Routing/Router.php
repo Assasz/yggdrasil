@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class Router
  *
- * Finds routes for requested resources
+ * Finds route for requested action
  *
  * @package Yggdrasil\Core\Routing
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -59,7 +59,7 @@ class Router
 
         $route = new Route();
 
-        if($this->routeParams[0] === 'api'){
+        if ($this->routeParams[0] === 'api') {
             unset($this->routeParams[0]);
             $this->routeParams = array_values($this->routeParams);
 
@@ -67,7 +67,9 @@ class Router
         }
 
         $route->setController($this->resolveController());
-        $route->setAction(($route->isApiCall()) ? $this->resolveApiAction($request->getMethod()) : $this->resolveAction());
+        $route->setAction(($route->isApiCall()) ?
+            $this->resolveApiAction($request->getMethod()) :
+            $this->resolveAction());
         $route->setActionParams($this->resolveActionParams());
 
         return $route;
@@ -108,21 +110,21 @@ class Router
     {
         $queryParams = explode(':', mb_strtolower($alias));
 
-        foreach($actionParams as $param){
+        foreach ($actionParams as $param) {
             $queryParams[] = $param;
         }
 
-        if(empty($queryParams[2]) && $queryParams[1].'Action' === $this->defaults['action']){
+        if (empty($queryParams[2]) && $queryParams[1] . 'Action' === $this->defaults['action']) {
             unset($queryParams[1]);
 
-            if(ucfirst($queryParams[0]).'Controller' === $this->defaults['controller']){
+            if (ucfirst($queryParams[0]) . 'Controller' === $this->defaults['controller']) {
                 unset($queryParams[0]);
             }
         }
 
         $query = implode('/', $queryParams);
 
-        return BASE_URL.$query;
+        return BASE_URL . $query;
     }
 
     /**
@@ -134,7 +136,7 @@ class Router
      */
     public function setDefaults(array $defaults): void
     {
-        if(!array_key_exists('controller', $defaults) && !array_key_exists('action', $defaults)){
+        if (!array_key_exists('controller', $defaults) && !array_key_exists('action', $defaults)) {
             throw new \InvalidArgumentException('Keys controller and action need to be specified in array to configure default routing.');
         }
 
@@ -168,7 +170,9 @@ class Router
      */
     private function resolveController(): string
     {
-        $controller = (!empty($this->routeParams[0])) ? $this->controllerNamespace.ucfirst($this->routeParams[0]).'Controller' : $this->controllerNamespace.$this->defaults['controller'];
+        $controller = (!empty($this->routeParams[0])) ?
+            $this->controllerNamespace . ucfirst($this->routeParams[0]) . 'Controller' :
+            $this->controllerNamespace . $this->defaults['controller'];
 
         return $controller;
     }
@@ -180,7 +184,9 @@ class Router
      */
     private function resolveAction(): string
     {
-        $action = (!empty($this->routeParams[1])) ? $this->routeParams[1].'Action' : $this->defaults['action'];
+        $action = (!empty($this->routeParams[1])) ?
+            $this->routeParams[1] . 'Action' :
+            $this->defaults['action'];
 
         return $action;
     }
@@ -192,7 +198,7 @@ class Router
      */
     private function resolvePassiveAction(): string
     {
-        $action = $this->routeParams[1].'PassiveAction';
+        $action = $this->routeParams[1] . 'PassiveAction';
 
         return $action;
     }
@@ -206,7 +212,9 @@ class Router
     private function resolveApiAction(string $method): string
     {
         $method = ucfirst(strtolower($method));
-        $action = (!empty($this->routeParams[1])) ? $this->routeParams[1].$method.'Action' : $this->defaults['action'];
+        $action = (!empty($this->routeParams[1])) ?
+            $this->routeParams[1] . $method.'Action' :
+            $this->defaults['action'];
 
         return $action;
     }
@@ -220,7 +228,7 @@ class Router
     {
         $actionParams = [];
 
-        for($i = 2; $i <= count($this->routeParams) - 1; $i++){
+        for ($i = 2; $i <= count($this->routeParams) - 1; $i++) {
             $actionParams[] = $this->routeParams[$i];
         }
 

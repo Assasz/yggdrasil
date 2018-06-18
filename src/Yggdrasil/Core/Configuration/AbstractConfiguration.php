@@ -9,7 +9,7 @@ use Yggdrasil\Core\Exception\DriverNotFoundException;
 /**
  * Class AbstractConfiguration
  *
- * Takes care of configuration and drivers, that your application uses
+ * Manages configuration and drivers, that application uses
  *
  * @package Yggdrasil\Core\Configuration
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -24,9 +24,9 @@ abstract class AbstractConfiguration
     private $configuration;
 
     /**
-     * Collection of drivers instances
+     * Set of registered drivers
      *
-     * @var DriverInstanceCollection
+     * @var array
      */
     protected $drivers;
 
@@ -39,10 +39,10 @@ abstract class AbstractConfiguration
      */
     public function __construct(string $configPath)
     {
-        $configFilePath = dirname(__DIR__, 7).'/src/'.$configPath.'/config.ini';
+        $configFilePath = dirname(__DIR__, 7) . '/src/' . $configPath . '/config.ini';
 
-        if(!file_exists($configFilePath)){
-            throw new ConfigurationNotFoundException('Configuration file in '.$configFilePath.' not found.');
+        if (!file_exists($configFilePath)) {
+            throw new ConfigurationNotFoundException('Configuration file in ' . $configFilePath . ' not found.');
         }
 
         $this->configuration = parse_ini_file($configFilePath, true);
@@ -57,7 +57,7 @@ abstract class AbstractConfiguration
     {
         $driversInstances = new DriverInstanceCollection();
 
-        foreach($this->drivers as $name => $driver){
+        foreach ($this->drivers as $name => $driver) {
             $driversInstances->add($name, $driver::getInstance($this));
         }
 
@@ -74,8 +74,8 @@ abstract class AbstractConfiguration
      */
     public function loadDriver(string $key)
     {
-        if(!array_key_exists($key, $this->drivers)){
-            throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that '.$key.' driver is properly configured.');
+        if (!array_key_exists($key, $this->drivers)) {
+            throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that ' . $key . ' driver is properly configured.');
         }
 
         return $this->drivers[$key]::getInstance($this);
@@ -100,7 +100,7 @@ abstract class AbstractConfiguration
      */
     public function isConfigured(array $keys, string $section): bool
     {
-        if(!array_key_exists($section, $this->configuration)){
+        if (!array_key_exists($section, $this->configuration)) {
             return false;
         }
 

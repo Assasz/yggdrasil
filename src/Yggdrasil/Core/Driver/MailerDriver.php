@@ -29,9 +29,9 @@ class MailerDriver implements DriverInterface
      *
      * Should be private to prevent object creation. Same with __clone
      */
-    private function __construct(){}
+    private function __construct() {}
 
-    private function __clone(){}
+    private function __clone() {}
 
     /**
      * Returns instance of mailer
@@ -43,15 +43,20 @@ class MailerDriver implements DriverInterface
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): \Swift_Mailer
     {
-        if(self::$mailerInstance === null){
+        if (self::$mailerInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['host', 'username', 'password'], 'mailer')){
+            if (!$appConfiguration->isConfigured(['host', 'username', 'password'], 'mailer')) {
                 throw new MissingConfigurationException('There are missing parameters in your configuration. host, username or password in section mailer');
             }
 
-            $transport = new \Swift_SmtpTransport($configuration['mailer']['host'], $configuration['mailer']['port'] ?? 465, $configuration['mailer']['encryption'] ?? 'ssl');
-            $transport->setUsername($configuration['mailer']['username'])
+            $transport = new \Swift_SmtpTransport(
+                $configuration['mailer']['host'],
+                $configuration['mailer']['port'] ?? 465,
+                $configuration['mailer']['encryption'] ?? 'ssl'
+            );
+            $transport
+                ->setUsername($configuration['mailer']['username'])
                 ->setPassword($configuration['mailer']['password']);
 
             $mailer = new \Swift_Mailer($transport);

@@ -2,7 +2,6 @@
 
 namespace Yggdrasil\Core\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -54,9 +53,9 @@ trait HttpControllerTrait
      * Returns Bad Request (400) response
      *
      * @param string $message
-     * @return Response|JsonResponse
+     * @return Response
      */
-    protected function badRequest($message = 'Bad request.')
+    protected function badRequest($message = 'Bad request.'): Response
     {
         return $this->getResponse()
             ->setContent($message)
@@ -67,9 +66,9 @@ trait HttpControllerTrait
      * Returns Forbidden (403) response
      *
      * @param string $message
-     * @return Response|JsonResponse
+     * @return Response
      */
-    protected function forbidden(string $message = 'Forbidden.')
+    protected function forbidden(string $message = 'Forbidden.'): Response
     {
         return $this->getResponse()
             ->setContent($message)
@@ -80,9 +79,9 @@ trait HttpControllerTrait
      * Returns Not Found (404) response
      *
      * @param string $message
-     * @return Response|JsonResponse
+     * @return Response
      */
-    protected function notFound(string $message = 'Not found.')
+    protected function notFound(string $message = 'Not found.'): Response
     {
         return $this->getResponse()
             ->setContent($message)
@@ -93,9 +92,9 @@ trait HttpControllerTrait
      * Returns Method Not Allowed (405) response
      *
      * @param string $message
-     * @return Response|JsonResponse
+     * @return Response
      */
-    protected function methodNotAllowed(string $message = "Method not allowed.")
+    protected function methodNotAllowed(string $message = "Method not allowed."): Response
     {
         return $this->getResponse()
             ->setContent($message)

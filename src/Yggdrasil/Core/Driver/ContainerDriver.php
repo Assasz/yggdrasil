@@ -30,9 +30,9 @@ class ContainerDriver implements DriverInterface
      *
      * Should be private to prevent object creation. Same with __clone
      */
-    private function __construct(){}
+    private function __construct() {}
 
-    private function __clone(){}
+    private function __clone() {}
 
     /**
      * Returns instance of container
@@ -44,20 +44,22 @@ class ContainerDriver implements DriverInterface
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): Container
     {
-        if(self::$containerInstance === null) {
+        if (self::$containerInstance === null) {
             $container = new Container();
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['service_namespace'], 'container')){
+            if (!$appConfiguration->isConfigured(['service_namespace'], 'container')) {
                 throw new MissingConfigurationException('There is missing parameter in your configuration: service_namespace in container section.');
             }
 
             foreach ($configuration['container'] as $name => $service) {
-                if($name === 'service_namespace'){
+                if ($name === 'service_namespace') {
                     continue;
                 }
 
-                $container->add($name, $configuration['container']['service_namespace'].$service)->withArgument($appConfiguration);
+                $container
+                    ->add($name, $configuration['container']['service_namespace'] . $service)
+                    ->withArgument($appConfiguration);
             }
 
             self::$containerInstance = $container;

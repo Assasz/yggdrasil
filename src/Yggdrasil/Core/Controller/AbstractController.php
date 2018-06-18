@@ -129,8 +129,6 @@ abstract class AbstractController
     {
         $session = new Session();
 
-        if($this->isGranted()){
-            return $session->get('user');
-        }
+        return $session->get('user');
     }
 }

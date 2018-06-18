@@ -42,7 +42,7 @@ class DriverInstanceCollection
      */
     public function add(string $key, $instance): void
     {
-        if($this->has($key)){
+        if ($this->has($key)) {
             throw new \InvalidArgumentException($key.' driver that you want to add already exist.');
         }
 
@@ -59,7 +59,7 @@ class DriverInstanceCollection
      */
     public function get(string $key)
     {
-        if(!$this->has($key)){
+        if (!$this->has($key)) {
             throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that '.$key.' driver is properly configured.');
         }
 
@@ -87,7 +87,7 @@ class DriverInstanceCollection
      */
     public function remove(string $key): void
     {
-        if(!$this->has($key)){
+        if (!$this->has($key)) {
             throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that '.$key.' driver is properly configured.');
         }
 

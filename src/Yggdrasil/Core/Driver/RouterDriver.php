@@ -29,9 +29,9 @@ class RouterDriver implements DriverInterface
      *
      * Should be private to prevent object creation. Same with __clone
      */
-    private function __construct(){}
+    private function __construct() {}
 
-    private function __clone(){}
+    private function __clone() {}
 
     /**
      * Returns instance of router
@@ -43,11 +43,11 @@ class RouterDriver implements DriverInterface
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): Router
     {
-        if(self::$routerInstance === null){
+        if (self::$routerInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
             $router = new Router();
 
-            if(!$appConfiguration->isConfigured(['default_controller', 'default_action', 'controller_namespace'], 'router')){
+            if (!$appConfiguration->isConfigured(['default_controller', 'default_action', 'controller_namespace'], 'router')) {
                 throw new MissingConfigurationException('There are missing parameters in your configuration: default_controller, default_action or controller_path in router section.');
             }
 

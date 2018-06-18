@@ -10,7 +10,7 @@ use Yggdrasil\Core\Service\ServiceRequestInterface;
 /**
  * Class FormHandler
  *
- * Handles form submission, in current state rather helper class
+ * Handles form submission
  *
  * @package Yggdrasil\Core\Form
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -44,18 +44,14 @@ class FormHandler
      */
     public function handle(Request $request): bool
     {
-        if(!$request->isMethod('POST')){
+        if (!$request->isMethod('POST')) {
             return false;
         }
 
-        if($request->request->has('csrf_token')) {
+        if ($request->request->has('csrf_token')) {
             $session = new Session();
 
-            if(!$session->has('csrf_token')){
-                return false;
-            }
-
-            if($session->get('csrf_token') !== $request->request->get('csrf_token')) {
+            if ($session->get('csrf_token') !== $request->request->get('csrf_token')) {
                 throw new InvalidCsrfTokenException('Invalid CSRF token.');
             }
 
@@ -69,7 +65,7 @@ class FormHandler
     }
 
     /**
-     * Returns all form data collection
+     * Returns form data collection
      *
      * @return array
      */
@@ -88,8 +84,8 @@ class FormHandler
      */
     public function getData(string $key)
     {
-        if(!$this->hasData($key)){
-            throw new \InvalidArgumentException($key.' not found in form data, that you submitted.');
+        if (!$this->hasData($key)) {
+            throw new \InvalidArgumentException($key . ' not found in form data, that you submitted.');
         }
 
         return $this->dataCollection[$key];
@@ -108,16 +104,17 @@ class FormHandler
 
     /**
      * Helper method that serializes form data into service request object
-     * Can be useful only in particular cases
+     * Can be useful in particular cases
      *
      * @param ServiceRequestInterface $request
      * @return ServiceRequestInterface
      */
     public function serializeData(ServiceRequestInterface $request): ServiceRequestInterface
     {
-        foreach ($this->dataCollection as $key => $value){
-            $setter = 'set'.ucfirst(str_replace(['_', '-', '.'], '', $key));
-            if(method_exists($request, $setter)){
+        foreach ($this->dataCollection as $key => $value) {
+            $setter = 'set' . (str_replace(['_', '-'], '', $key));
+
+            if (method_exists($request, $setter)) {
                 $request->{$setter}($value);
             }
         }

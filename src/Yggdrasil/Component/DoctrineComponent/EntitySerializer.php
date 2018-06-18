@@ -23,7 +23,7 @@ class EntitySerializer
      */
     public static function toArray(array $entities, int $depth = 1): array
     {
-        if($depth < 0){
+        if ($depth < 0) {
             return null;
         }
 
@@ -31,15 +31,15 @@ class EntitySerializer
         $data = [];
         $i = 0;
 
-        foreach ($entities as $entity){
-            if(!$entity instanceof SerializableEntityInterface){
+        foreach ($entities as $entity) {
+            if (!$entity instanceof SerializableEntityInterface) {
                 continue;
             }
 
             $methods[$i] = get_class_methods($entity);
 
-            foreach ($methods[$i] as $method){
-                if(strpos($method, 'get') === false || strpos($method, 'get') !== 0){
+            foreach ($methods[$i] as $method) {
+                if (strpos($method, 'get') === false || strpos($method, 'get') !== 0) {
                     continue;
                 }
 
@@ -47,11 +47,11 @@ class EntitySerializer
 
                 $value = $entity->{$method}();
 
-                if(is_object($value)){
-                    if($value instanceof Collection){
+                if (is_object($value)) {
+                    if ($value instanceof Collection) {
                         $collection = $value->toArray();
                         $value = self::toArray($collection, $depth);
-                    } elseif($value instanceof \DateTime) {
+                    } elseif ($value instanceof \DateTime) {
                         $value = $value->format('Y-m-d H:i:s');
                     } else {
                         $value = self::toArray([$value], $depth);

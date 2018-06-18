@@ -40,7 +40,7 @@ class StandardExtension extends \Twig_Extension
      */
     public function getAsset(string $path): string
     {
-        return BASE_URL.ltrim($path, '/');
+        return BASE_URL . ltrim($path, '/');
     }
 
     /**
@@ -58,11 +58,11 @@ class StandardExtension extends \Twig_Extension
         $session = new Session();
         $session->set('csrf_token', $token);
 
-        if($onlyToken){
+        if ($onlyToken) {
             return $token;
         }
 
-        echo '<input type="hidden" id="csrf_token" name="csrf_token" value="'.$token.'"/>';
+        echo '<input type="hidden" id="csrf_token" name="csrf_token" value="' . $token . '"/>';
     }
 
     /**
@@ -85,6 +85,7 @@ class StandardExtension extends \Twig_Extension
     public function getFlashBag(string $type): array
     {
         $session = new Session();
+
         return $session->getFlashBag()->get($type);
     }
 
@@ -96,6 +97,7 @@ class StandardExtension extends \Twig_Extension
     public function isGranted(): bool
     {
         $session = new Session();
+
         return $session->get('is_granted', false);
     }
 

@@ -57,7 +57,7 @@ class Kernel
         $response = $this->executePassiveActions($request, $response);
         $response = $this->executeAction($request, $response);
 
-        if($response->isClientError() || $response->isServerError()){
+        if ($response->isClientError() || $response->isServerError()) {
             return $this->handleError($request, $response);
         }
 
@@ -75,12 +75,12 @@ class Kernel
      */
     private function executePassiveActions(Request $request, Response $response): Response
     {
-        if(array_key_exists('passive_action', $this->configuration)) {
+        if (array_key_exists('passive_action', $this->configuration)) {
             foreach ($this->configuration['passive_action'] as $action) {
                 $route = $this->getRouter()->getAliasedRoute($action, [], true);
 
                 if (!method_exists($route->getController(), $route->getAction())) {
-                    throw new ActionNotFoundException($action. ' passive action is present in your configuration, but can\'t be found or is improperly configured.');
+                    throw new ActionNotFoundException($action . ' passive action is present in your configuration, but can\'t be found or is improperly configured.');
                 }
 
                 $controllerName = $route->getController();
@@ -106,18 +106,18 @@ class Kernel
     {
         $route = $this->getRouter()->getRoute($request);
 
-        if(!method_exists($route->getController(), $route->getAction())){
-            if(!DEBUG) {
+        if (!method_exists($route->getController(), $route->getAction())) {
+            if (!DEBUG) {
                 return $response
                     ->setContent('Not found.')
                     ->setStatusCode(Response::HTTP_NOT_FOUND);
             }
 
-            throw new ActionNotFoundException($route->getAction().' for '.$route->getController().' not found.');
+            throw new ActionNotFoundException($route->getAction() . ' for ' . $route->getController() . ' not found.');
         }
 
-        if(preg_match('(partial|passive)', strtolower($route->getAction())) === 1){
-            if(!DEBUG) {
+        if (preg_match('(partial|passive)', strtolower($route->getAction())) === 1) {
+            if (!DEBUG) {
                 return $response
                     ->setContent('Access denied.')
                     ->setStatusCode(Response::HTTP_FORBIDDEN);
@@ -144,10 +144,10 @@ class Kernel
         $controllerName = $this->getRouter()->getControllerNamespace() . 'ErrorController';
         $actionName = 'code' . $response->getStatusCode() . 'Action';
 
-        if(!method_exists($controllerName, $actionName)){
+        if (!method_exists($controllerName, $actionName)) {
             $actionName = 'defaultAction';
 
-            if(!method_exists($controllerName, $actionName)) {
+            if (!method_exists($controllerName, $actionName)) {
                 return $response;
             }
         }
@@ -166,22 +166,27 @@ class Kernel
     {
         $response = new Response();
 
-        if(array_key_exists('cors', $this->configuration)){
+        if (array_key_exists('cors', $this->configuration)) {
             $response->headers->set(
                 'Access-Control-Allow-Origin',
-                $this->configuration['cors']['allow_origin'] ?? '*');
+                $this->configuration['cors']['allow_origin'] ?? '*'
+            );
             $response->headers->set(
                 'Access-Control-Allow-Methods',
-                $this->configuration['cors']['allow_methods'] ?? 'GET, POST, PUT, DELETE, OPTIONS');
+                $this->configuration['cors']['allow_methods'] ?? 'GET, POST, PUT, DELETE, OPTIONS'
+            );
             $response->headers->set(
                 'Access-Control-Allow-Headers',
-                $this->configuration['cors']['allow_headers'] ?? '*');
+                $this->configuration['cors']['allow_headers'] ?? '*'
+            );
             $response->headers->set(
                 'Access-Control-Allow-Credentials',
-                $this->configuration['cors']['allow_credentials'] ?? true);
+                $this->configuration['cors']['allow_credentials'] ?? true
+            );
             $response->headers->set(
                 'Access-Control-Allow-Max-Age',
-                $this->configuration['cors']['max_age'] ?? 3600);
+                $this->configuration['cors']['max_age'] ?? 3600
+            );
         }
 
         return $response;

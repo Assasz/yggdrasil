@@ -31,9 +31,9 @@ class ValidatorDriver implements DriverInterface
      *
      * Should be private to prevent object creation. Same with __clone
      */
-    private function __construct(){}
+    private function __construct() {}
 
-    private function __clone(){}
+    private function __clone() {}
 
     /**
      * Returns instance of validator
@@ -45,15 +45,15 @@ class ValidatorDriver implements DriverInterface
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): RecursiveValidator
     {
-        if(self::$validatorInstance === null){
+        if (self::$validatorInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if(!$appConfiguration->isConfigured(['validation_path'], 'validator')){
+            if (!$appConfiguration->isConfigured(['validation_path'], 'validator')) {
                 throw new MissingConfigurationException('There is missing parameter in your configuration: validation_path in validator section.');
             }
 
             $validator = Validation::createValidatorBuilder()
-                ->addYamlMapping(dirname(__DIR__, 7).'/src/'.$configuration['validator']['validation_path'].'/validation.yaml')
+                ->addYamlMapping(dirname(__DIR__, 7) . '/src/' . $configuration['validator']['validation_path'] . '/validation.yaml')
                 ->getValidator();
 
             self::$validatorInstance = $validator;
