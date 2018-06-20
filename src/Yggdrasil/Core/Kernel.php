@@ -34,7 +34,7 @@ class Kernel
     /**
      * Kernel constructor.
      *
-     * Gets application configuration and loads drivers
+     * Initializes application
      *
      * @param ConfigurationInterface $appConfiguration
      */
@@ -42,6 +42,8 @@ class Kernel
     {
         $this->configuration = $appConfiguration->getConfiguration();
         $this->drivers = $appConfiguration->loadDrivers();
+
+        $this->getExceptionHandler();
     }
 
     /**

@@ -43,15 +43,15 @@ class DriverCollection
     /**
      * Adds driver to collection
      *
-     * @param string          $key    Name of driver
-     * @param DriverInterface $driver
+     * @param string $key Name of driver
+     * @param string $driver
      *
-     * @throws \InvalidArgumentException if given driver already exist
+     * @throws \LogicException if given driver doesn't implement DriverInterface
      */
-    public function add(string $key, DriverInterface $driver): void
+    public function add(string $key, string $driver): void
     {
-        if ($this->has($driver)) {
-            throw new \InvalidArgumentException($key . ' driver already exist in collection.');
+        if (!in_array(DriverInterface::class, class_implements($driver))) {
+            throw new \LogicException($key . ' driver needs to implement DriverInterface.');
         }
 
         $this->drivers[$key] = $driver;
