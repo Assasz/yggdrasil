@@ -2,7 +2,7 @@
 
 namespace Yggdrasil\Core\Configuration;
 
-use Yggdrasil\Core\Driver\Base\DriverInstanceCollection;
+use Yggdrasil\Core\Driver\Base\DriverCollection;
 use Yggdrasil\Core\Exception\DriverNotFoundException;
 
 /**
@@ -18,9 +18,9 @@ interface ConfigurationInterface
     /**
      * Gets registered drivers and returns collection of their component instances
      *
-     * @return DriverInstanceCollection
+     * @return DriverCollection
      */
-    public function loadDrivers(): DriverInstanceCollection;
+    public function loadDrivers(): DriverCollection;
 
     /**
      * Gets given driver and returns it's component instance directly

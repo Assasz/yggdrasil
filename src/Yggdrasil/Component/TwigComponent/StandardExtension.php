@@ -13,8 +13,23 @@ use Symfony\Component\HttpFoundation\Session\Session;
  * @package Yggdrasil\Component\TwigComponent
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class StandardExtension extends \Twig_Extension
+class StandardExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
+    /**
+     * Returns set of globals
+     *
+     * @return array
+     */
+    public function getGlobals(): array
+    {
+        $session = new Session();
+
+        return [
+            '_session' => $session,
+            '_user' => $session->get('user')
+        ];
+    }
+
     /**
      * Returns set of functions
      *

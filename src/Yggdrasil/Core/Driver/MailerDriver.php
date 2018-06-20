@@ -55,6 +55,7 @@ class MailerDriver implements DriverInterface
                 $configuration['mailer']['port'] ?? 465,
                 $configuration['mailer']['encryption'] ?? 'ssl'
             );
+
             $transport
                 ->setUsername($configuration['mailer']['username'])
                 ->setPassword($configuration['mailer']['password']);

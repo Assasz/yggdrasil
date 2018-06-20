@@ -13,7 +13,7 @@ use Yggdrasil\Core\Routing\Router;
  *
  * Provides access to application drivers
  *
- * @see DriverInstanceCollection
+ * @see DriverCollection
  *
  * @package Yggdrasil\Core\Driver\Base
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -21,9 +21,9 @@ use Yggdrasil\Core\Routing\Router;
 trait DriverAccessorTrait
 {
     /**
-     * Collection of drivers instances
+     * Collection of application drivers
      *
-     * @var DriverInstanceCollection
+     * @var DriverCollection
      */
     private $drivers;
 

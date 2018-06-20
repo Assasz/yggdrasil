@@ -52,13 +52,12 @@ class ContainerDriver implements DriverInterface
                 throw new MissingConfigurationException('There is missing parameter in your configuration: service_namespace in container section.');
             }
 
-            foreach ($configuration['container'] as $name => $service) {
-                if ($name === 'service_namespace') {
-                    continue;
-                }
+            $serviceNamespace = $configuration['container']['service_namespace'];
+            unset($configuration['container']['service_namespace']);
 
+            foreach ($configuration['container'] as $name => $service) {
                 $container
-                    ->add($name, $configuration['container']['service_namespace'] . $service)
+                    ->add($name, $serviceNamespace . $service)
                     ->withArgument($appConfiguration);
             }
 

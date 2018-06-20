@@ -2,7 +2,7 @@
 
 namespace Yggdrasil\Core\Configuration;
 
-use Yggdrasil\Core\Driver\Base\DriverInstanceCollection;
+use Yggdrasil\Core\Driver\Base\DriverCollection;
 use Yggdrasil\Core\Exception\ConfigurationNotFoundException;
 use Yggdrasil\Core\Exception\DriverNotFoundException;
 
@@ -49,16 +49,16 @@ abstract class AbstractConfiguration
     }
 
     /**
-     * Gets registered drivers and returns collection of their component instances
+     * Returns collection of application drivers
      *
-     * @return DriverInstanceCollection
+     * @return DriverCollection
      */
-    public function loadDrivers(): DriverInstanceCollection
+    public function loadDrivers(): DriverCollection
     {
-        $driversInstances = new DriverInstanceCollection();
+        $driversInstances = new DriverCollection($this);
 
         foreach ($this->drivers as $name => $driver) {
-            $driversInstances->add($name, $driver::getInstance($this));
+            $driversInstances->add($name, $driver);
         }
 
         return $driversInstances;

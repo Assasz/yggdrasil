@@ -53,16 +53,13 @@ class TemplateEngineDriver implements DriverInterface
                 throw new MissingConfigurationException('There are missing parameters in your configuration: view_path or application_name in template_engine section.');
             }
 
-            $loader = new \Twig_Loader_Filesystem(dirname(__DIR__, 7) . '/src/' . $configuration['template_engine']['view_path']);
+            $viewPath = dirname(__DIR__, 7) . '/src/' . $configuration['template_engine']['view_path'];
+            $loader = new \Twig_Loader_Filesystem($viewPath);
             $twig = new \Twig_Environment($loader);
 
+            $twig->addGlobal('_appname', $configuration['template_engine']['application_name']);
             $twig->addExtension(new StandardExtension());
             $twig->addExtension(new RoutingExtension($appConfiguration->loadDriver('router')));
-
-            $session = new Session();
-            $twig->addGlobal('_session', $session);
-            $twig->addGlobal('_user', $session->get('user'));
-            $twig->addGlobal('_appname', $configuration['template_engine']['application_name']);
 
             self::$engineInstance = $twig;
         }

@@ -45,9 +45,11 @@ class RouterDriver implements DriverInterface
     {
         if (self::$routerInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
+            $requiredConfig = ['default_controller', 'default_action', 'controller_namespace'];
+
             $router = new Router();
 
-            if (!$appConfiguration->isConfigured(['default_controller', 'default_action', 'controller_namespace'], 'router')) {
+            if (!$appConfiguration->isConfigured($requiredConfig, 'router')) {
                 throw new MissingConfigurationException('There are missing parameters in your configuration: default_controller, default_action or controller_path in router section.');
             }
 

@@ -2,10 +2,8 @@
 
 namespace Yggdrasil\Core\Controller;
 
-use Yggdrasil\Component\DoctrineComponent\EntitySerializer;
-use Yggdrasil\Component\DoctrineComponent\SerializableEntityInterface;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
-use Yggdrasil\Core\Driver\Base\DriverInstanceCollection;
+use Yggdrasil\Core\Driver\Base\DriverCollection;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,11 +31,11 @@ abstract class ApiController
     /**
      * AbstractController constructor.
      *
-     * @param DriverInstanceCollection $drivers
+     * @param DriverCollection $drivers
      * @param Request $request
      * @param Response $response
      */
-    public function __construct(DriverInstanceCollection $drivers, Request $request, Response $response)
+    public function __construct(DriverCollection $drivers, Request $request, Response $response)
     {
         $this->drivers = $drivers;
         $this->request = $request;

@@ -8,9 +8,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
-use Yggdrasil\Core\Driver\Base\DriverInstanceCollection;
-use Yggdrasil\Component\DoctrineComponent\EntitySerializer;
-use Yggdrasil\Component\DoctrineComponent\SerializableEntityInterface;
+use Yggdrasil\Core\Driver\Base\DriverCollection;
 
 /**
  * Class AbstractController
@@ -35,11 +33,11 @@ abstract class AbstractController
     /**
      * AbstractController constructor.
      *
-     * @param DriverInstanceCollection $drivers Drivers passed by Kernel
+     * @param DriverCollection $drivers Drivers passed by Kernel
      * @param Request $request
      * @param Response $response
      */
-    public function __construct(DriverInstanceCollection $drivers, Request $request, Response $response)
+    public function __construct(DriverCollection $drivers, Request $request, Response $response)
     {
         $this->drivers = $drivers;
         $this->request = $request;

@@ -52,8 +52,10 @@ class ValidatorDriver implements DriverInterface
                 throw new MissingConfigurationException('There is missing parameter in your configuration: validation_path in validator section.');
             }
 
+            $validationPath = dirname(__DIR__, 7) . '/src/' . $configuration['validator']['validation_path'] . '/validation.yaml';
+
             $validator = Validation::createValidatorBuilder()
-                ->addYamlMapping(dirname(__DIR__, 7) . '/src/' . $configuration['validator']['validation_path'] . '/validation.yaml')
+                ->addYamlMapping($validationPath)
                 ->getValidator();
 
             self::$validatorInstance = $validator;
