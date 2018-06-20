@@ -71,7 +71,7 @@ class DriverCollection
             throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that ' . $key . ' driver is properly configured.');
         }
 
-        return $this->drivers[$key]::getInstace($this->appConfiguration);
+        return $this->drivers[$key]::getInstance($this->appConfiguration);
     }
 
     /**
