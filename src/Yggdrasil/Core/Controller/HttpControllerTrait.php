@@ -55,7 +55,7 @@ trait HttpControllerTrait
      * @param string $message
      * @return Response
      */
-    protected function badRequest($message = 'Bad request.'): Response
+    protected function badRequest(string $message = 'Bad request.'): Response
     {
         return $this->getResponse()
             ->setContent($message)
