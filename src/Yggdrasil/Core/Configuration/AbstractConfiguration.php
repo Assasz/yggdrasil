@@ -55,13 +55,13 @@ abstract class AbstractConfiguration
      */
     public function loadDrivers(): DriverCollection
     {
-        $driversInstances = new DriverCollection($this);
+        $drivers = new DriverCollection($this);
 
         foreach ($this->drivers as $name => $driver) {
-            $driversInstances->add($name, $driver);
+            $drivers->add($name, $driver);
         }
 
-        return $driversInstances;
+        return $drivers;
     }
 
     /**
