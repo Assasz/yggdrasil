@@ -71,7 +71,7 @@ class EntityManagerDriver implements DriverInterface
             $entityPath = implode('/', explode('\\', $configuration['entity_manager']['entity_namespace']));
             $entityPath = [dirname(__DIR__, 7) . '/src/' . $entityPath . '/'];
 
-            $config = Setup::createAnnotationMetadataConfiguration($entityPath, DEBUG);
+            $config = Setup::createAnnotationMetadataConfiguration($entityPath);
             $config->addEntityNamespace('Entity', $configuration['entity_manager']['entity_namespace']);
 
             $connection = DriverManager::getConnection($connectionParams, $config);
