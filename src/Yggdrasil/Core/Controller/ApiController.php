@@ -6,7 +6,6 @@ use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\Base\DriverCollection;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class ApiController
@@ -19,9 +18,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 abstract class ApiController
 {
     /**
-     * Trait that makes controller a HTTP port component
+     * Trait that provides common controllers features
      */
-    use HttpControllerTrait;
+    use ControllerTrait;
 
     /**
      * Trait that provides access to drivers
@@ -88,20 +87,5 @@ abstract class ApiController
         $this->getTemplateEngine()->addGlobal('_request', $this->getRequest());
 
         return $this->getTemplateEngine()->render($view, $params);
-    }
-
-    /**
-     * Returns JSON encoded response
-     *
-     * @param array  $data   Data supposed to be returned
-     * @param string $status Response status code
-     * @return JsonResponse
-     */
-    protected function json(array $data = [], string $status = Response::HTTP_OK): JsonResponse
-    {
-        $this->getResponse()->headers->set('Content-Type', 'application/json');
-        $headers = $this->getResponse()->headers->all();
-
-        return new JsonResponse($data, $status, $headers);
     }
 }

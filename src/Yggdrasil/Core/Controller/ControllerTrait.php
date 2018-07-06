@@ -4,16 +4,18 @@ namespace Yggdrasil\Core\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
- * Trait HttpControllerTrait
+ * Trait ControllerTrait
  *
- * Trait that makes controller a HTTP port component
+ * Trait that provides common controllers features
  *
  * @package Yggdrasil\Core\Controller
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-trait HttpControllerTrait
+trait ControllerTrait
 {
     /**
      * Request from client
@@ -99,5 +101,56 @@ trait HttpControllerTrait
         return $this->getResponse()
             ->setContent($message)
             ->setStatusCode(Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+
+    /**
+     * Returns JSON encoded response
+     *
+     * @param array  $data   Data supposed to be returned
+     * @param string $status Response status code
+     * @return JsonResponse
+     */
+    protected function json(array $data = [], string $status = Response::HTTP_OK): JsonResponse
+    {
+        $this->getResponse()->headers->set('Content-Type', 'application/json');
+        $headers = $this->getResponse()->headers->all();
+
+        return new JsonResponse($data, $status, $headers);
+    }
+
+    /**
+     * Adds flash to session flash bag
+     *
+     * @param string       $type    Type of flash bag
+     * @param string|array $message Message of flash
+     */
+    protected function addFlash(string $type, $message): void
+    {
+        $session = new Session();
+        $session->getFlashBag()->set($type, $message);
+    }
+
+    /**
+     * Checks if user is authenticated
+     *
+     * @return bool
+     */
+    protected function isGranted(): bool
+    {
+        $session = new Session();
+
+        return $session->get('is_granted', false);
+    }
+
+    /**
+     * Returns authenticated user instance from session
+     *
+     * @return mixed
+     */
+    protected function getUser()
+    {
+        $session = new Session();
+
+        return $session->get('user');
     }
 }

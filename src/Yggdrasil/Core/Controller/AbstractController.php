@@ -4,9 +4,7 @@ namespace Yggdrasil\Core\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\Base\DriverCollection;
 
@@ -21,9 +19,9 @@ use Yggdrasil\Core\Driver\Base\DriverCollection;
 abstract class AbstractController
 {
     /**
-     * Trait that makes controller a HTTP port component
+     * Trait that provides common controllers features
      */
-    use HttpControllerTrait;
+    use ControllerTrait;
 
     /**
      * Trait that provides access to drivers
@@ -77,56 +75,5 @@ abstract class AbstractController
         $headers = $this->getResponse()->headers->all();
 
         return new RedirectResponse($query, Response::HTTP_FOUND, $headers);
-    }
-
-    /**
-     * Returns JSON encoded response
-     *
-     * @param array  $data   Data supposed to be returned
-     * @param string $status Response status code
-     * @return JsonResponse
-     */
-    protected function json(array $data = [], string $status = Response::HTTP_OK): JsonResponse
-    {
-        $this->getResponse()->headers->set('Content-Type', 'application/json');
-        $headers = $this->getResponse()->headers->all();
-
-        return new JsonResponse($data, $status, $headers);
-    }
-
-    /**
-     * Adds flash to session flash bag
-     *
-     * @param string       $type    Type of flash bag
-     * @param string|array $message Message of flash
-     */
-    protected function addFlash(string $type, $message): void
-    {
-        $session = new Session();
-        $session->getFlashBag()->set($type, $message);
-    }
-
-    /**
-     * Checks if user is authenticated
-     *
-     * @return bool
-     */
-    protected function isGranted(): bool
-    {
-        $session = new Session();
-
-        return $session->get('is_granted', false);
-    }
-
-    /**
-     * Returns authenticated user instance from session
-     *
-     * @return mixed
-     */
-    protected function getUser()
-    {
-        $session = new Session();
-
-        return $session->get('user');
     }
 }
