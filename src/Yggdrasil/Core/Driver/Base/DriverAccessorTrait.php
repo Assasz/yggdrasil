@@ -28,7 +28,7 @@ trait DriverAccessorTrait
     private $drivers;
 
     /**
-     * Returns given driver instance
+     * Returns component instance of given driver
      *
      * @param string $key Name of driver
      * @return mixed
@@ -39,7 +39,7 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Helper method that returns built-in driver instance, in this case entity manager
+     * Returns entity manager instance
      *
      * @return EntityManager
      */
@@ -49,7 +49,7 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Helper method that returns built-in driver instance, in this case template engine
+     * Returns template engine instance
      *
      * @return \Twig_Environment
      */
@@ -59,7 +59,7 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Helper method that returns built-in driver instance, in this case router
+     * Returns router instance
      *
      * @return Router
      */
@@ -69,7 +69,7 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Helper method that returns built-in driver instance, in this case validator
+     * Returns validator instance
      *
      * @return RecursiveValidator
      */
@@ -79,7 +79,7 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Helper method that returns built-in driver instance, in this case mailer
+     * Returns mailer instance
      *
      * @return \Swift_Mailer
      */
@@ -89,7 +89,7 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Helper method that returns built-in driver instance, in this case container
+     * Returns container instance
      *
      * @return Container
      */
@@ -99,7 +99,7 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Helper method that returns built-in driver instance, in this case exception handler
+     * Returns exception handler instance
      *
      * @return Run
      */
