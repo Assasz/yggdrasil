@@ -112,7 +112,7 @@ class FormHandler
     public function serializeData(ServiceRequestInterface $request): ServiceRequestInterface
     {
         foreach ($this->dataCollection as $key => $value) {
-            $setter = 'set' . (str_replace(['_', '-'], '', $key));
+            $setter = 'set' . ucfirst($key);
 
             if (method_exists($request, $setter)) {
                 $request->{$setter}($value);
