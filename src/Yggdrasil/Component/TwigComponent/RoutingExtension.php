@@ -39,7 +39,8 @@ class RoutingExtension extends \Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new \Twig_Function('path', [$this, 'getPath'])
+            new \Twig_Function('path', [$this, 'getPath']),
+            new \Twig_Function('asset', [$this, 'getAsset'])
         ];
     }
 
@@ -53,5 +54,16 @@ class RoutingExtension extends \Twig_Extension
     public function getPath(string $alias, array $params = []): string
     {
         return $this->router->getQuery($alias, $params);
+    }
+
+    /**
+     * Returns absolute path for requested asset like CSS file
+     *
+     * @param string $path Relative path of asset
+     * @return string
+     */
+    public function getAsset(string $path): string
+    {
+        return $this->router->getConfiguration()->getBaseUrl() . ltrim($path, '/');
     }
 }

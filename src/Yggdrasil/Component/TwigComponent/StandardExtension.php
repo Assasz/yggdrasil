@@ -38,24 +38,12 @@ class StandardExtension extends \Twig_Extension implements \Twig_Extension_Globa
     public function getFunctions(): array
     {
         return [
-            new \Twig_Function('asset', [$this, 'getAsset']),
             new \Twig_Function('csrf_token', [$this, 'generateCsrfToken']),
             new \Twig_Function('flashbag', [$this, 'getFlashBag']),
             new \Twig_Function('is_granted', [$this, 'isGranted']),
             new \Twig_Function('is_pjax', [$this, 'isPjax']),
             new \Twig_Function('partial', [$this, 'embedPartial'])
         ];
-    }
-
-    /**
-     * Returns absolute path for requested asset like CSS file
-     *
-     * @param string $path
-     * @return string
-     */
-    public function getAsset(string $path): string
-    {
-        return BASE_URL . ltrim($path, '/');
     }
 
     /**

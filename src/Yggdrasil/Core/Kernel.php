@@ -55,7 +55,6 @@ class Kernel
     public function handle(Request $request)
     {
         $response = $this->prepareResponse();
-
         $response = $this->executePassiveActions($request, $response);
         $response = $this->executeAction($request, $response);
 
@@ -169,26 +168,22 @@ class Kernel
         $response = new Response();
 
         if (array_key_exists('cors', $this->configuration)) {
-            $response->headers->set(
-                'Access-Control-Allow-Origin',
-                $this->configuration['cors']['allow_origin'] ?? '*'
-            );
-            $response->headers->set(
-                'Access-Control-Allow-Methods',
-                $this->configuration['cors']['allow_methods'] ?? 'GET, POST, PUT, DELETE, OPTIONS'
-            );
-            $response->headers->set(
-                'Access-Control-Allow-Headers',
-                $this->configuration['cors']['allow_headers'] ?? '*'
-            );
-            $response->headers->set(
-                'Access-Control-Allow-Credentials',
-                $this->configuration['cors']['allow_credentials'] ?? true
-            );
-            $response->headers->set(
-                'Access-Control-Allow-Max-Age',
-                $this->configuration['cors']['max_age'] ?? 3600
-            );
+            $corsConfig = [
+                'Access-Control-Allow-Origin'
+                => $this->configuration['cors']['allow_origin'] ?? '*',
+                'Access-Control-Allow-Methods'
+                => $this->configuration['cors']['allow_methods'] ?? 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers'
+                => $this->configuration['cors']['allow_headers'] ?? '*',
+                'Access-Control-Allow-Credentials'
+                => $this->configuration['cors']['allow_credentials'] ?? true,
+                'Access-Control-Allow-Max-Age'
+                => $this->configuration['cors']['max_age'] ?? 3600
+            ];
+
+            foreach ($corsConfig as $key => $value) {
+                $response->headers->set($key, $value);
+            }
         }
 
         return $response;

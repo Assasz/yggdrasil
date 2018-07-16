@@ -15,18 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 class Router
 {
     /**
-     * Names of default controller and action
+     * Routing configuration
      *
-     * @var array
+     * @var RoutingConfiguration
      */
-    private $defaults;
-
-    /**
-     * Namespace of controllers
-     *
-     * @var string
-     */
-    private $controllerNamespace;
+    private $configuration;
 
     /**
      * Set of route parameters consisting of controller, action and action parameters values, if exists
@@ -38,11 +31,11 @@ class Router
     /**
      * Router constructor.
      *
-     * Initialises arrays of $defaults and $routeParams
+     * @param RoutingConfiguration $configuration
      */
-    public function __construct()
+    public function __construct(RoutingConfiguration $configuration)
     {
-        $this->defaults = [];
+        $this->configuration = $configuration;
         $this->routeParams = [];
     }
 
@@ -57,20 +50,21 @@ class Router
         $query = $request->query->get('route');
         $this->routeParams = explode('/', trim($query, '/'));
 
-        $route = new Route();
+        $isApiCall = false;
 
         if ($this->routeParams[0] === 'api') {
             unset($this->routeParams[0]);
             $this->routeParams = array_values($this->routeParams);
 
-            $route->setApiCall(true);
+            $isApiCall = true;
         }
 
-        $route->setController($this->resolveController());
-        $route->setAction(($route->isApiCall()) ?
-            $this->resolveApiAction($request->getMethod()) :
-            $this->resolveAction());
-        $route->setActionParams($this->resolveActionParams());
+        $route = (new Route())
+            ->setController($this->resolveController())
+            ->setAction(($isApiCall) ?
+                $this->resolveApiAction($request->getMethod()) :
+                $this->resolveAction())
+            ->setActionParams($this->resolveActionParams());
 
         return $route;
     }
@@ -91,10 +85,10 @@ class Router
             $this->routeParams[] = $param;
         }
 
-        $route = new Route();
-        $route->setController($this->resolveController());
-        $route->setAction(($passive) ? $this->resolvePassiveAction() : $this->resolveAction());
-        $route->setActionParams($this->resolveActionParams());
+        $route = (new Route())
+            ->setController($this->resolveController())
+            ->setAction(($passive) ? $this->resolvePassiveAction() : $this->resolveAction())
+            ->setActionParams($this->resolveActionParams());
 
         return $route;
     }
@@ -114,71 +108,35 @@ class Router
             $queryParams[] = $param;
         }
 
-        if (empty($queryParams[2]) && $queryParams[1] . 'Action' === $this->defaults['action']) {
+        if (empty($queryParams[2]) && $queryParams[1] . 'Action' === $this->configuration->getDefaultAction()) {
             unset($queryParams[1]);
 
-            if (ucfirst($queryParams[0]) . 'Controller' === $this->defaults['controller']) {
+            if (ucfirst($queryParams[0]) . 'Controller' === $this->configuration->getDefaultController()) {
                 unset($queryParams[0]);
             }
         }
 
         $query = implode('/', $queryParams);
 
-        return BASE_URL . $query;
+        return $this->configuration->getBaseUrl() . $query;
     }
 
     /**
-     * Sets default controller and action names
-     *
-     * @param array $defaults
-     *
-     * @throws \InvalidArgumentException if controller and action keys can't be found in passed array
-     */
-    public function setDefaults(array $defaults): void
-    {
-        if (!array_key_exists('controller', $defaults) && !array_key_exists('action', $defaults)) {
-            throw new \InvalidArgumentException('Keys controller and action need to be specified in array to configure default routing.');
-        }
-
-        $this->defaults = $defaults;
-    }
-
-    /**
-     * Sets controllers namespace
-     *
-     * @param string $namespace
-     */
-    public function setControllerNamespace(string $namespace): void
-    {
-        $this->controllerNamespace = $namespace;
-    }
-
-    /**
-     * Returns controllers namespace
-     *
-     * @return string
-     */
-    public function getControllerNamespace(): string
-    {
-        return $this->controllerNamespace;
-    }
-
-    /**
-     * Resolves controller depending on route parameter, returns default value otherwise
+     * Resolves controller depending on route parameter
      *
      * @return string
      */
     private function resolveController(): string
     {
         $controller = (!empty($this->routeParams[0])) ?
-            $this->controllerNamespace . ucfirst($this->routeParams[0]) . 'Controller' :
-            $this->controllerNamespace . $this->defaults['controller'];
+            $this->configuration->getControllerNamespace() . ucfirst($this->routeParams[0]) . 'Controller' :
+            $this->configuration->getControllerNamespace() . $this->configuration->getDefaultController();
 
         return $controller;
     }
 
     /**
-     * Resolves action depending on route parameter, returns default value otherwise
+     * Resolves action depending on route parameter
      *
      * @return string
      */
@@ -186,7 +144,7 @@ class Router
     {
         $action = (!empty($this->routeParams[1])) ?
             $this->routeParams[1] . 'Action' :
-            $this->defaults['action'];
+            $this->configuration->getDefaultAction();
 
         return $action;
     }
@@ -212,15 +170,16 @@ class Router
     private function resolveApiAction(string $method): string
     {
         $method = ucfirst(strtolower($method));
+
         $action = (!empty($this->routeParams[1])) ?
             $this->routeParams[1] . $method.'Action' :
-            $this->defaults['action'];
+            $this->configuration->getDefaultAction();
 
         return $action;
     }
 
     /**
-     * Resolves action parameters depending on route parameters, if exists
+     * Resolves action parameters depending on route parameters
      *
      * @return array
      */
@@ -233,5 +192,15 @@ class Router
         }
 
         return $actionParams;
+    }
+
+    /**
+     * Returns routing configuration
+     *
+     * @return RoutingConfiguration
+     */
+    public function getConfiguration(): RoutingConfiguration
+    {
+        return $this->configuration;
     }
 }
