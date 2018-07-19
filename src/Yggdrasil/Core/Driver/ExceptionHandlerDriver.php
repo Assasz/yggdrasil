@@ -49,13 +49,20 @@ class ExceptionHandlerDriver implements DriverInterface
                 throw new MissingConfigurationException('There is missing parameter in your configuration: handler in exception_handler section.');
             }
 
-            $handler = 'Whoops\Handler\\' . $configuration['exception_handler']['handler'] ?? 'PrettyPageHandler';
+            $run = new Run();
 
-            $driver = new Run();
-            $driver->pushHandler(new $handler());
-            $driver->register();
+            if (DEBUG) {
+                $handler = 'Whoops\Handler\\' . $configuration['exception_handler']['handler'] ?? 'PrettyPageHandler';
+                $run->pushHandler(new $handler());
+            } else {
+                $run->pushHandler(function () {
+                    echo 'Internal server error.';
+                });
+            }
 
-            self::$handlerInstance = $driver;
+            $run->register();
+
+            self::$handlerInstance = $run;
         }
 
         return self::$handlerInstance;
