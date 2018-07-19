@@ -142,7 +142,7 @@ class Kernel
      */
     private function handleError(Request $request, Response $response)
     {
-        $controllerName = $this->getRouter()->getControllerNamespace() . 'ErrorController';
+        $controllerName = $this->getRouter()->getConfiguration()->getControllerNamespace() . 'ErrorController';
         $actionName = 'code' . $response->getStatusCode() . 'Action';
 
         if (!method_exists($controllerName, $actionName)) {
