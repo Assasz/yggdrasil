@@ -59,7 +59,7 @@ class RoutingExtension extends \Twig_Extension
     /**
      * Returns absolute path for requested asset like CSS file
      *
-     * @param string $path Relative path of asset
+     * @param string $path Path of asset relative to web directory
      * @return string
      */
     public function getAsset(string $path): string

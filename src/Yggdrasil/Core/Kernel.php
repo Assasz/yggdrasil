@@ -69,7 +69,7 @@ class Kernel
      * Executes passive actions and returns modified or not response
      *
      * @param Request  $request
-     * @param Response $response New object of Response
+     * @param Response $response Response prepared by prepareResponse() method
      * @return Response
      *
      * @throws ActionNotFoundException if passive action can't be found, but exists in configuration

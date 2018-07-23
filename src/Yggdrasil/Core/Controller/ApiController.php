@@ -82,7 +82,7 @@ abstract class ApiController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    protected function renderPartial(string $view, array $params = [])
+    protected function renderPartial(string $view, array $params = []): string
     {
         $this->getTemplateEngine()->addGlobal('_request', $this->getRequest());
 
