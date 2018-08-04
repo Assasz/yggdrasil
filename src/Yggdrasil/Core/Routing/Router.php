@@ -172,7 +172,7 @@ class Router
         $method = ucfirst(strtolower($method));
 
         $action = (!empty($this->routeParams[1])) ?
-            $this->routeParams[1] . $method.'Action' :
+            $this->routeParams[1] . $method . 'Action' :
             $this->configuration->getDefaultAction();
 
         return $action;
@@ -187,7 +187,7 @@ class Router
     {
         $actionParams = [];
 
-        for ($i = 2; $i <= count($this->routeParams) - 1; $i++) {
+        for ($i = 2; $i < count($this->routeParams); $i++) {
             $actionParams[] = $this->routeParams[$i];
         }
 

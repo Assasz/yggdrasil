@@ -2,6 +2,8 @@
 
 namespace Yggdrasil\Component\TwigComponent;
 
+use Symfony\Component\HttpFoundation\Request;
+use Yggdrasil\Core\Routing\Route;
 use Yggdrasil\Core\Routing\Router;
 
 /**
@@ -40,7 +42,8 @@ class RoutingExtension extends \Twig_Extension
     {
         return [
             new \Twig_Function('path', [$this, 'getPath']),
-            new \Twig_Function('asset', [$this, 'getAsset'])
+            new \Twig_Function('asset', [$this, 'getAsset']),
+            new \Twig_Function('route', [$this, 'getRoute'])
         ];
     }
 
@@ -65,5 +68,16 @@ class RoutingExtension extends \Twig_Extension
     public function getAsset(string $path): string
     {
         return $this->router->getConfiguration()->getBaseUrl() . ltrim($path, '/');
+    }
+
+    /**
+     * Returns route for given request
+     *
+     * @param Request $request
+     * @return Route
+     */
+    public function getRoute(Request $request): Route
+    {
+        return $this->router->getRoute($request);
     }
 }
