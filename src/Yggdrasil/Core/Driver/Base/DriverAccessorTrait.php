@@ -115,6 +115,8 @@ trait DriverAccessorTrait
      *
      * @param string $alias Alias of service like module.service_name
      * @return ServiceInterface
+     *
+     * @throws ServiceNotFoundException if given service doesn't exist
      */
     protected function getService(string $alias): ServiceInterface
     {
