@@ -6,7 +6,9 @@ use Doctrine\ORM\EntityManager;
 use League\Container\Container;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Whoops\Run;
+use Yggdrasil\Core\Exception\ServiceNotFoundException;
 use Yggdrasil\Core\Routing\Router;
+use Yggdrasil\Core\Service\ServiceInterface;
 
 /**
  * Trait DriverAccessorTrait
@@ -106,5 +108,20 @@ trait DriverAccessorTrait
     protected function getExceptionHandler(): Run
     {
         return $this->drivers->get('exceptionHandler');
+    }
+
+    /**
+     * Helper method that returns given service instance from container directly
+     *
+     * @param string $alias Alias of service like module.service_name
+     * @return ServiceInterface
+     */
+    protected function getService(string $alias): ServiceInterface
+    {
+        if (!$this->getContainer()->has($alias)) {
+            throw new ServiceNotFoundException('Service with alias ' . $alias . ' doesn\'t exist.');
+        }
+
+        return $this->getContainer()->get($alias);
     }
 }
