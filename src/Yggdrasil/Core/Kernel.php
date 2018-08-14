@@ -17,7 +17,7 @@ use Yggdrasil\Core\Exception\WrongActionRequestedException;
  * @package Yggdrasil\Core
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class Kernel
+final class Kernel
 {
     /**
      * Application configuration

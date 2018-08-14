@@ -12,8 +12,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 /**
  * Class TemplateEngineDriver
  *
- * Template engine driver, necessary for templating to work
- * Twig is framework default template engine
+ * [Twig] Template Engine driver
  *
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -25,7 +24,7 @@ class TemplateEngineDriver implements DriverInterface
      *
      * @var \Twig_Environment
      */
-    private static $engineInstance;
+    protected static $engineInstance;
 
     /**
      * TemplateEngineDriver constructor.

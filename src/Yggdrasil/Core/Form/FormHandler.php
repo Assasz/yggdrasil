@@ -15,7 +15,7 @@ use Yggdrasil\Core\Service\ServiceRequestInterface;
  * @package Yggdrasil\Core\Form
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class FormHandler
+final class FormHandler
 {
     /**
      * Collection od form data
@@ -58,8 +58,7 @@ class FormHandler
             $request->request->remove('csrf_token');
         }
 
-        $dataCollection = array_merge($request->request->all(), $request->files->all());
-        $this->dataCollection = $dataCollection;
+        $this->dataCollection = array_merge($request->request->all(), $request->files->all());
 
         return true;
     }

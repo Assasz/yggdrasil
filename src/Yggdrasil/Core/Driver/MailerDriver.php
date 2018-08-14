@@ -9,8 +9,7 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
 /**
  * Class MailerDriver
  *
- * Mailer driver, necessary for mailing to work
- * SwiftMailer is framework default mailer
+ * [SwiftMailer] Mailer driver
  *
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -22,7 +21,7 @@ class MailerDriver implements DriverInterface
      *
      * @var \Swift_Mailer
      */
-    private static $mailerInstance;
+    protected static $mailerInstance;
 
     /**
      * MailerDriver constructor.

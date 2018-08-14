@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @package Yggdrasil\Core\Routing
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class Router
+final class Router
 {
     /**
      * Routing configuration

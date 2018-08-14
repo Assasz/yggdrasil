@@ -11,7 +11,7 @@ use Yggdrasil\Core\Routing\RoutingConfiguration;
 /**
  * Class RouterDriver
  *
- * Router driver, necessary for routing to work
+ * [Yggdrasil] Router driver, required in driver registry
  *
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -23,7 +23,7 @@ class RouterDriver implements DriverInterface
      *
      * @var Router
      */
-    private static $routerInstance;
+    protected static $routerInstance;
 
     /**
      * RouterDriver constructor.

@@ -10,7 +10,7 @@ namespace Yggdrasil\Core\Routing;
  * @package Yggdrasil\Core\Routing
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class Route
+final class Route
 {
     /**
      * Name of controller

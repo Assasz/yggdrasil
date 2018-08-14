@@ -11,8 +11,7 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
 /**
  * Class ValidatorDriver
  *
- * Validator driver, necessary for validation to work
- * Symfony validator is framework default validator
+ * [Symfony Validator] Validator driver
  *
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -24,7 +23,7 @@ class ValidatorDriver implements DriverInterface
      *
      * @var RecursiveValidator
      */
-    private static $validatorInstance;
+    protected static $validatorInstance;
 
     /**
      * ValidatorDriver constructor.

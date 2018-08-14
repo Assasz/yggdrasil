@@ -13,7 +13,7 @@ use Yggdrasil\Core\Exception\DriverNotFoundException;
  * @package Yggdrasil\Core\Driver\Base
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class DriverCollection
+final class DriverCollection
 {
     /**
      * Application drivers

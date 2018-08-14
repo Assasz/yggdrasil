@@ -7,7 +7,7 @@ use Yggdrasil\Core\Configuration\ConfigurationInterface;
 /**
  * Interface DriverInterface
  *
- * Ensures that driver implements getInstance() method
+ * Implements singleton pattern in application driver
  *
  * @package Yggdrasil\Core\Driver\Base
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -15,7 +15,7 @@ use Yggdrasil\Core\Configuration\ConfigurationInterface;
 interface DriverInterface
 {
     /**
-     * Returns instance of component (not driver itself), that application want to use, e.g. instance of Entity Manager from EntityManagerDriver
+     * Returns instance of specific component (not driver itself)
      *
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure component
      * @return mixed

@@ -10,8 +10,7 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
 /**
  * Class ContainerDriver
  *
- * Container driver, necessary for services to work
- * League\Container is framework default container
+ * [The PHP League] Dependency Injection Container driver
  *
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -23,7 +22,7 @@ class ContainerDriver implements DriverInterface
      *
      * @var Container
      */
-    private static $containerInstance;
+    protected static $containerInstance;
 
     /**
      * ContainerDriver constructor.

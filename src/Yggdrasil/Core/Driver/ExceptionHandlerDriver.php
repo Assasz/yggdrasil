@@ -10,8 +10,7 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
 /**
  * Class ExceptionHandlerDriver
  *
- * Exception handler driver, necessary for exception handling to work
- * Whoops is framework default exception handler
+ * [Whoops] Exception Handler driver, required in driver reqistry
  *
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -23,7 +22,7 @@ class ExceptionHandlerDriver implements DriverInterface
      *
      * @var Run
      */
-    private static $handlerInstance;
+    protected static $handlerInstance;
 
     /**
      * ExceptionHandlerDriver constructor.

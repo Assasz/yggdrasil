@@ -14,8 +14,7 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
 /**
  * Class EntityManagerDriver
  *
- * Entity manager driver, necessary for ORM to work
- * Doctrine is framework default ORM
+ * [Doctrine ORM] Entity Manager driver
  *
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -27,7 +26,7 @@ class EntityManagerDriver implements DriverInterface
      *
      * @var EntityManager
      */
-    private static $managerInstance;
+    protected static $managerInstance;
 
     /**
      * EntityManagerDriver constructor.
