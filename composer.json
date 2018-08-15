@@ -21,7 +21,6 @@
     "doctrine/orm": "^2.6",
     "twig/twig": "^2.4",
     "filp/whoops": "^2.1",
-    "league/container": "^2.4",
     "swiftmailer/swiftmailer": "^6.0",
     "symfony/dependency-injection": "^4.1",
     "symfony/config": "^4.1"
