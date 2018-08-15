@@ -58,6 +58,8 @@ class ContainerDriver implements DriverInterface
             $loader = new YamlFileLoader($container, new FileLocator($servicesPath));
             $loader->load('services.yaml');
 
+            $container->setParameter('app.configuration', $appConfiguration);
+
             self::$containerInstance = $container;
         }
 
