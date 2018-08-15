@@ -2,7 +2,6 @@
 
 namespace Yggdrasil\Core\Driver;
 
-use League\Container\Container;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -54,7 +53,7 @@ class ContainerDriver implements DriverInterface
                 throw new MissingConfigurationException('There is missing parameter in your configuration: services_path in container section.');
             }
 
-            $servicesPath = dirname(__DIR__, 7) . '/src/ ' . $configuration['container']['services_path'];
+            $servicesPath = dirname(__DIR__, 7) . '/src/' . $configuration['container']['services_path'];
 
             $loader = new YamlFileLoader($container, new FileLocator($servicesPath));
             $loader->load('services.yaml');

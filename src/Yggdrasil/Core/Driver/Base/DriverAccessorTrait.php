@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Whoops\Run;
+use Yggdrasil\Core\Exception\NotServiceReturnedException;
 use Yggdrasil\Core\Exception\ServiceNotFoundException;
 use Yggdrasil\Core\Routing\Router;
 use Yggdrasil\Core\Service\ServiceInterface;
@@ -117,11 +118,17 @@ trait DriverAccessorTrait
      * @return ServiceInterface
      *
      * @throws ServiceNotFoundException if given service doesn't exist
+     * @throws NotServiceReturnedException if object returned by container is not a service
+     * @throws \Exception
      */
     protected function getService(string $alias): ServiceInterface
     {
         if (!$this->getContainer()->has($alias)) {
             throw new ServiceNotFoundException('Service with alias ' . $alias . ' doesn\'t exist.');
+        }
+
+        if (!$this->getContainer()->get($alias) instanceof ServiceInterface) {
+            throw new NotServiceReturnedException('Not service returned by container for alias ' . $alias . '.');
         }
 
         return $this->getContainer()->get($alias);
