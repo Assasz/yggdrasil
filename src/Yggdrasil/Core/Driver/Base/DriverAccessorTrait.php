@@ -3,7 +3,7 @@
 namespace Yggdrasil\Core\Driver\Base;
 
 use Doctrine\ORM\EntityManager;
-use League\Container\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Whoops\Run;
 use Yggdrasil\Core\Exception\ServiceNotFoundException;
@@ -93,9 +93,9 @@ trait DriverAccessorTrait
     /**
      * Returns container instance
      *
-     * @return Container
+     * @return ContainerBuilder
      */
-    protected function getContainer(): Container
+    protected function getContainer(): ContainerBuilder
     {
         return $this->drivers->get('container');
     }

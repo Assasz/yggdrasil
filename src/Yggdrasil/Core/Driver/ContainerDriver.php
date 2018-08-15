@@ -3,6 +3,9 @@
 namespace Yggdrasil\Core\Driver;
 
 use League\Container\Container;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverInterface;
 use Yggdrasil\Core\Exception\MissingConfigurationException;
@@ -10,7 +13,7 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
 /**
  * Class ContainerDriver
  *
- * [The PHP League] Dependency Injection Container driver
+ * [Symfony Dependency Injection] DI Container driver
  *
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -20,7 +23,7 @@ class ContainerDriver implements DriverInterface
     /**
      * Instance of container
      *
-     * @var Container
+     * @var ContainerBuilder
      */
     protected static $containerInstance;
 
@@ -36,29 +39,25 @@ class ContainerDriver implements DriverInterface
     /**
      * Returns instance of container
      *
-     * @param ConfigurationInterface $appConfiguration Configuration needed to get registered services
-     * @return Container
+     * @param ConfigurationInterface $appConfiguration Configuration needed to configure container
+     * @return ContainerBuilder
      *
-     * @throws MissingConfigurationException if service_namespace is not configured
+     * @throws MissingConfigurationException if services_path is not configured
      */
-    public static function getInstance(ConfigurationInterface $appConfiguration): Container
+    public static function getInstance(ConfigurationInterface $appConfiguration): ContainerBuilder
     {
         if (self::$containerInstance === null) {
-            $container = new Container();
+            $container = new ContainerBuilder();
             $configuration = $appConfiguration->getConfiguration();
 
-            if (!$appConfiguration->isConfigured(['service_namespace'], 'container')) {
-                throw new MissingConfigurationException('There is missing parameter in your configuration: service_namespace in container section.');
+            if (!$appConfiguration->isConfigured(['services_path'], 'container')) {
+                throw new MissingConfigurationException('There is missing parameter in your configuration: services_path in container section.');
             }
 
-            $serviceNamespace = $configuration['container']['service_namespace'];
-            unset($configuration['container']['service_namespace']);
+            $servicesPath = dirname(__DIR__, 7) . '/src/ ' . $configuration['container']['services_path'];
 
-            foreach ($configuration['container'] as $name => $service) {
-                $container
-                    ->add($name, $serviceNamespace . $service)
-                    ->withArgument($appConfiguration);
-            }
+            $loader = new YamlFileLoader($container, new FileLocator($servicesPath));
+            $loader->load('services.yaml');
 
             self::$containerInstance = $container;
         }
