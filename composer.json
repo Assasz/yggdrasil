@@ -23,6 +23,7 @@
     "filp/whoops": "^2.1",
     "swiftmailer/swiftmailer": "^6.0",
     "symfony/dependency-injection": "^4.1",
-    "symfony/config": "^4.1"
+    "symfony/config": "^4.1",
+    "nette/php-generator": "^3.1"
   }
 }
