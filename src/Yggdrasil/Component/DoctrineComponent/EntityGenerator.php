@@ -40,24 +40,32 @@ class EntityGenerator
     /**
      * EntityGenerator constructor.
      *
-     * Creates empty entity class
-     *
      * @param array $entityData
      */
     public function __construct(array $entityData)
     {
         $this->entityData = $entityData;
+    }
 
+    /**
+     * Generates entity class
+     *
+     * @return EntityGenerator
+     */
+    private function generateClass(): EntityGenerator
+    {
         $this->entityFile = (new PhpFile())
             ->addComment('This file is auto-generated.');
 
         $this->entityClass = $this->entityFile
-            ->addNamespace($entityData['namespace'])
-            ->addClass($entityData['class'])
-            ->addComment($entityData['class'] . ' entity' . PHP_EOL)
+            ->addNamespace($this->entityData['namespace'])
+            ->addClass($this->entityData['class'])
+            ->addComment($this->entityData['class'] . ' entity' . PHP_EOL)
             ->addComment('@Entity')
-            ->addComment('@Table(name="' . $entityData['table'] . '")' . PHP_EOL)
-            ->addComment('@package ' . $entityData['namespace']);
+            ->addComment('@Table(name="' . $this->entityData['table'] . '")' . PHP_EOL)
+            ->addComment('@package ' . $this->entityData['namespace']);
+
+        return $this;
     }
 
     /**
@@ -126,7 +134,8 @@ class EntityGenerator
             ->setVisibility('public')
             ->addComment('Returns ' . strtolower($this->entityData['class']) . ' ID' . PHP_EOL)
             ->addComment('@return int')
-            ->addBody('return $this->id;');
+            ->addBody('return $this->id;')
+            ->setReturnType('int');
 
         foreach ($this->entityData['properties'] as $name => $type) {
             $this
@@ -252,6 +261,7 @@ class EntityGenerator
     public function generate(): string
     {
         $this
+            ->generateClass()
             ->generateProperties()
             ->generateMethods();
 

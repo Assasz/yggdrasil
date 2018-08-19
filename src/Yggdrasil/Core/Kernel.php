@@ -12,7 +12,7 @@ use Yggdrasil\Core\Exception\WrongActionRequestedException;
 /**
  * Class Kernel
  *
- * Heart of framework core, manages action execution
+ * Heart of Yggdrasil, manages action execution
  *
  * @package Yggdrasil\Core
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -66,13 +66,13 @@ final class Kernel
     }
 
     /**
-     * Executes passive actions and returns modified or not response
+     * Executes passive actions existing in configuration
      *
      * @param Request  $request
-     * @param Response $response Response prepared by prepareResponse() method
+     * @param Response $response Prepared response object
      * @return Response
      *
-     * @throws ActionNotFoundException if passive action can't be found, but exists in configuration
+     * @throws ActionNotFoundException if passive action can't be found
      */
     private function executePassiveActions(Request $request, Response $response): Response
     {
@@ -94,14 +94,14 @@ final class Kernel
     }
 
     /**
-     * Executes action and returns response
+     * Executes action
      *
      * @param Request  $request
-     * @param Response $response Response returned by passive actions if exists, can be modified
+     * @param Response $response Response returned by passive actions execution
      * @return mixed|Response
      *
-     * @throws ActionNotFoundException if requested action can't be found, but only in debug mode
-     * @throws WrongActionRequestedException if requested action is partial or passive
+     * @throws ActionNotFoundException if requested action can't be found, in debug mode
+     * @throws WrongActionRequestedException if requested action is partial or passive, in debug mode
      */
     private function executeAction(Request $request, Response $response)
     {

@@ -6,7 +6,6 @@ namespace Yggdrasil\Core\Service;
  * Interface ServiceInterface
  *
  * Interactor between input port and output port of service
- * Ensures that service implements process() method which receives request and returns response
  *
  * @package Yggdrasil\Core\Service
  * @author Paweł Antosiak <contact@pawelantosiak.com>

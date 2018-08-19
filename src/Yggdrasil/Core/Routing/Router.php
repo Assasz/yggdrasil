@@ -22,7 +22,7 @@ final class Router
     private $configuration;
 
     /**
-     * Set of route parameters consisting of controller, action and action parameters values, if exists
+     * Set of route parameters consisting of controller, action and action parameters
      *
      * @var array
      */

@@ -4,6 +4,7 @@ namespace Yggdrasil\Core\Driver\Base;
 
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Exception\DriverNotFoundException;
+use Yggdrasil\Core\Exception\NotDriverProvidedException;
 
 /**
  * Class DriverCollection
@@ -46,12 +47,12 @@ final class DriverCollection
      * @param string $key Name of driver
      * @param string $driver
      *
-     * @throws \LogicException if given driver doesn't implement DriverInterface
+     * @throws NotDriverProvidedException if given object is of another instance than DriverInterface
      */
     public function add(string $key, string $driver): void
     {
         if (!in_array(DriverInterface::class, class_implements($driver))) {
-            throw new \LogicException($key . ' driver needs to implement DriverInterface.');
+            throw new NotDriverProvidedException($key . ' is not a driver.');
         }
 
         $this->drivers[$key] = $driver;

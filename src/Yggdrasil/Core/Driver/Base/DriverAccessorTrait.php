@@ -128,7 +128,7 @@ trait DriverAccessorTrait
         }
 
         if (!$this->getContainer()->get($alias) instanceof ServiceInterface) {
-            throw new NotServiceReturnedException('Not service returned by container for alias ' . $alias . '.');
+            throw new NotServiceReturnedException('Not a service returned by container for alias ' . $alias . '.');
         }
 
         return $this->getContainer()->get($alias);
