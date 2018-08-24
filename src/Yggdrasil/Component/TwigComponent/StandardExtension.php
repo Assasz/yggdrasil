@@ -87,9 +87,7 @@ class StandardExtension extends \Twig_Extension implements \Twig_Extension_Globa
      */
     public function getFlashBag(string $type): array
     {
-        $session = new Session();
-
-        return $session->getFlashBag()->get($type);
+        return (new Session())->getFlashBag()->get($type);
     }
 
     /**
@@ -99,9 +97,7 @@ class StandardExtension extends \Twig_Extension implements \Twig_Extension_Globa
      */
     public function isGranted(): bool
     {
-        $session = new Session();
-
-        return $session->get('is_granted', false);
+        return (new Session())->get('is_granted', false);
     }
 
     /**

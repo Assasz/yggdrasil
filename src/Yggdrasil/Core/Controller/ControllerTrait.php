@@ -126,8 +126,7 @@ trait ControllerTrait
      */
     protected function addFlash(string $type, $message): void
     {
-        $session = new Session();
-        $session->getFlashBag()->set($type, $message);
+        (new Session())->getFlashBag()->set($type, $message);
     }
 
     /**
@@ -137,9 +136,7 @@ trait ControllerTrait
      */
     protected function isGranted(): bool
     {
-        $session = new Session();
-
-        return $session->get('is_granted', false);
+        return (new Session())->get('is_granted', false);
     }
 
     /**
@@ -149,8 +146,6 @@ trait ControllerTrait
      */
     protected function getUser()
     {
-        $session = new Session();
-
-        return $session->get('user');
+        return (new Session())->get('user');
     }
 }
