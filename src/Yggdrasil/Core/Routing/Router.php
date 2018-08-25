@@ -125,11 +125,12 @@ final class Router
     /**
      * Returns query map like [Controller:action => query]
      *
+     * @param array $protected Controllers to ignore
      * @return array
      *
      * @throws \Exception
      */
-    public function getQueryMap(): array
+    public function getQueryMap(array $protected = ['Error']): array
     {
         $queryMap = [];
 
@@ -141,10 +142,18 @@ final class Router
             $controllerReflection = new \ReflectionClass($controller);
             $controllerAlias = str_replace('Controller', '', $controllerReflection->getShortName());
 
+            if (in_array($controllerAlias, $protected)) {
+                continue;
+            }
+
             $actions = $controllerReflection->getMethods(\ReflectionMethod::IS_PUBLIC);
 
             foreach ($actions as $action) {
                 if (1 === preg_match('(Partial|Passive)', $action->getName())) {
+                    continue;
+                }
+
+                if ('__construct' === $action->getName()) {
                     continue;
                 }
 
