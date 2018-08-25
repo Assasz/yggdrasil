@@ -141,7 +141,7 @@ final class Router
             $controllerReflection = new \ReflectionClass($controller);
             $controllerAlias = str_replace('Controller', '', $controllerReflection->getShortName());
 
-            $actions = $controllerReflection->getMethods();
+            $actions = $controllerReflection->getMethods(\ReflectionMethod::IS_PUBLIC);
 
             foreach ($actions as $action) {
                 if (1 === preg_match('(Partial|Passive)', $action->getName())) {
