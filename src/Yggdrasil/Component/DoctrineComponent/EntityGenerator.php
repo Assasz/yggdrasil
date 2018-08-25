@@ -230,17 +230,27 @@ class EntityGenerator
     }
 
     /**
-     * Generates entity
-     *
-     * @return string
+     * Saves entity file in given path
      */
-    public function generate(): string
+    private function saveFile(): void
+    {
+        $sourceCode = Helpers::tabsToSpaces((string) $this->entityFile);
+        $entityPath = dirname(__DIR__, 7) . '/src/' . $this->entityData['namespace'];
+
+        $handle = fopen($entityPath . $this->entityData['class'] . '.php', 'w');
+        fwrite($handle, $sourceCode);
+        fclose($handle);
+    }
+
+    /**
+     * Generates entity
+     */
+    public function generate(): void
     {
         $this
             ->generateClass()
             ->generateProperties()
-            ->generateMethods();
-
-        return Helpers::tabsToSpaces((string) $this->entityFile);
+            ->generateMethods()
+            ->saveFile();
     }
 }
