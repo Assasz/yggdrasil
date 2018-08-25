@@ -157,13 +157,27 @@ final class Router
                     continue;
                 }
 
+                $httpMethods = ['Get', 'Post', 'Put', 'Delete'];
+                $isApiAction = false;
+
+                foreach ($httpMethods as $method) {
+                    if (strstr($action, $method)) {
+                        $isApiAction = true;
+                    }
+                }
+
                 $actionAlias = str_replace(
-                    ['Get', 'Post', 'Put', 'Delete', 'Action'],
+                    array_merge($httpMethods, ['Action']),
                     '',
                     $action->getName()
                 );
 
                 $alias = $controllerAlias . ':' . $actionAlias;
+
+                if ($isApiAction) {
+                    $alias = 'API:' . $alias;
+                }
+
                 $queryMap[$alias] = $this->getQuery($alias);
             }
         }
