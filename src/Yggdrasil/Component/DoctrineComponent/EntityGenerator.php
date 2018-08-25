@@ -91,16 +91,6 @@ class EntityGenerator
                 ->addComment($this->entityData['class'] . ' ' . $name . PHP_EOL);
 
             switch ($type) {
-                case 'datetime':
-                    $property
-                        ->addComment('@Column(type="datetime")')
-                        ->addComment('@var \DateTime $' . $name);
-                    break;
-                case 'int':
-                    $property
-                        ->addComment('@Column(type="integer")')
-                        ->addComment('@var int $' . $name);
-                    break;
                 case 'string':
                     $property
                         ->addComment('@Column(type="string", length=255)')
@@ -111,10 +101,20 @@ class EntityGenerator
                         ->addComment('@Column(type="text")')
                         ->addComment('@var string $' . $name);
                     break;
-                default:
+                case 'int':
                     $property
-                        ->addComment('@Column(type="' . $type . '")')
-                        ->addComment('@var ' . $type . ' $' . $name);
+                        ->addComment('@Column(type="integer")')
+                        ->addComment('@var int $' . $name);
+                    break;
+                case 'float':
+                    $property
+                        ->addComment('@Column(type="float")')
+                        ->addComment('@var float $' . $name);
+                    break;
+                case 'datetime':
+                    $property
+                        ->addComment('@Column(type="datetime")')
+                        ->addComment('@var \DateTime $' . $name);
                     break;
             }
         }
@@ -160,31 +160,21 @@ class EntityGenerator
             ->setVisibility('public')
             ->addComment('Returns ' . strtolower($this->entityData['class']) . ' ' . $name . PHP_EOL);
 
-        switch ($type) {
-            case 'datetime':
-                $getter
-                    ->addComment('@return \DateTime')
-                    ->setReturnType('\DateTime');
-                break;
-            case 'int':
-                $getter
-                    ->addComment('@return int')
-                    ->setReturnType('int');
-                break;
-            case 'string':
+        switch (true) {
+            case in_array($type, ['string', 'text']):
                 $getter
                     ->addComment('@return string')
                     ->setReturnType('string');
                 break;
-            case 'text':
-                $getter
-                    ->addComment('@return string')
-                    ->setReturnType('string');
-                break;
-            default:
+            case in_array($type, ['int', 'float']):
                 $getter
                     ->addComment('@return ' . $type)
                     ->setReturnType($type);
+                break;
+            case 'datetime' === $type:
+                $getter
+                    ->addComment('@return \DateTime')
+                    ->setReturnType('\DateTime');
                 break;
         }
 
@@ -207,41 +197,27 @@ class EntityGenerator
             ->setVisibility('public')
             ->addComment('Sets ' . strtolower($this->entityData['class']) . ' ' . $name . PHP_EOL);
 
-        switch ($type) {
-            case 'datetime':
-                $setter
-                    ->addComment('@param \DateTime $' . $name)
-                    ->addComment('@return ' . ucfirst($this->entityData['class']))
-                    ->addParameter($name)
-                    ->setTypeHint('\DateTime');
-                break;
-            case 'int':
-                $setter
-                    ->addComment('@param int $' . $name)
-                    ->addComment('@return ' . ucfirst($this->entityData['class']))
-                    ->addParameter($name)
-                    ->setTypeHint('int');
-                break;
-            case 'string':
+        switch (true) {
+            case in_array($type, ['string', 'text']):
                 $setter
                     ->addComment('@param string $' . $name)
                     ->addComment('@return ' . ucfirst($this->entityData['class']))
                     ->addParameter($name)
                     ->setTypeHint('string');
                 break;
-            case 'text':
-                $setter
-                    ->addComment('@param string $' . $name)
-                    ->addComment('@return ' . ucfirst($this->entityData['class']))
-                    ->addParameter($name)
-                    ->setTypeHint('string');
-                break;
-            default:
+            case in_array($type, ['int', 'float']):
                 $setter
                     ->addComment('@param ' . $type . ' $' . $name)
                     ->addComment('@return ' . ucfirst($this->entityData['class']))
                     ->addParameter($name)
                     ->setTypeHint($type);
+                break;
+            case 'datetime' === $type:
+                $setter
+                    ->addComment('@param \DateTime $' . $name)
+                    ->addComment('@return ' . ucfirst($this->entityData['class']))
+                    ->addParameter($name)
+                    ->setTypeHint('\DateTime');
                 break;
         }
 

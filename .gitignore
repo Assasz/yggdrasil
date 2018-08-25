@@ -1,4 +1,2 @@
 /.idea
 /vendor
-composer.lock
-/src/Yggdrasil/Component/DoctrineComponent/generator_test.php

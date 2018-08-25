@@ -67,14 +67,18 @@ class EntityManagerDriver implements DriverInterface
                 'charset' => $configuration['entity_manager']['db_charset'] ?? 'UTF8'
             ];
 
-            $entityPath = implode('/', explode('\\', $configuration['entity_manager']['entity_namespace']));
-            $entityPath = [dirname(__DIR__, 7) . '/src/' . $entityPath . '/'];
+            $entityPath = [
+                dirname(__DIR__, 7) . '/src/' .
+                $configuration['entity_manager']['entity_namespace'] . '/'
+            ];
 
             $config = Setup::createAnnotationMetadataConfiguration($entityPath);
             $config->addEntityNamespace('Entity', $configuration['entity_manager']['entity_namespace']);
 
             $connection = DriverManager::getConnection($connectionParams, $config);
-            $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+            $connection
+                ->getDatabasePlatform()
+                ->registerDoctrineTypeMapping('enum', 'string');
 
             self::$managerInstance = EntityManager::create($connection, $config);
         }
