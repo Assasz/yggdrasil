@@ -40,18 +40,19 @@ class ValidatorDriver implements DriverInterface
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure validator
      * @return RecursiveValidator
      *
-     * @throws MissingConfigurationException if validation path is not configured
+     * @throws MissingConfigurationException if resource path is not configured
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): RecursiveValidator
     {
         if (self::$validatorInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if (!$appConfiguration->isConfigured(['validation_path'], 'validator')) {
-                throw new MissingConfigurationException('There is missing parameter in your configuration: validation_path in validator section.');
+            if (!$appConfiguration->isConfigured(['resource_path'], 'validator')) {
+                throw new MissingConfigurationException('There is missing parameter in your configuration: resource_path in validator section.');
             }
 
-            $validationPath = dirname(__DIR__, 7) . '/src/' . $configuration['validator']['validation_path'] . '/validation.yaml';
+            $validationPath = dirname(__DIR__, 7) .
+                '/src/' . $configuration['validator']['resource_path'] . '/validation.yaml';
 
             $validator = Validation::createValidatorBuilder()
                 ->addYamlMapping($validationPath)

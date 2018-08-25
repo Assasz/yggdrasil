@@ -41,7 +41,7 @@ class ContainerDriver implements DriverInterface
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure container
      * @return ContainerBuilder
      *
-     * @throws MissingConfigurationException if services_path is not configured
+     * @throws MissingConfigurationException if resource_path is not configured
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): ContainerBuilder
     {
@@ -50,12 +50,12 @@ class ContainerDriver implements DriverInterface
             $configuration = $appConfiguration->getConfiguration();
 
             if (!$appConfiguration->isConfigured(['services_path'], 'container')) {
-                throw new MissingConfigurationException('There is missing parameter in your configuration: services_path in container section.');
+                throw new MissingConfigurationException('There is missing parameter in your configuration: resource_path in container section.');
             }
 
-            $servicesPath = dirname(__DIR__, 7) . '/src/' . $configuration['container']['services_path'];
+            $resourcePath = dirname(__DIR__, 7) . '/src/' . $configuration['container']['resource_path'];
 
-            $loader = new YamlFileLoader($container, new FileLocator($servicesPath));
+            $loader = new YamlFileLoader($container, new FileLocator($resourcePath));
             $loader->load('services.yaml');
 
             $container->setParameter('app.configuration', $appConfiguration);
