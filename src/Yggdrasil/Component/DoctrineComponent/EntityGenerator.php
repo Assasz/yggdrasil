@@ -235,7 +235,7 @@ class EntityGenerator
     private function saveFile(): void
     {
         $sourceCode = Helpers::tabsToSpaces((string) $this->entityFile);
-        $entityPath = dirname(__DIR__, 7) . '/src/' . $this->entityData['namespace'];
+        $entityPath = dirname(__DIR__, 7) . '/src/' . $this->entityData['namespace'] . '/';
 
         $handle = fopen($entityPath . $this->entityData['class'] . '.php', 'w');
         fwrite($handle, $sourceCode);
