@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "68293dc5172c57f7ed28ed423208435d",
+    "content-hash": "e72ed75201c30eede36c35d91277b7a2",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -735,6 +735,41 @@
                 "whoops"
             ],
             "time": "2017-11-23T18:22:44+00:00"
+        },
+        {
+            "name": "haydenpierce/class-finder",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/hpierce1102/ClassFinder.git",
+                "reference": "7193ca785886f37e0bcc72fba6f36e53aed3a25f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/hpierce1102%2FClassFinder/repository/archive.zip?sha=7193ca785886f37e0bcc72fba6f36e53aed3a25f",
+                "reference": "7193ca785886f37e0bcc72fba6f36e53aed3a25f",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "HaydenPierce\\ClassFinder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hayden Pierce",
+                    "email": "hayden@haydenpierce.com"
+                }
+            ],
+            "time": "2018-08-05T01:22:43+00:00"
         },
         {
             "name": "nette/php-generator",

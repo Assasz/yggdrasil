@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Core\Routing;
 
+use HaydenPierce\ClassFinder\ClassFinder;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -119,6 +120,46 @@ final class Router
         $query = implode('/', $queryParams);
 
         return $this->configuration->getBaseUrl() . $query;
+    }
+
+    /**
+     * Returns query map like [Controller:action => query]
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    public function getQueryMap(): array
+    {
+        $queryMap = [];
+
+        $controllers = ClassFinder::getClassesInNamespace(
+            rtrim($this->configuration->getControllerNamespace(), '\\')
+        );
+
+        foreach ($controllers as $controller) {
+            $controllerReflection = new \ReflectionClass($controller);
+            $controllerAlias = str_replace('Controller', '', $controllerReflection->getShortName());
+
+            $actions = $controllerReflection->getMethods();
+
+            foreach ($actions as $action) {
+                if (1 === preg_match('(Partial|Passive)', $action->getName())) {
+                    continue;
+                }
+
+                $actionAlias = str_replace(
+                    ['Get', 'Post', 'Put', 'Delete', 'Action'],
+                    '',
+                    $action->getName()
+                );
+
+                $alias = $controllerAlias . ':' . $actionAlias;
+                $queryMap[$alias] = $this->getQuery($alias);
+            }
+        }
+
+        return $queryMap;
     }
 
     /**
