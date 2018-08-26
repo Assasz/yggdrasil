@@ -49,7 +49,7 @@ class ContainerDriver implements DriverInterface
             $container = new ContainerBuilder();
             $configuration = $appConfiguration->getConfiguration();
 
-            if (!$appConfiguration->isConfigured(['services_path'], 'container')) {
+            if (!$appConfiguration->isConfigured(['resource_path'], 'container')) {
                 throw new MissingConfigurationException('There is missing parameter in your configuration: resource_path in container section.');
             }
 
