@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 use Yggdrasil\Core\Exception\ActionNotFoundException;
-use Yggdrasil\Core\Exception\WrongActionRequestedException;
+use Yggdrasil\Core\Exception\ActionForbiddenException;
 
 /**
  * Class Kernel
@@ -19,13 +19,6 @@ use Yggdrasil\Core\Exception\WrongActionRequestedException;
  */
 final class Kernel
 {
-    /**
-     * Application configuration
-     *
-     * @var array
-     */
-    private $configuration;
-
     /**
      * Trait that provides access to drivers
      */
@@ -40,7 +33,6 @@ final class Kernel
      */
     public function __construct(ConfigurationInterface $appConfiguration)
     {
-        $this->configuration = $appConfiguration->getConfiguration();
         $this->drivers = $appConfiguration->loadDrivers();
 
         if ($this->drivers->has('exceptionHandler')) {
@@ -102,7 +94,7 @@ final class Kernel
      * @return mixed|Response
      *
      * @throws ActionNotFoundException if requested action can't be found, in debug mode
-     * @throws WrongActionRequestedException if requested action is partial, passive or belongs to ErrorController, in debug mode
+     * @throws ActionForbiddenException if requested action is partial, passive or belongs to ErrorController, in debug mode
      */
     private function executeAction(Request $request, Response $response)
     {
@@ -123,11 +115,11 @@ final class Kernel
         if (1 === preg_match('(Partial|Passive)', $route->getAction()) || $errorController === $route->getController()) {
             if (!DEBUG) {
                 return $response
-                    ->setContent('Access denied.')
+                    ->setContent('Forbidden.')
                     ->setStatusCode(Response::HTTP_FORBIDDEN);
             }
 
-            throw new WrongActionRequestedException('Partial, passive and error actions cannot be requested by user.');
+            throw new ActionForbiddenException('Partial, passive and error actions cannot be requested by user.');
         }
 
         $controllerName = $route->getController();
