@@ -43,7 +43,9 @@ final class Kernel
         $this->configuration = $appConfiguration->getConfiguration();
         $this->drivers = $appConfiguration->loadDrivers();
 
-        $this->getExceptionHandler();
+        if ($this->drivers->has('exceptionHandler')) {
+            $this->getExceptionHandler();
+        }
     }
 
     /**
