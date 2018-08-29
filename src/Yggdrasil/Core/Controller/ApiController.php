@@ -88,4 +88,29 @@ abstract class ApiController
 
         return $this->getTemplateEngine()->render($view, $params);
     }
+
+    /**
+     * Enables CORS in given action or controller
+     *
+     * @param array $options Set of CORS options (allow_origin, allow_methods, allow_headers, allow_credentials, max_age)
+     */
+    protected function enableCors(array $options = []): void
+    {
+        $corsConfig = [
+            'Access-Control-Allow-Origin'
+            => $options['allow_origin'] ?? '*',
+            'Access-Control-Allow-Methods'
+            => $options['allow_methods'] ?? 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers'
+            => $options['allow_headers'] ?? '*',
+            'Access-Control-Allow-Credentials'
+            => $options['allow_credentials'] ?? true,
+            'Access-Control-Allow-Max-Age'
+            => $options['max_age'] ?? 3600
+        ];
+  
+        foreach ($corsConfig as $key => $value) {
+            $this->getResponse()->headers->set($key, $value);
+        }
+    }
 }

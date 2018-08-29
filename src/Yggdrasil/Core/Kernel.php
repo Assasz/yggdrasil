@@ -56,7 +56,8 @@ final class Kernel
      */
     public function handle(Request $request)
     {
-        $response = $this->prepareResponse();
+        $response = new Response();
+
         $response = $this->executePassiveActions($request, $response);
         $response = $this->executeAction($request, $response);
 
@@ -71,7 +72,7 @@ final class Kernel
      * Executes passive actions existing in configuration
      *
      * @param Request  $request
-     * @param Response $response Prepared response object
+     * @param Response $response
      * @return Response
      *
      * @throws ActionNotFoundException if passive action can't be found
@@ -158,36 +159,5 @@ final class Kernel
         $controller = new $controllerName($this->drivers, $request, $response);
 
         return call_user_func([$controller, $actionName]);
-    }
-
-    /**
-     * Prepares response before action execution
-     *
-     * @return Response
-     */
-    private function prepareResponse(): Response
-    {
-        $response = new Response();
-
-        if (array_key_exists('cors', $this->configuration)) {
-            $corsConfig = [
-                'Access-Control-Allow-Origin'
-                => $this->configuration['cors']['allow_origin'] ?? '*',
-                'Access-Control-Allow-Methods'
-                => $this->configuration['cors']['allow_methods'] ?? 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers'
-                => $this->configuration['cors']['allow_headers'] ?? '*',
-                'Access-Control-Allow-Credentials'
-                => $this->configuration['cors']['allow_credentials'] ?? true,
-                'Access-Control-Allow-Max-Age'
-                => $this->configuration['cors']['max_age'] ?? 3600
-            ];
-
-            foreach ($corsConfig as $key => $value) {
-                $response->headers->set($key, $value);
-            }
-        }
-
-        return $response;
     }
 }
