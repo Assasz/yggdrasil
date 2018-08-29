@@ -118,7 +118,9 @@ final class Kernel
             throw new ActionNotFoundException($route->getAction() . ' for ' . $route->getController() . ' not found.');
         }
 
-        if (1 === preg_match('(Partial|Passive)', $route->getAction()) || 'ErrorController' === $route->getController()) {
+        $errorController = $this->getRouter()->getConfiguration()->getControllerNamespace() . 'ErrorController';
+
+        if (1 === preg_match('(Partial|Passive)', $route->getAction()) || $errorController === $route->getController()) {
             if (!DEBUG) {
                 return $response
                     ->setContent('Access denied.')
