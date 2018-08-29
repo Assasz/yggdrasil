@@ -68,4 +68,12 @@ trait SessionManagerTrait
     {
         (new Session())->getFlashBag()->set($type, $message);
     }
+
+    /**
+     * Clears all session data and regenerates session ID
+     */
+    protected function invalidateSession(): void
+    {
+        (new Session())->invalidate();
+    }
 }
