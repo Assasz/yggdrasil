@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Core\Driver;
 
+use Symfony\Component\Yaml\Yaml;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Exception\MissingConfigurationException;
 use Yggdrasil\Core\Routing\Router;
@@ -40,23 +41,26 @@ class RouterDriver implements DriverInterface
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure router
      * @return Router
      *
-     * @throws MissingConfigurationException if default controller, action or controller namespace are not configured
+     * @throws MissingConfigurationException if default_controller, default_action, controller_namespace, base_url or resource_path are not configured
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): Router
     {
         if (self::$routerInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
-            $requiredConfig = ['default_controller', 'default_action', 'controller_namespace', 'base_url'];
+            $requiredConfig = ['default_controller', 'default_action', 'controller_namespace', 'base_url', 'resource_path'];
 
             if (!$appConfiguration->isConfigured($requiredConfig, 'router')) {
-                throw new MissingConfigurationException('There are missing parameters in your configuration: default_controller, default_action, controller_namespace or base_url in router section.');
+                throw new MissingConfigurationException('There are missing parameters in your configuration: default_controller, default_action, controller_namespace, base_url or resource_path in router section.');
             }
+
+            $passiveActions = Yaml::parseFile($configuration['router']['resource_path'] . '/passive_actions.yaml');
 
             $routingConfig = (new RoutingConfiguration())
                 ->setBaseUrl($configuration['router']['base_url'])
                 ->setControllerNamespace($configuration['router']['controller_namespace'])
                 ->setDefaultController($configuration['router']['default_controller'])
-                ->setDefaultAction($configuration['router']['default_action']);
+                ->setDefaultAction($configuration['router']['default_action'])
+                ->setPassiveActions($passiveActions);
 
             $router = new Router($routingConfig);
 

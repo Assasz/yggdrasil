@@ -42,6 +42,7 @@ class ContainerDriver implements DriverInterface
      * @return ContainerBuilder
      *
      * @throws MissingConfigurationException if resource_path is not configured
+     * @throws \Exception
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): ContainerBuilder
     {

@@ -41,6 +41,13 @@ final class RoutingConfiguration
     private $defaultAction;
 
     /**
+     * Collection of registered passive actions
+     *
+     * @var array
+     */
+    private $passiveActions;
+
+    /**
      * Returns base URL
      *
      * @return string
@@ -128,6 +135,29 @@ final class RoutingConfiguration
     public function setDefaultAction(string $defaultAction): RoutingConfiguration
     {
         $this->defaultAction = $defaultAction;
+
+        return $this;
+    }
+
+    /**
+     * Returns passive actions
+     *
+     * @return array
+     */
+    public function getPassiveActions(): array
+    {
+        return $this->passiveActions['passive_actions'];
+    }
+
+    /**
+     * Sets passive actions
+     *
+     * @param array $passiveActions
+     * @return RoutingConfiguration
+     */
+    public function setPassiveActions(array $passiveActions): RoutingConfiguration
+    {
+        $this->passiveActions = $passiveActions;
 
         return $this;
     }

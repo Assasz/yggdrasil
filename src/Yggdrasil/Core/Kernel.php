@@ -69,7 +69,7 @@ final class Kernel
     }
 
     /**
-     * Executes passive actions existing in configuration
+     * Executes passive actions existing in registry
      *
      * @param Request  $request
      * @param Response $response
@@ -79,18 +79,16 @@ final class Kernel
      */
     private function executePassiveActions(Request $request, Response $response): Response
     {
-        if (array_key_exists('passive_action', $this->configuration)) {
-            foreach ($this->configuration['passive_action'] as $action) {
-                $route = $this->getRouter()->getAliasedRoute($action, [], true);
+        foreach ($this->getRouter()->getConfiguration()->getPassiveActions() as $action) {
+            $route = $this->getRouter()->getAliasedRoute($action, [], true);
 
-                if (!method_exists($route->getController(), $route->getAction())) {
-                    throw new ActionNotFoundException($action . ' passive action is present in your configuration, but can\'t be found or is improperly configured.');
-                }
-
-                $controllerName = $route->getController();
-                $controller = new $controllerName($this->drivers, $request, $response);
-                $response = call_user_func_array([$controller, $route->getAction()], $route->getActionParams());
+            if (!method_exists($route->getController(), $route->getAction())) {
+                throw new ActionNotFoundException($action . ' passive action is present in registry, but can\'t be found or is improperly configured.');
             }
+
+            $controllerName = $route->getController();
+            $controller = new $controllerName($this->drivers, $request, $response);
+            $response = call_user_func_array([$controller, $route->getAction()], $route->getActionParams());
         }
 
         return $response;
