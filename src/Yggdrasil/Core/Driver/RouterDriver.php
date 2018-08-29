@@ -53,7 +53,7 @@ class RouterDriver implements DriverInterface
                 throw new MissingConfigurationException('There are missing parameters in your configuration: default_controller, default_action, controller_namespace, base_url or resource_path in router section.');
             }
 
-            $passiveActions = Yaml::parseFile($configuration['router']['resource_path'] . '/passive_actions.yaml');
+            $passiveActions = Yaml::parseFile(dirname(__DIR__, 7) . '/src/' . $configuration['router']['resource_path'] . '/passive_actions.yaml');
 
             $routingConfig = (new RoutingConfiguration())
                 ->setBaseUrl($configuration['router']['base_url'])
