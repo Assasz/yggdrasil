@@ -104,7 +104,7 @@ final class Kernel
      * @return mixed|Response
      *
      * @throws ActionNotFoundException if requested action can't be found, in debug mode
-     * @throws WrongActionRequestedException if requested action is partial or passive, in debug mode
+     * @throws WrongActionRequestedException if requested action is partial, passive or belongs to ErrorController, in debug mode
      */
     private function executeAction(Request $request, Response $response)
     {
@@ -120,14 +120,14 @@ final class Kernel
             throw new ActionNotFoundException($route->getAction() . ' for ' . $route->getController() . ' not found.');
         }
 
-        if (1 === preg_match('(Partial|Passive)', $route->getAction())) {
+        if (1 === preg_match('(Partial|Passive)', $route->getAction()) || 'ErrorController' === $route->getController()) {
             if (!DEBUG) {
                 return $response
                     ->setContent('Access denied.')
                     ->setStatusCode(Response::HTTP_FORBIDDEN);
             }
 
-            throw new WrongActionRequestedException('Partial and passive actions cannot be requested by user.');
+            throw new WrongActionRequestedException('Partial, passive and error actions cannot be requested by user.');
         }
 
         $controllerName = $route->getController();
