@@ -8,14 +8,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
- * Trait ControllerTrait
+ * Trait HttpManagerTrait
  *
- * Trait that provides common controllers features
+ * Provides ability to manage request and response
  *
  * @package Yggdrasil\Core\Controller
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-trait ControllerTrait
+trait HttpManagerTrait
 {
     /**
      * Request from client
@@ -116,36 +116,5 @@ trait ControllerTrait
         $headers = $this->getResponse()->headers->all();
 
         return new JsonResponse($data, $status, $headers);
-    }
-
-    /**
-     * Adds flash to session flash bag
-     *
-     * @param string       $type    Type of flash bag
-     * @param string|array $message Message of flash
-     */
-    protected function addFlash(string $type, $message): void
-    {
-        (new Session())->getFlashBag()->set($type, $message);
-    }
-
-    /**
-     * Checks if user is authenticated
-     *
-     * @return bool
-     */
-    protected function isGranted(): bool
-    {
-        return (new Session())->get('is_granted', false);
-    }
-
-    /**
-     * Returns authenticated user instance from session
-     *
-     * @return mixed
-     */
-    protected function getUser()
-    {
-        return (new Session())->get('user');
     }
 }

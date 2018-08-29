@@ -20,7 +20,7 @@ use Yggdrasil\Core\Exception\ActionForbiddenException;
 final class Kernel
 {
     /**
-     * Trait that provides access to drivers
+     * Provides access to application drivers
      */
     use DriverAccessorTrait;
 

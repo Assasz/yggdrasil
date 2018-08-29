@@ -19,12 +19,17 @@ use Yggdrasil\Core\Driver\Base\DriverCollection;
 abstract class AbstractController
 {
     /**
-     * Trait that provides common controllers features
+     * Provides ability to manage request and response
      */
-    use ControllerTrait;
+    use HttpManagerTrait;
 
     /**
-     * Trait that provides access to drivers
+     * Makes session management easy
+     */
+    use SessionManagerTrait;
+
+    /**
+     * Provides access to application drivers
      */
     use DriverAccessorTrait;
 
