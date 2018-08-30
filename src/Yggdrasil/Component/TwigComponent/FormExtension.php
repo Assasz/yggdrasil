@@ -74,13 +74,18 @@ class FormExtension extends \Twig_Extension
      * @param string $type    Form field type, equivalent to type attribute
      * @param array  $options Set of additional attributes like ['wrapper'|'label'|'input' => [attribute_name => value]]
      */
-    public function addFormField(string $name, string $label, string $type = 'text', array $options = []): void
+    public function addFormField(string $name, string $label = '', string $type = 'text', array $options = []): void
     {
         $wrapperStart = '<div>';
         $wrapperEnd = '</div>';
 
-        $labelStart = '<label for="' . $name . '"';
-        $labelEnd = '>' . $label . '</label>';
+        $labelStart = '';
+        $labelEnd = '';
+
+        if (!empty($label)) {
+            $labelStart = '<label for="' . $name . '"';
+            $labelEnd = '>' . $label . '</label>';
+        }
 
         $inputStart = '<input type="' . $type . '" id="' . $name . '" name="' . $name . '"';
         $inputEnd = '>';
@@ -91,13 +96,17 @@ class FormExtension extends \Twig_Extension
                   $wrapperStart = rtrim($wrapperStart, '>');
 
                   foreach ($attrs as $attr => $value) {
-                    $wrapperStart .= ' ' . $attr . '="' . $value . '"';
+                      $wrapperStart .= ' ' . $attr . '="' . $value . '"';
                   }
 
                   $wrapperStart .= '>';
 
                   break;
               case 'label':
+                  if (empty($label)) {
+                      break;
+                  }
+
                   foreach ($attrs as $attr => $value) {
                       $labelStart .= ' ' . $attr . '="' . $value . '"';
                   }
