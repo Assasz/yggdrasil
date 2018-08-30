@@ -136,15 +136,17 @@ class FormExtension extends \Twig_Extension
     /**
      * Adds button to HTML form
      *
-     * @param string $name      Button name, equivalent to ID attribute
-     * @param string $type      Button type, equivalent to type attribute
-     * @param array  $options   Set of additional button attributes like [attribute_name => value]
+     * @param string $name    Button name, equivalent to ID attribute
+     * @param string $text    Button text
+     * @param string $type    Button type, equivalent to type attribute
+     * @param array  $options Set of additional button attributes like [attribute_name => value]
      */
-    public function addButton(string $name, string $type = 'button', array $options = []): void
+    public function addButton(string $name, string $text, string $type = 'button', array $options = []): void
     {
         $button = HtmlTag::createElement('button')
             ->set('id', $name)
-            ->set('type', $type);
+            ->set('type', $type)
+            ->text($text);
 
         foreach ($options as $attr => $value) {
             $button->set($attr, $value);
