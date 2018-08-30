@@ -133,6 +133,26 @@ class FormExtension extends \Twig_Extension
     }
 
     /**
+     * Adds button to HTML form
+     *
+     * @param string $name      Button name, equivalent to ID attribute
+     * @param string $type      Button type, equivalent to type attribute
+     * @param array  $options   Set of additional button attributes like [attribute_name => value]
+     */
+    public function addButton(string $name, string $type = 'button', array $options = []): void
+    {
+        $button = HtmlTag::createElement('button')
+            ->set('id', $name)
+            ->set('type', $type);
+
+        foreach ($options as $attr => $value) {
+            $button->set($attr, $value);
+        }
+
+        echo $button;
+    }
+
+    /**
      * Generates CSRF token
      *
      * @param int $length Number of bytes to use in generating token
