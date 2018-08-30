@@ -121,14 +121,14 @@ class FormExtension extends \Twig_Extension
         }
 
         if(in_array($type, ['checkbox', 'radio', 'file'])) {
-            $wrapper = $wrapper->addElement($input);
+            $wrapper->addElement($input);
 
             echo $wrapper->addElement($label);
 
             return;
         }
 
-        $wrapper = $wrapper->addElement($label);
+        $wrapper->addElement($label);
 
         echo $wrapper->addElement($input);
     }
