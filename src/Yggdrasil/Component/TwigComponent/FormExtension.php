@@ -24,7 +24,7 @@ class FormExtension extends \Twig_Extension
         return [
             new \Twig_Function('begin_form', [$this, 'beginForm']),
             new \Twig_Function('end_form', [$this, 'endForm']),
-            new \Twig_Function('textfield', [$this, 'addTextField']),
+            new \Twig_Function('form_field', [$this, 'addFormField']),
             new \Twig_Function('csrf_token', [$this, 'generateCsrfToken']),
         ];
     }
@@ -39,7 +39,11 @@ class FormExtension extends \Twig_Extension
      */
     public function beginForm(string $name, string $action, array $options = [], bool $isPjax = true): void
     {
-        $form = '<form id="' . $name . '" action="' . $action . '" method="post"' . ($isPjax) ? ' data-pjax' : '';
+        $form = '<form id="' . $name . '" action="' . $action . '" method="post"';
+
+        if ($isPjax) {
+            $form .= ' data-pjax';
+        }
 
         foreach ($options as $attr => $value) {
             $form .= ' ' . $attr . '="' . $value . '"';
@@ -63,22 +67,22 @@ class FormExtension extends \Twig_Extension
     }
 
     /**
-     * Adds text field to HTML form
+     * Adds field to HTML form
      *
-     * @param string $name    Text field name, equivalent to ID and name attribute
-     * @param string $label   Text field label
-     * @param string $type    Text field type, equivalent to type attribute
+     * @param string $name    Form field name, equivalent to ID and name attribute
+     * @param string $label   Form field label
+     * @param string $type    Form field type, equivalent to type attribute
      * @param array  $options Set of additional attributes like ['wrapper'|'label'|'input' => [attribute_name => value]]
      */
-    public function addTextField(string $name, string $label, string $type = 'text', array $options = []): void
+    public function addFormField(string $name, string $label, string $type = 'text', array $options = []): void
     {
-        $wrapperStart = '<div class="form-group">';
+        $wrapperStart = '<div>';
         $wrapperEnd = '</div>';
 
         $labelStart = '<label for="' . $name . '"';
         $labelEnd = '>' . $label . '</label>';
 
-        $inputStart = '<input type="' . $type . '" id="' . $name . '" name="' . $name . '" class="form-control"';
+        $inputStart = '<input type="' . $type . '" id="' . $name . '" name="' . $name . '"';
         $inputEnd = '>';
 
         foreach ($options as $element => $attrs) {
