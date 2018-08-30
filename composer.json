@@ -25,6 +25,7 @@
     "symfony/dependency-injection": "^4.1",
     "symfony/config": "^4.1",
     "nette/php-generator": "^3.1",
-    "haydenpierce/class-finder": "^0.0.2"
+    "haydenpierce/class-finder": "^0.0.2",
+    "airmanbzh/php-html-generator": "^1.0"
   }
 }

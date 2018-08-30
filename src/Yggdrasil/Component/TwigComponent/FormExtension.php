@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Component\TwigComponent;
 
+use HtmlGenerator\HtmlTag;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
@@ -41,9 +42,7 @@ class FormExtension extends \Twig_Extension
     {
         $form = '<form id="' . $name . '" action="' . $action . '" method="post"';
 
-        if ($isPjax) {
-            $form .= ' data-pjax';
-        }
+        $form .= ($isPjax) ? ' data-pjax' : '';
 
         foreach ($options as $attr => $value) {
             $form .= ' ' . $attr . '="' . $value . '"';
@@ -61,7 +60,12 @@ class FormExtension extends \Twig_Extension
      */
     public function endForm(bool $csrf = true): void
     {
-        $tokenField = ($csrf) ? '<input type="hidden" id="csrf_token" name="csrf_token" value="' . $this->generateCsrfToken() . '"/>' : '';
+        $tokenField = ($csrf) ? HtmlTag::createElement('input')
+            ->set('id', 'csrf_token')
+            ->set('name', 'csrf_token')
+            ->set('type', 'hidden')
+            ->set('value', $this->generateCsrfToken())
+            : '';
 
         echo $tokenField . '</form>';
     }
@@ -69,37 +73,31 @@ class FormExtension extends \Twig_Extension
     /**
      * Adds field to HTML form
      *
-     * @param string $name    Form field name, equivalent to ID and name attribute
-     * @param string $label   Form field label
-     * @param string $type    Form field type, equivalent to type attribute
-     * @param array  $options Set of additional attributes like ['wrapper'|'label'|'input' => [attribute_name => value]]
+     * @param string $name      Form field name, equivalent to ID and name attribute
+     * @param string $labelText Form field label text
+     * @param string $type      Form field type, equivalent to type attribute
+     * @param array  $options   Set of additional attributes like [wrapper|label|input => [attribute_name => value]]
      */
-    public function addFormField(string $name, string $label = '', string $type = 'text', array $options = []): void
+    public function addFormField(string $name, string $labelText = '', string $type = 'text', array $options = []): void
     {
-        $wrapperStart = '<div>';
-        $wrapperEnd = '</div>';
+        $wrapper = HtmlTag::createElement('div');
 
-        $labelStart = '';
-        $labelEnd = '';
+        $label = (!empty($labelText)) ? HtmlTag::createElement('label')
+            ->set('for', $name)
+            ->text($labelText)
+            : '';
 
-        if (!empty($label)) {
-            $labelStart = '<label for="' . $name . '"';
-            $labelEnd = '>' . $label . '</label>';
-        }
-
-        $inputStart = '<input type="' . $type . '" id="' . $name . '" name="' . $name . '"';
-        $inputEnd = '>';
+        $input = HtmlTag::createElement('input')
+            ->set('type', $type)
+            ->set('id', $name)
+            ->set('name', $name);
 
         foreach ($options as $element => $attrs) {
            switch ($element) {
               case 'wrapper':
-                  $wrapperStart = rtrim($wrapperStart, '>');
-
                   foreach ($attrs as $attr => $value) {
-                      $wrapperStart .= ' ' . $attr . '="' . $value . '"';
+                      $wrapper->set($attr, $value);
                   }
-
-                  $wrapperStart .= '>';
 
                   break;
               case 'label':
@@ -108,13 +106,13 @@ class FormExtension extends \Twig_Extension
                   }
 
                   foreach ($attrs as $attr => $value) {
-                      $labelStart .= ' ' . $attr . '="' . $value . '"';
+                      $label->set($attr, $value);
                   }
 
                   break;
               case 'input':
                   foreach ($attrs as $attr => $value) {
-                      $inputStart .= ' ' . $attr . '="' . $value . '"';
+                      $input->set($attr, $value);
                   }
 
                   break;
@@ -122,12 +120,16 @@ class FormExtension extends \Twig_Extension
         }
 
         if(in_array($type, ['checkbox', 'radio', 'file'])) {
-            echo $wrapperStart . $inputStart . $inputEnd . $labelStart . $labelEnd . $wrapperEnd;
+            echo $wrapper
+                ->addElement($input)
+                ->addElement($label);
 
             return;
         }
 
-        echo $wrapperStart . $labelStart . $labelEnd . $inputStart . $inputEnd . $wrapperEnd;
+        echo $wrapper
+            ->addElement($label)
+            ->addElement($input);
     }
 
     /**

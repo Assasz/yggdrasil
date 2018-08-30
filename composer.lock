@@ -1,11 +1,54 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e72ed75201c30eede36c35d91277b7a2",
+    "content-hash": "428a20e41090480f5c86dc4ae6bafd8c",
     "packages": [
+        {
+            "name": "airmanbzh/php-html-generator",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Airmanbzh/php-html-generator.git",
+                "reference": "5a707722a9f1fa656e6e3dd26e52db6f8369724b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Airmanbzh/php-html-generator/zipball/5a707722a9f1fa656e6e3dd26e52db6f8369724b",
+                "reference": "5a707722a9f1fa656e6e3dd26e52db6f8369724b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "package",
+            "autoload": {
+                "psr-4": {
+                    "HtmlGenerator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "LE BOULC'H Brice",
+                    "email": "airmanbzh@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP html generator",
+            "homepage": "https://github.com/Airmanbzh/php-html-generator",
+            "keywords": [
+                "generator",
+                "html",
+                "php"
+            ],
+            "time": "2018-04-06T14:52:36+00:00"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.6.0",
