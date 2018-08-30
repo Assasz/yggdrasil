@@ -112,6 +112,12 @@ class FormExtension extends \Twig_Extension
            }
         }
 
+        if(in_array($type, ['checkbox', 'radio', 'file'])) {
+            echo $wrapperStart . $inputStart . $inputEnd . $labelStart . $labelEnd . $wrapperEnd;
+
+            return;
+        }
+
         echo $wrapperStart . $labelStart . $labelEnd . $inputStart . $inputEnd . $wrapperEnd;
     }
 
