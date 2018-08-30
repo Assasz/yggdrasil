@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Core\Driver;
 
+use Yggdrasil\Component\TwigComponent\FormExtension;
 use Yggdrasil\Component\TwigComponent\RoutingExtension;
 use Yggdrasil\Component\TwigComponent\StandardExtension;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
@@ -59,6 +60,7 @@ class TemplateEngineDriver implements DriverInterface
             $twig->addGlobal('_appname', $configuration['template_engine']['application_name']);
             $twig->addExtension(new StandardExtension());
             $twig->addExtension(new RoutingExtension($appConfiguration->loadDriver('router')));
+            $twig->addExtension(new FormExtension());
 
             self::$engineInstance = $twig;
         }

@@ -38,34 +38,11 @@ class StandardExtension extends \Twig_Extension implements \Twig_Extension_Globa
     public function getFunctions(): array
     {
         return [
-            new \Twig_Function('csrf_token', [$this, 'generateCsrfToken']),
             new \Twig_Function('flashbag', [$this, 'getFlashBag']),
             new \Twig_Function('is_granted', [$this, 'isGranted']),
             new \Twig_Function('is_pjax', [$this, 'isPjax']),
             new \Twig_Function('partial', [$this, 'embedPartial'])
         ];
-    }
-
-    /**
-     * Generates CSRF token
-     *
-     * @param bool $onlyToken Useful if multiple tokens are needed on one page
-     * @return mixed
-     *
-     * @throws \Exception if any rand function can't be found in OS
-     */
-    public function generateCsrfToken(bool $onlyToken = false)
-    {
-        $token = bin2hex(random_bytes(32));
-
-        $session = new Session();
-        $session->set('csrf_token', $token);
-
-        if ($onlyToken) {
-            return $token;
-        }
-
-        echo '<input type="hidden" id="csrf_token" name="csrf_token" value="' . $token . '"/>';
     }
 
     /**
