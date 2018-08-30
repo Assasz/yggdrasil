@@ -27,6 +27,7 @@ class FormExtension extends \Twig_Extension
             new \Twig_Function('end_form', [$this, 'endForm']),
             new \Twig_Function('form_field', [$this, 'addFormField']),
             new \Twig_Function('csrf_token', [$this, 'generateCsrfToken']),
+            new \Twig_Function('button', [$this, 'addButton']),
         ];
     }
 
