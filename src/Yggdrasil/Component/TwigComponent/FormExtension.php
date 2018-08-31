@@ -26,8 +26,9 @@ class FormExtension extends \Twig_Extension
             new \Twig_Function('begin_form', [$this, 'beginForm']),
             new \Twig_Function('end_form', [$this, 'endForm']),
             new \Twig_Function('form_field', [$this, 'addFormField']),
-            new \Twig_Function('csrf_token', [$this, 'generateCsrfToken']),
+            new \Twig_Function('select_list', [$this, 'addSelectList']),
             new \Twig_Function('button', [$this, 'addButton']),
+            new \Twig_Function('csrf_token', [$this, 'generateCsrfToken']),
         ];
     }
 
@@ -77,7 +78,7 @@ class FormExtension extends \Twig_Extension
      * @param string $name      Form field name, equivalent to ID and name attribute
      * @param string $labelText Form field label text
      * @param string $type      Form field type, equivalent to type attribute
-     * @param array  $options   Set of additional attributes like [wrapper|label|input => [attribute_name => value]]
+     * @param array  $options   Set of additional attributes [wrapper|label|input => [attribute_name => value]]
      */
     public function addFormField(string $name, string $labelText = '', string $type = 'text', array $options = []): void
     {
@@ -134,12 +135,54 @@ class FormExtension extends \Twig_Extension
     }
 
     /**
+     * Adds select list to HTML form
+     *
+     * @param string $name    Select list name, equivalent to ID attribute
+     * @param array  $items   Select list items [value => text]
+     * @param array  $options Set of additional attributes [list|item => [attribute_name => value]]
+     */
+    public function addSelectList(string $name, array $items = [], array $options = []): void
+    {
+        $selectList = HtmlTag::createElement('select')
+            ->set('id', $name);
+
+        $optionsElements = [];
+
+        foreach ($items as $value => $text) {
+            $optionsElements[] = $selectList->addElement('option')
+                ->set('value', $value)
+                ->text($text);
+        }
+
+        foreach ($options as $element => $attrs) {
+            switch ($element) {
+                case 'list':
+                    foreach ($attrs as $attr => $value) {
+                        $selectList->set($attr, $value);
+                    }
+
+                    break;
+                case 'item':
+                    foreach ($optionsElements as $option) {
+                        foreach ($attrs as $attr => $value) {
+                            $option->set($attr, $value);
+                        }
+                    }
+
+                    break;
+            }
+        }
+
+        echo $selectList;
+    }
+
+    /**
      * Adds button to HTML form
      *
      * @param string $name    Button name, equivalent to ID attribute
      * @param string $text    Button text
      * @param string $type    Button type, equivalent to type attribute
-     * @param array  $options Set of additional button attributes like [attribute_name => value]
+     * @param array  $options Set of additional button attributes [attribute_name => value]
      */
     public function addButton(string $name, string $text, string $type = 'button', array $options = []): void
     {
