@@ -3,6 +3,7 @@
 namespace Yggdrasil\Component\TwigComponent;
 
 use HtmlGenerator\HtmlTag;
+use HtmlGenerator\Markup;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
@@ -75,24 +76,30 @@ class FormExtension extends \Twig_Extension
     /**
      * Adds field to HTML form
      *
-     * @param string $name      Form field name, equivalent to ID and name attribute
-     * @param string $labelText Form field label text
-     * @param string $type      Form field type, equivalent to type attribute
-     * @param array  $options   Set of additional attributes [wrapper|label|input => [attribute_name => value]]
+     * @param string $name        Form field name, equivalent to ID and name attribute
+     * @param string $labelText   Form field label text
+     * @param string $captionText Form field caption text
+     * @param string $type        Form field type, equivalent to type attribute
+     * @param array  $options     Set of additional attributes [wrapper|label|input|caption => [attribute_name => value]]
      */
-    public function addFormField(string $name, string $labelText = '', string $type = 'text', array $options = []): void
+    public function addFormField(string $name, string $labelText = '', string $captionText = '', string $type = 'text', array $options = []): void
     {
         $wrapper = HtmlTag::createElement('div');
 
-        $label = (!empty($labelText)) ? HtmlTag::createElement('label')
-            ->set('for', $name)
-            ->text($labelText)
+        $label = (!empty($labelText)) ? $this->addLabel($labelText, $name)
             : '';
 
         $input = HtmlTag::createElement('input')
             ->set('type', $type)
             ->set('id', $name)
             ->set('name', $name);
+
+        if (!empty($captionText)) {
+            $input->set('aria-describedby', $name . '_caption');
+        }
+
+        $caption = (!empty($captionText)) ? $this->addCaption($captionText, $name)
+            : '';
 
         foreach ($options as $element => $attrs) {
            switch ($element) {
@@ -118,41 +125,61 @@ class FormExtension extends \Twig_Extension
                   }
 
                   break;
+               case 'caption':
+                   if (empty($caption)) {
+                       break;
+                   }
+
+                   foreach ($attrs as $attr => $value) {
+                       $caption->set($attr, $value);
+                   }
+
+                   break;
            }
         }
 
         if(in_array($type, ['checkbox', 'radio', 'file'])) {
             $wrapper->addElement($input);
+            $wrapper->addElement($label);
+            $wrapper->addElement($caption);
 
-            echo $wrapper->addElement($label);
+            echo $wrapper;
 
             return;
         }
 
         $wrapper->addElement($label);
+        $wrapper->addElement($input);
+        $wrapper->addElement($caption);
 
-        echo $wrapper->addElement($input);
+        echo $wrapper;
     }
 
     /**
      * Adds select list to HTML form
      *
-     * @param string $name      Select list name, equivalent to ID attribute
-     * @param string $labelText Select list label text
-     * @param array  $items     Select list items [value => text]
-     * @param array  $options   Set of additional attributes [wrapper|label|list|item => [attribute_name => value]]
+     * @param string $name        Select list name, equivalent to ID attribute
+     * @param string $labelText   Select list label text
+     * @param string $captionText Select list caption text
+     * @param array  $items       Select list items [value => text]
+     * @param array  $options     Set of additional attributes [wrapper|label|list|item|caption => [attribute_name => value]]
      */
-    public function addSelectList(string $name, string $labelText = '', array $items = [], array $options = []): void
+    public function addSelectList(string $name, string $labelText = '', string $captionText = '', array $items = [], array $options = []): void
     {
         $wrapper = HtmlTag::createElement('div');
 
-        $label = (!empty($labelText)) ? HtmlTag::createElement('label')
-            ->set('for', $name)
-            ->text($labelText)
+        $label = (!empty($labelText)) ? $this->addLabel($labelText, $name)
             : '';
 
         $selectList = HtmlTag::createElement('select')
             ->set('id', $name);
+
+        if (!empty($captionText)) {
+            $selectList->set('aria-describedby', $name . '_caption');
+        }
+
+        $caption = (!empty($captionText)) ? $this->addCaption($captionText, $name)
+            : '';
 
         $optionsElements = [];
 
@@ -194,11 +221,22 @@ class FormExtension extends \Twig_Extension
                     }
 
                     break;
+                case 'caption':
+                    if (empty($caption)) {
+                        break;
+                    }
+
+                    foreach ($attrs as $attr => $value) {
+                        $caption->set($attr, $value);
+                    }
+
+                    break;
             }
         }
 
         $wrapper->addElement($label);
         $wrapper->addElement($selectList);
+        $wrapper->addElement($caption);
 
         echo $wrapper;
     }
@@ -241,5 +279,33 @@ class FormExtension extends \Twig_Extension
         $session->set('csrf_token', $token);
 
         return $token;
+    }
+
+    /**
+     * Adds label to form element
+     *
+     * @param string $text Label text
+     * @param string $name Element name
+     * @return Markup
+     */
+    private function addLabel(string $text, string $name): Markup
+    {
+        return HtmlTag::createElement('label')
+            ->set('for', $name)
+            ->text($text);
+    }
+
+    /**
+     * Adds caption to form element
+     *
+     * @param string $text Caption text
+     * @param string $name Element name
+     * @return Markup
+     */
+    private function addCaption(string $text, string $name): Markup
+    {
+        return HtmlTag::createElement('small')
+            ->set('id', $name . '_caption')
+            ->text($text);
     }
 }
