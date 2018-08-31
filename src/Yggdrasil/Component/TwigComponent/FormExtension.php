@@ -137,12 +137,20 @@ class FormExtension extends \Twig_Extension
     /**
      * Adds select list to HTML form
      *
-     * @param string $name    Select list name, equivalent to ID attribute
-     * @param array  $items   Select list items [value => text]
-     * @param array  $options Set of additional attributes [list|item => [attribute_name => value]]
+     * @param string $name      Select list name, equivalent to ID attribute
+     * @param string $labelText Select list label text
+     * @param array  $items     Select list items [value => text]
+     * @param array  $options   Set of additional attributes [wrapper|label|list|item => [attribute_name => value]]
      */
-    public function addSelectList(string $name, array $items = [], array $options = []): void
+    public function addSelectList(string $name, string $labelText = '', array $items = [], array $options = []): void
     {
+        $wrapper = HtmlTag::createElement('div');
+
+        $label = (!empty($labelText)) ? HtmlTag::createElement('label')
+            ->set('for', $name)
+            ->text($labelText)
+            : '';
+
         $selectList = HtmlTag::createElement('select')
             ->set('id', $name);
 
@@ -156,6 +164,22 @@ class FormExtension extends \Twig_Extension
 
         foreach ($options as $element => $attrs) {
             switch ($element) {
+                case 'wrapper':
+                    foreach ($attrs as $attr => $value) {
+                        $wrapper->set($attr, $value);
+                    }
+
+                break;
+                case 'label':
+                    if (empty($labelText)) {
+                        break;
+                    }
+
+                    foreach ($attrs as $attr => $value) {
+                        $label->set($attr, $value);
+                    }
+
+                    break;
                 case 'list':
                     foreach ($attrs as $attr => $value) {
                         $selectList->set($attr, $value);
@@ -173,7 +197,10 @@ class FormExtension extends \Twig_Extension
             }
         }
 
-        echo $selectList;
+        $wrapper->addElement($label);
+        $wrapper->addElement($selectList);
+
+        echo $wrapper;
     }
 
     /**
