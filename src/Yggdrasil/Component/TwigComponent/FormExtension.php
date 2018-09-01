@@ -45,9 +45,11 @@ class FormExtension extends \Twig_Extension
     {
         $form = '<form id="' . $name . '" action="' . $action . '" method="post"';
 
-        $form .= ((bool) $options['is_pjax'] ?? true) ? ' data-pjax' : '';
+        $pjaxAtr = ' data-pjax';
 
         if (isset($options['is_pjax'])) {
+            $pjaxAtr = (filter_var($options['is_pjax'], FILTER_VALIDATE_BOOLEAN)) ?: '';
+
             unset($options['is_pjax']);
         }
 
@@ -55,7 +57,7 @@ class FormExtension extends \Twig_Extension
             $form .= ' ' . $attr . '="' . $value . '"';
         }
 
-        echo $form . '>';
+        echo $form . $pjaxAtr . '>';
     }
 
     /**
