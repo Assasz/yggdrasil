@@ -45,7 +45,11 @@ class FormExtension extends \Twig_Extension
     {
         $form = '<form id="' . $name . '" action="' . $action . '" method="post"';
 
-        $form .= ($isPjax) ? ' data-pjax' : '';
+        $form .= ((bool) $options['is_pjax'] ?? true) ? ' data-pjax' : '';
+
+        if (isset($options['is_pjax'])) {
+            unset($options['is_pjax']);
+        }
 
         foreach ($options as $attr => $value) {
             $form .= ' ' . $attr . '="' . $value . '"';
@@ -77,68 +81,51 @@ class FormExtension extends \Twig_Extension
      * Adds field to HTML form
      *
      * @param string $name        Form field name, equivalent to ID and name attribute
-     * @param string $labelText   Form field label text
-     * @param string $captionText Form field caption text
-     * @param string $type        Form field type, equivalent to type attribute
      * @param array  $options     Set of additional attributes [wrapper|label|input|caption => [attribute_name => value]]
      */
-    public function addFormField(string $name, string $labelText = '', string $captionText = '', string $type = 'text', array $options = []): void
+    public function addFormField(string $name, array $options = []): void
     {
         $wrapper = HtmlTag::createElement('div');
 
-        $label = (!empty($labelText)) ? $this->addLabel($labelText, $name)
-            : '';
+        $label = '';
+
+        if (isset($options['label']['text'])) {
+            $label = $this->addLabel($options['label']['text'], $name);
+
+            unset($options['label']['text']);
+        }
 
         $input = HtmlTag::createElement('input')
-            ->set('type', $type)
+            ->set('type', $options['input']['type'] ?? 'text')
             ->set('id', $name)
             ->set('name', $name);
 
-        if (!empty($captionText)) {
+        $caption = '';
+
+        if (isset($options['caption']['text'])) {
             $input->set('aria-describedby', $name . '_caption');
+            $caption = $this->addCaption($options['caption']['text'], $name);
+
+            unset($options['caption']['text']);
         }
 
-        $caption = (!empty($captionText)) ? $this->addCaption($captionText, $name)
-            : '';
+        $elements = ['wrapper', 'label', 'input', 'caption'];
 
-        foreach ($options as $element => $attrs) {
-           switch ($element) {
-              case 'wrapper':
-                  foreach ($attrs as $attr => $value) {
-                      $wrapper->set($attr, $value);
-                  }
+        foreach ($options as $option => $attrs) {
+            foreach ($elements as $element) {
+                if ($element === $option) {
+                    if (in_array($element, ['label', 'caption']) && empty($$element)) {
+                        continue;
+                    }
 
-                  break;
-              case 'label':
-                  if (empty($label)) {
-                      break;
-                  }
-
-                  foreach ($attrs as $attr => $value) {
-                      $label->set($attr, $value);
-                  }
-
-                  break;
-              case 'input':
-                  foreach ($attrs as $attr => $value) {
-                      $input->set($attr, $value);
-                  }
-
-                  break;
-               case 'caption':
-                   if (empty($caption)) {
-                       break;
-                   }
-
-                   foreach ($attrs as $attr => $value) {
-                       $caption->set($attr, $value);
-                   }
-
-                   break;
-           }
+                    foreach ($attrs as $attr => $value) {
+                        $$element->set($attr, $value);
+                    }
+                }
+            }
         }
 
-        if(in_array($type, ['checkbox', 'radio', 'file'])) {
+        if (in_array($options['input']['type'] ?? 'text', ['checkbox', 'radio', 'file'])) {
             $wrapper->addElement($input);
             $wrapper->addElement($label);
             $wrapper->addElement($caption);
@@ -159,78 +146,66 @@ class FormExtension extends \Twig_Extension
      * Adds select list to HTML form
      *
      * @param string $name        Select list name, equivalent to ID attribute
-     * @param string $labelText   Select list label text
-     * @param string $captionText Select list caption text
-     * @param array  $items       Select list items [value => text]
      * @param array  $options     Set of additional attributes [wrapper|label|list|item|caption => [attribute_name => value]]
+     *                            List items define as [list => [items => [value => text]]]
      */
-    public function addSelectList(string $name, string $labelText = '', string $captionText = '', array $items = [], array $options = []): void
+    public function addSelectList(string $name, array $options = []): void
     {
         $wrapper = HtmlTag::createElement('div');
 
-        $label = (!empty($labelText)) ? $this->addLabel($labelText, $name)
-            : '';
+        $label = '';
+
+        if (isset($options['label']['text'])) {
+            $label = $this->addLabel($options['label']['text'], $name);
+
+            unset($options['label']['text']);
+        }
 
         $selectList = HtmlTag::createElement('select')
             ->set('id', $name);
 
-        if (!empty($captionText)) {
+        $caption = '';
+
+        if (isset($options['caption']['text'])) {
             $selectList->set('aria-describedby', $name . '_caption');
+            $caption = $this->addCaption($options['caption']['text'], $name);
+
+            unset($options['caption']['text']);
         }
 
-        $caption = (!empty($captionText)) ? $this->addCaption($captionText, $name)
-            : '';
+        $items = [];
 
-        $optionsElements = [];
-
-        foreach ($items as $value => $text) {
-            $optionsElements[] = $selectList->addElement('option')
+        foreach ($options['list']['items'] ?? [] as $value => $text) {
+            $items[] = $selectList->addElement('option')
                 ->set('value', $value)
                 ->text($text);
         }
 
+        if (isset($options['list']['items'])) {
+            unset($options['list']['items']);
+        }
+
+        $elements = ['wrapper', 'label', 'list', 'item', 'caption'];
+
         foreach ($options as $element => $attrs) {
-            switch ($element) {
-                case 'wrapper':
-                    foreach ($attrs as $attr => $value) {
-                        $wrapper->set($attr, $value);
-                    }
+            foreach ($elements as $element) {
+                if (in_array($element, ['label', 'caption']) && empty($$element)) {
+                    continue;
+                }
 
-                break;
-                case 'label':
-                    if (empty($labelText)) {
-                        break;
-                    }
-
-                    foreach ($attrs as $attr => $value) {
-                        $label->set($attr, $value);
-                    }
-
-                    break;
-                case 'list':
-                    foreach ($attrs as $attr => $value) {
-                        $selectList->set($attr, $value);
-                    }
-
-                    break;
-                case 'item':
-                    foreach ($optionsElements as $option) {
+                if ('item' === $element) {
+                    foreach ($items as $item) {
                         foreach ($attrs as $attr => $value) {
-                            $option->set($attr, $value);
+                            $item->set($attr, $value);
                         }
                     }
 
-                    break;
-                case 'caption':
-                    if (empty($caption)) {
-                        break;
-                    }
+                    continue;
+                }
 
-                    foreach ($attrs as $attr => $value) {
-                        $caption->set($attr, $value);
-                    }
-
-                    break;
+                foreach ($attrs as $attr => $value) {
+                    $$element->set($attr, $value);
+                }
             }
         }
 
@@ -246,14 +221,13 @@ class FormExtension extends \Twig_Extension
      *
      * @param string $name    Button name, equivalent to ID attribute
      * @param string $text    Button text
-     * @param string $type    Button type, equivalent to type attribute
      * @param array  $options Set of additional button attributes [attribute_name => value]
      */
-    public function addButton(string $name, string $text, string $type = 'button', array $options = []): void
+    public function addButton(string $name, string $text, array $options = []): void
     {
         $button = HtmlTag::createElement('button')
             ->set('id', $name)
-            ->set('type', $type)
+            ->set('type', $options['type'] ?? 'button')
             ->text($text);
 
         foreach ($options as $attr => $value) {
