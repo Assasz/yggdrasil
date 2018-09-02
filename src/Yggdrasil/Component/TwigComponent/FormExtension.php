@@ -181,9 +181,10 @@ class FormExtension extends \Twig_Extension
     /**
      * Adds select list to HTML form
      *
-     * @param string $name Select list name, equivalent to ID attribute
+     * @param string $name  Select list name, equivalent to ID attribute
+     * @param array  $items Select list items [value => text]
      */
-    public function addSelectList(string $name): void
+    public function addSelectList(string $name, array $items = []): void
     {
         $options = $this->formOptions['fields'][$name];
 
@@ -209,16 +210,12 @@ class FormExtension extends \Twig_Extension
             unset($options['caption']['text']);
         }
 
-        $items = [];
+        $itemsElements = [];
 
-        foreach ($options['list']['items'] ?? [] as $value => $text) {
-            $items[] = $list->addElement('option')
+        foreach ($items as $value => $text) {
+            $itemsElements[] = $list->addElement('option')
                 ->set('value', $value)
                 ->text($text);
-        }
-
-        if (isset($options['list']['items'])) {
-            unset($options['list']['items']);
         }
 
         $elements = ['wrapper', 'label', 'list', 'item', 'caption'];
@@ -230,7 +227,7 @@ class FormExtension extends \Twig_Extension
                 }
 
                 if ('item' === $element) {
-                    foreach ($items as $item) {
+                    foreach ($itemsElements as $item) {
                         foreach ($attrs as $attr => $value) {
                             $item->set($attr, $value);
                         }
