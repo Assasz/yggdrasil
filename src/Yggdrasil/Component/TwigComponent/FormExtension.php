@@ -18,13 +18,6 @@ use Symfony\Component\Yaml\Yaml;
 class FormExtension extends \Twig_Extension
 {
     /**
-     * Form name
-     *
-     * @var string
-     */
-    private $formName;
-
-    /**
      * Form options
      *
      * @var array
@@ -73,8 +66,7 @@ class FormExtension extends \Twig_Extension
      */
     public function beginForm(string $name, string $action): void
     {
-        $this->formName = $name;
-        $this->formOptions = $this->getFormOptions();
+        $this->formOptions = $this->getFormOptions($name);
 
         $form = '<form id="' . $name . '" action="' . $action . '" method="post"';
 
@@ -114,8 +106,6 @@ class FormExtension extends \Twig_Extension
             : '';
 
         echo $tokenField . '</form>';
-
-        $this->formName = null;
     }
 
     /**
@@ -337,10 +327,11 @@ class FormExtension extends \Twig_Extension
     /**
      * Returns form options from resource
      *
+     * @param string $formName Name of form
      * @return array
      */
-    private function getFormOptions(): array
+    private function getFormOptions(string $formName): array
     {
-        return Yaml::parseFile($this->resourcePath . '/' . $this->formName . '.yaml');
+        return Yaml::parseFile($this->resourcePath . '/' . $formName . '.yaml');
     }
 }
