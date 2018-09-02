@@ -5,6 +5,7 @@ namespace Yggdrasil\Component\TwigComponent;
 use HtmlGenerator\HtmlTag;
 use HtmlGenerator\Markup;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class FormExtension
@@ -16,6 +17,37 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class FormExtension extends \Twig_Extension
 {
+    /**
+     * Form name
+     *
+     * @var string
+     */
+    private $formName;
+
+    /**
+     * Form options
+     *
+     * @var array
+     */
+    private $formOptions;
+
+    /**
+     * Path to forms configuration resources
+     *
+     * @var string
+     */
+    private $resourcePath;
+
+    /**
+     * FormExtension constructor.
+     *
+     * @param string $resourcePath
+     */
+    public function __construct(string $resourcePath)
+    {
+        $this->resourcePath = $resourcePath;
+    }
+
     /**
      * Returns set of functions
      *
@@ -38,26 +70,29 @@ class FormExtension extends \Twig_Extension
      *
      * @param string $name    Form name, equivalent to ID attribute
      * @param string $action  Form action URL, equivalent to action attribute
-     * @param array  $options Set of additional form attributes like [attribute_name => value]
-     * @param bool   $isPjax  Form will be send with Pjax if true
      */
-    public function beginForm(string $name, string $action, array $options = [], bool $isPjax = true): void
+    public function beginForm(string $name, string $action): void
     {
+        $this->formName = $name;
+        $this->formOptions = $this->getFormOptions();
+
         $form = '<form id="' . $name . '" action="' . $action . '" method="post"';
 
-        $pjaxAtr = ' data-pjax';
+        $pjaxAttr = ' data-pjax';
 
-        if (isset($options['is_pjax'])) {
-            $pjaxAtr = (filter_var($options['is_pjax'], FILTER_VALIDATE_BOOLEAN)) ?: '';
-
-            unset($options['is_pjax']);
+        if (isset($this->formOptions['is_pjax'])) {
+            $pjaxAttr = (filter_var($this->formOptions['is_pjax'], FILTER_VALIDATE_BOOLEAN)) ?: '';
         }
 
-        foreach ($options as $attr => $value) {
+        foreach ($this->formOptions as $attr => $value) {
+            if (in_array($attr, ['is_pjax', 'fields'])) {
+                continue;
+            }
+
             $form .= ' ' . $attr . '="' . $value . '"';
         }
 
-        echo $form . $pjaxAtr . '>';
+        echo $form . $pjaxAttr . '>';
     }
 
     /**
@@ -77,22 +112,25 @@ class FormExtension extends \Twig_Extension
             : '';
 
         echo $tokenField . '</form>';
+
+        $this->formName = null;
     }
 
     /**
      * Adds field to HTML form
      *
-     * @param string $name        Form field name, equivalent to ID and name attribute
-     * @param array  $options     Set of additional attributes [wrapper|label|input|caption => [attribute_name => value]]
+     * @param string $name Form field name, equivalent to ID and name attributes
      */
-    public function addFormField(string $name, array $options = []): void
+    public function addFormField(string $name): void
     {
-        $wrapper = HtmlTag::createElement('div');
+        $options = $this->formOptions['fields'][$name];
+
+        $wrapper = $this->createWrapper();
 
         $label = '';
 
         if (isset($options['label']['text'])) {
-            $label = $this->addLabel($options['label']['text'], $name);
+            $label = $this->createLabel($options['label']['text'], $name);
 
             unset($options['label']['text']);
         }
@@ -106,7 +144,7 @@ class FormExtension extends \Twig_Extension
 
         if (isset($options['caption']['text'])) {
             $input->set('aria-describedby', $name . '_caption');
-            $caption = $this->addCaption($options['caption']['text'], $name);
+            $caption = $this->createCaption($options['caption']['text'], $name);
 
             unset($options['caption']['text']);
         }
@@ -130,15 +168,11 @@ class FormExtension extends \Twig_Extension
         if (in_array($options['input']['type'] ?? 'text', ['checkbox', 'radio', 'file'])) {
             $wrapper->addElement($input);
             $wrapper->addElement($label);
-            $wrapper->addElement($caption);
-
-            echo $wrapper;
-
-            return;
+        } else {
+            $wrapper->addElement($label);
+            $wrapper->addElement($input);
         }
 
-        $wrapper->addElement($label);
-        $wrapper->addElement($input);
         $wrapper->addElement($caption);
 
         echo $wrapper;
@@ -147,30 +181,30 @@ class FormExtension extends \Twig_Extension
     /**
      * Adds select list to HTML form
      *
-     * @param string $name        Select list name, equivalent to ID attribute
-     * @param array  $options     Set of additional attributes [wrapper|label|list|item|caption => [attribute_name => value]]
-     *                            List items define as [list => [items => [value => text]]]
+     * @param string $name Select list name, equivalent to ID attribute
      */
-    public function addSelectList(string $name, array $options = []): void
+    public function addSelectList(string $name): void
     {
-        $wrapper = HtmlTag::createElement('div');
+        $options = $this->formOptions['fields'][$name];
+
+        $wrapper = $this->createWrapper();
 
         $label = '';
 
         if (isset($options['label']['text'])) {
-            $label = $this->addLabel($options['label']['text'], $name);
+            $label = $this->createLabel($options['label']['text'], $name);
 
             unset($options['label']['text']);
         }
 
-        $selectList = HtmlTag::createElement('select')
+        $list = HtmlTag::createElement('select')
             ->set('id', $name);
 
         $caption = '';
 
         if (isset($options['caption']['text'])) {
-            $selectList->set('aria-describedby', $name . '_caption');
-            $caption = $this->addCaption($options['caption']['text'], $name);
+            $list->set('aria-describedby', $name . '_caption');
+            $caption = $this->createCaption($options['caption']['text'], $name);
 
             unset($options['caption']['text']);
         }
@@ -178,7 +212,7 @@ class FormExtension extends \Twig_Extension
         $items = [];
 
         foreach ($options['list']['items'] ?? [] as $value => $text) {
-            $items[] = $selectList->addElement('option')
+            $items[] = $list->addElement('option')
                 ->set('value', $value)
                 ->text($text);
         }
@@ -212,7 +246,7 @@ class FormExtension extends \Twig_Extension
         }
 
         $wrapper->addElement($label);
-        $wrapper->addElement($selectList);
+        $wrapper->addElement($list);
         $wrapper->addElement($caption);
 
         echo $wrapper;
@@ -222,15 +256,19 @@ class FormExtension extends \Twig_Extension
      * Adds button to HTML form
      *
      * @param string $name    Button name, equivalent to ID attribute
-     * @param string $text    Button text
-     * @param array  $options Set of additional button attributes [attribute_name => value]
      */
-    public function addButton(string $name, string $text, array $options = []): void
+    public function addButton(string $name): void
     {
+        $options = $this->formOptions['fields'][$name];
+
         $button = HtmlTag::createElement('button')
             ->set('id', $name)
             ->set('type', $options['type'] ?? 'button')
-            ->text($text);
+            ->text($options['text'] ?? '');
+
+        if (isset($options['text'])) {
+            unset($options['text']);
+        }
 
         foreach ($options as $attr => $value) {
             $button->set($attr, $value);
@@ -258,13 +296,23 @@ class FormExtension extends \Twig_Extension
     }
 
     /**
-     * Adds label to form element
+     * Creates wrapper for form field
+     *
+     * @return Markup
+     */
+    private function createWrapper(): Markup
+    {
+        return HtmlTag::createElement('div');
+    }
+
+    /**
+     * Creates label for form field
      *
      * @param string $text Label text
      * @param string $name Element name
      * @return Markup
      */
-    private function addLabel(string $text, string $name): Markup
+    private function createLabel(string $text, string $name): Markup
     {
         return HtmlTag::createElement('label')
             ->set('for', $name)
@@ -272,16 +320,26 @@ class FormExtension extends \Twig_Extension
     }
 
     /**
-     * Adds caption to form element
+     * Creates caption for form field
      *
      * @param string $text Caption text
      * @param string $name Element name
      * @return Markup
      */
-    private function addCaption(string $text, string $name): Markup
+    private function createCaption(string $text, string $name): Markup
     {
         return HtmlTag::createElement('small')
             ->set('id', $name . '_caption')
             ->text($text);
+    }
+
+    /**
+     * Returns form options from resource
+     *
+     * @return array
+     */
+    private function getFormOptions(): array
+    {
+        return Yaml::parseFile($this->resourcePath . '/' . $this->formName . '.yaml');
     }
 }
