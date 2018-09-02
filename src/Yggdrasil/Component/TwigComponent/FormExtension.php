@@ -78,14 +78,14 @@ class FormExtension extends \Twig_Extension
 
         $form = '<form id="' . $name . '" action="' . $action . '" method="post"';
 
-        $pjaxAttr = ' data-pjax';
+        $usePjax = (isset($this->formOptions['use_pjax'])) ?
+            filter_var($this->formOptions['use_pjax'], FILTER_VALIDATE_BOOLEAN)
+            : true;
 
-        if (isset($this->formOptions['is_pjax'])) {
-            $pjaxAttr = (filter_var($this->formOptions['is_pjax'], FILTER_VALIDATE_BOOLEAN)) ?: '';
-        }
+        $pjaxAttr = ($usePjax) ? ' data-pjax' : '';
 
         foreach ($this->formOptions as $attr => $value) {
-            if (in_array($attr, ['is_pjax', 'fields'])) {
+            if (in_array($attr, ['use_pjax', 'use_csrf', 'fields'])) {
                 continue;
             }
 
@@ -98,13 +98,15 @@ class FormExtension extends \Twig_Extension
     /**
      * Ends HTML form
      *
-     * @param bool $csrf CSRF token will be included if true
-     *
      * @throws \Exception
      */
-    public function endForm(bool $csrf = true): void
+    public function endForm(): void
     {
-        $tokenField = ($csrf) ? HtmlTag::createElement('input')
+        $useCsrf = (isset($this->formOptions['use_csrf'])) ?
+            filter_var($this->formOptions['use_csrf'], FILTER_VALIDATE_BOOLEAN)
+            : true;
+
+        $tokenField = ($useCsrf) ? HtmlTag::createElement('input')
             ->set('id', 'csrf_token')
             ->set('name', 'csrf_token')
             ->set('type', 'hidden')
