@@ -220,24 +220,26 @@ class FormExtension extends \Twig_Extension
 
         $elements = ['wrapper', 'label', 'list', 'item', 'caption'];
 
-        foreach ($options as $element => $attrs) {
+        foreach ($options as $option => $attrs) {
             foreach ($elements as $element) {
-                if (in_array($element, ['label', 'caption']) && empty($$element)) {
-                    continue;
-                }
-
-                if ('item' === $element) {
-                    foreach ($itemsElements as $item) {
-                        foreach ($attrs as $attr => $value) {
-                            $item->set($attr, $value);
-                        }
+                if ($element === $option) {
+                    if (in_array($element, ['label', 'caption']) && empty($$element)) {
+                        continue;
                     }
 
-                    continue;
-                }
+                    if ('item' === $element) {
+                        foreach ($itemsElements as $item) {
+                            foreach ($attrs as $attr => $value) {
+                                $item->set($attr, $value);
+                            }
+                        }
 
-                foreach ($attrs as $attr => $value) {
-                    $$element->set($attr, $value);
+                        continue;
+                    }
+
+                    foreach ($attrs as $attr => $value) {
+                        $$element->set($attr, $value);
+                    }
                 }
             }
         }
