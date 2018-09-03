@@ -9,7 +9,7 @@ use Yggdrasil\Core\Exception\DriverNotFoundException;
 /**
  * Class AbstractConfiguration
  *
- * Manages configuration including drivers, that application uses
+ * Manages configuration of whole application
  *
  * @package Yggdrasil\Core\Configuration
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -49,7 +49,7 @@ abstract class AbstractConfiguration
     }
 
     /**
-     * Returns collection of application drivers
+     * Returns collection of registered application drivers
      *
      * @return DriverCollection
      */

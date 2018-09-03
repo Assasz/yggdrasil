@@ -16,7 +16,7 @@ use Yggdrasil\Core\Exception\DriverNotFoundException;
 interface ConfigurationInterface
 {
     /**
-     * Gets registered drivers and returns collection of their component instances
+     * Returns collection of registered application drivers
      *
      * @return DriverCollection
      */
