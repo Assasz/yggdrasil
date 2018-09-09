@@ -59,7 +59,7 @@ final class DriverCollection
     }
 
     /**
-     * Returns component instance of given driver
+     * Returns component instance configured by given driver
      *
      * @param string $key Name of driver
      * @return mixed
@@ -97,7 +97,7 @@ final class DriverCollection
     public function remove(string $key): void
     {
         if (!$this->has($key)) {
-            throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that '.$key.' driver is properly configured.');
+            throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that ' . $key . ' driver is properly configured.');
         }
 
         unset($this->drivers[$key]);

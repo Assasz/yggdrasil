@@ -16,7 +16,7 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class ValidatorDriver implements DriverInterface
+abstract class ValidatorDriver implements DriverInterface
 {
     /**
      * Instance of validator
@@ -24,15 +24,6 @@ class ValidatorDriver implements DriverInterface
      * @var RecursiveValidator
      */
     protected static $validatorInstance;
-
-    /**
-     * ValidatorDriver constructor.
-     *
-     * Should be private to prevent object creation. Same with __clone
-     */
-    private function __construct() {}
-
-    private function __clone() {}
 
     /**
      * Returns instance of validator

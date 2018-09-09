@@ -10,12 +10,12 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
 /**
  * Class ExceptionHandlerDriver
  *
- * [Whoops] Exception Handler driver, required in driver reqistry
+ * [Whoops] Exception Handler driver
  *
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class ExceptionHandlerDriver implements DriverInterface
+abstract class ExceptionHandlerDriver implements DriverInterface
 {
     /**
      * Instance of exception handler
@@ -23,15 +23,6 @@ class ExceptionHandlerDriver implements DriverInterface
      * @var Run
      */
     protected static $handlerInstance;
-
-    /**
-     * ExceptionHandlerDriver constructor.
-     *
-     * Should be private to prevent object creation. Same with __clone
-     */
-    private function __construct() {}
-
-    private function __clone() {}
 
     /**
      * Returns instance of exception handler

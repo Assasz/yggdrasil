@@ -19,7 +19,7 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class EntityManagerDriver implements DriverInterface
+abstract class EntityManagerDriver implements DriverInterface
 {
     /**
      * Instance of entity manager
@@ -27,15 +27,6 @@ class EntityManagerDriver implements DriverInterface
      * @var EntityManager
      */
     protected static $managerInstance;
-
-    /**
-     * EntityManagerDriver constructor.
-     *
-     * Should be private to prevent object creation. Same with __clone
-     */
-    private function __construct() {}
-
-    private function __clone() {}
 
     /**
      * Returns instance of entity manager

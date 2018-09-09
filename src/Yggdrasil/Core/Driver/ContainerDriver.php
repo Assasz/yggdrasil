@@ -17,7 +17,7 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class ContainerDriver implements DriverInterface
+abstract class ContainerDriver implements DriverInterface
 {
     /**
      * Instance of container
@@ -25,15 +25,6 @@ class ContainerDriver implements DriverInterface
      * @var ContainerBuilder
      */
     protected static $containerInstance;
-
-    /**
-     * ContainerDriver constructor.
-     *
-     * Should be private to prevent object creation. Same with __clone
-     */
-    private function __construct() {}
-
-    private function __clone() {}
 
     /**
      * Returns instance of container

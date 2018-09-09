@@ -17,7 +17,7 @@ use Yggdrasil\Core\Routing\RoutingConfiguration;
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class RouterDriver implements DriverInterface
+abstract class RouterDriver implements DriverInterface
 {
     /**
      * Instance of router
@@ -25,15 +25,6 @@ class RouterDriver implements DriverInterface
      * @var Router
      */
     protected static $routerInstance;
-
-    /**
-     * RouterDriver constructor.
-     *
-     * Should be private to prevent object creation. Same with __clone
-     */
-    private function __construct() {}
-
-    private function __clone() {}
 
     /**
      * Returns instance of router

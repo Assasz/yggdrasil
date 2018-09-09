@@ -31,7 +31,7 @@ trait DriverAccessorTrait
     private $drivers;
 
     /**
-     * Returns component instance of given driver
+     * Returns component instance configured by given driver
      *
      * @param string $key Name of driver
      * @return mixed

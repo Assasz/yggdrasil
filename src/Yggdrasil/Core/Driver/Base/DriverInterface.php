@@ -7,7 +7,7 @@ use Yggdrasil\Core\Configuration\ConfigurationInterface;
 /**
  * Interface DriverInterface
  *
- * Implements singleton pattern in application driver
+ * Bridge between application and vendor
  *
  * @package Yggdrasil\Core\Driver\Base
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -15,7 +15,7 @@ use Yggdrasil\Core\Configuration\ConfigurationInterface;
 interface DriverInterface
 {
     /**
-     * Returns instance of specific component (not driver itself)
+     * Returns configured instance of specific vendor component
      *
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure component
      * @return mixed

@@ -14,7 +14,7 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class MailerDriver implements DriverInterface
+abstract class MailerDriver implements DriverInterface
 {
     /**
      * Instance of mailer
@@ -22,15 +22,6 @@ class MailerDriver implements DriverInterface
      * @var \Swift_Mailer
      */
     protected static $mailerInstance;
-
-    /**
-     * MailerDriver constructor.
-     *
-     * Should be private to prevent object creation. Same with __clone
-     */
-    private function __construct() {}
-
-    private function __clone() {}
 
     /**
      * Returns instance of mailer

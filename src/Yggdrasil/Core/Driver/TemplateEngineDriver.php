@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class TemplateEngineDriver implements DriverInterface
+abstract class TemplateEngineDriver implements DriverInterface
 {
     /**
      * Instance of template engine
@@ -26,15 +26,6 @@ class TemplateEngineDriver implements DriverInterface
      * @var \Twig_Environment
      */
     protected static $engineInstance;
-
-    /**
-     * TemplateEngineDriver constructor.
-     *
-     * Should be private to prevent object creation. Same with __clone
-     */
-    private function __construct() {}
-
-    private function __clone() {}
 
     /**
      * Returns instance of template engine
