@@ -37,9 +37,9 @@ final class ExceptionLogger
      */
     public function log(\Throwable $throwable)
     {
-        $date = new \DateTime();
+        $date = (new \DateTime())->format('Y-m-d H:i:s');
 
-        $log = "[$date] {$throwable->getMessage()} at line {$throwable->getLine()} in {$throwable->getFile()}";
+        $log = "[$date] {$throwable->getMessage()} at line {$throwable->getLine()} in {$throwable->getFile()}" . PHP_EOL;
 
         $handle = fopen($this->logPath, 'a');
         fwrite($handle, $log);
