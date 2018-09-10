@@ -32,20 +32,11 @@ abstract class AbstractConfiguration
 
     /**
      * AbstractConfiguration constructor.
-     *
-     * Gets configuration from configuration file specified in $configPath
-     *
-     * @param string $configPath Path of configuration file
      */
-    public function __construct(string $configPath)
+    public function __construct()
     {
-        $configFilePath = dirname(__DIR__, 7) . '/src/' . $configPath . '/config.ini';
-
-        if (!file_exists($configFilePath)) {
-            throw new ConfigurationNotFoundException('Configuration file in ' . $configFilePath . ' not found.');
-        }
-
-        $this->configuration = parse_ini_file($configFilePath, true);
+        $this->configuration = $this->parseConfiguration();
+        $this->drivers = $this->getDriverRegistry();
     }
 
     /**
@@ -106,4 +97,36 @@ abstract class AbstractConfiguration
 
         return !array_diff_key(array_flip($keys), $this->configuration[$section]);
     }
+
+    /**
+     * Parses config.ini file into configuration array
+     *
+     * @return array
+     *
+     * @throws ConfigurationNotFoundException if config.ini file doesn't exist in specified path
+     */
+    private function parseConfiguration(): array
+    {
+        $configFilePath = dirname(__DIR__, 7) . '/src/' . $this->getConfigPath() . '/config.ini';
+
+        if (!file_exists($configFilePath)) {
+            throw new ConfigurationNotFoundException('Configuration file in ' . $configFilePath . ' not found.');
+        }
+
+        return parse_ini_file($configFilePath, true);
+    }
+
+    /**
+     * Returns application config path
+     *
+     * @return string
+     */
+    abstract protected function getConfigPath(): string;
+
+    /**
+     * Returns application driver registry
+     *
+     * @return array
+     */
+    abstract protected function getDriverRegistry(): array;
 }
