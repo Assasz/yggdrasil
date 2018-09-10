@@ -5,6 +5,7 @@ namespace Yggdrasil\Core\Driver;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverInterface;
 use Whoops\Run;
+use Yggdrasil\Core\Exception\ExceptionLogger;
 use Yggdrasil\Core\Exception\MissingConfigurationException;
 
 /**
@@ -29,14 +30,16 @@ abstract class ExceptionHandlerDriver implements DriverInterface
      *
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure exception handler
      * @return Run
+     *
+     * @throws MissingConfigurationException if handler or log_path is not configured
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): Run
     {
         if (self::$handlerInstance === null) {
             $configuration = $appConfiguration->getConfiguration();
 
-            if (!$appConfiguration->isConfigured(['handler'], 'exception_handler')) {
-                throw new MissingConfigurationException('There is missing parameter in your configuration: handler in exception_handler section.');
+            if (!$appConfiguration->isConfigured(['handler', 'log_path'], 'exception_handler')) {
+                throw new MissingConfigurationException('There is missing parameter in your configuration: handler or log_path in exception_handler section.');
             }
 
             $run = new Run();
@@ -49,6 +52,13 @@ abstract class ExceptionHandlerDriver implements DriverInterface
                     echo 'Internal server error.';
                 });
             }
+
+            $logger = (new ExceptionLogger())
+                ->setLogPath(dirname(__DIR__, 7) . '/src/' . $configuration['exception_handler']['log_path'] . '/exceptions.txt');
+
+            $run->pushHandler(function ($exception) use ($logger) {
+                $logger->log($exception);
+            });
 
             $run->register();
 
