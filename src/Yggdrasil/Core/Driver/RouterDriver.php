@@ -51,7 +51,7 @@ abstract class RouterDriver implements DriverInterface
                 ->setControllerNamespace($configuration['router']['controller_namespace'])
                 ->setDefaultController($configuration['router']['default_controller'])
                 ->setDefaultAction($configuration['router']['default_action'])
-                ->setPassiveActions($passiveActions);
+                ->setPassiveActions($passiveActions ?? ['passive_actions' => []]);
 
             $router = new Router($routingConfig);
 
