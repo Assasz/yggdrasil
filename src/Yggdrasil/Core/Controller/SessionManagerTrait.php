@@ -15,16 +15,19 @@ use Symfony\Component\HttpFoundation\Session\Session;
 trait SessionManagerTrait
 {
     /**
-     * Starts user session
+     * Starts user session and returns session instance
      *
      * @param mixed $user Authenticated user instance
+     * @return Session
      */
-    protected function startUserSession($user): void
+    protected function startUserSession($user): Session
     {
         $session = new Session();
 
         $session->set('is_granted', true);
         $session->set('user', $user);
+
+        return $session;
     }
 
     /**
