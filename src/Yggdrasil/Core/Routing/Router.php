@@ -16,6 +16,20 @@ use Symfony\Component\HttpFoundation\Request;
 final class Router
 {
     /**
+     * Passive action type
+     *
+     * @var int
+     */
+    public const PASSIVE_ACTION = 0;
+
+    /**
+     * Active action type
+     *
+     * @var int
+     */
+    public const ACTIVE_ACTION = 1;
+
+    /**
      * Routing configuration
      *
      * @var RoutingConfiguration
@@ -71,14 +85,14 @@ final class Router
     }
 
     /**
-     * Returns route for requested action by alias, useful for passive actions
+     * Returns route for requested action by alias
      *
      * @param string $alias   Alias of action like Controller:action:parameters where parameters are optional
      * @param array  $params  Additional action parameters
-     * @param bool   $passive Indicates if requested action is passive
+     * @param int    $type    Type of action to resolve
      * @return Route
      */
-    public function getAliasedRoute(string $alias, array $params = [], bool $passive = false): Route
+    public function getAliasedRoute(string $alias, array $params = [], int $type = self::ACTIVE_ACTION): Route
     {
         $this->routeParams = explode(':', $alias);
 
@@ -88,7 +102,7 @@ final class Router
 
         $route = (new Route())
             ->setController($this->resolveController())
-            ->setAction(($passive) ? $this->resolvePassiveAction() : $this->resolveAction())
+            ->setAction((self::PASSIVE_ACTION === $type) ? $this->resolvePassiveAction() : $this->resolveAction())
             ->setActionParams($this->resolveActionParams());
 
         return $route;
@@ -123,7 +137,7 @@ final class Router
     }
 
     /**
-     * Returns query map like [Controller:action => query]
+     * Returns query map [Controller:action => query]
      *
      * @param array $protected Controllers to ignore
      * @return array
@@ -149,11 +163,7 @@ final class Router
             $actions = $controllerReflection->getMethods(\ReflectionMethod::IS_PUBLIC);
 
             foreach ($actions as $action) {
-                if (1 === preg_match('(Partial|Passive)', $action->getName())) {
-                    continue;
-                }
-
-                if ('__construct' === $action->getName()) {
+                if (1 === preg_match('(Partial|Passive|__construct)', $action->getName())) {
                     continue;
                 }
 
@@ -161,16 +171,10 @@ final class Router
                 $isApiAction = false;
 
                 foreach ($httpMethods as $method) {
-                    if (strstr($action, $method)) {
-                        $isApiAction = true;
-                    }
+                    $isApiAction = (!strstr($action, $method)) ?: true;
                 }
 
-                $actionAlias = str_replace(
-                    array_merge($httpMethods, ['Action']),
-                    '',
-                    $action->getName()
-                );
+                $actionAlias = str_replace(array_merge($httpMethods, ['Action']), '', $action->getName());
 
                 $alias = $controllerAlias . ':' . $actionAlias;
 

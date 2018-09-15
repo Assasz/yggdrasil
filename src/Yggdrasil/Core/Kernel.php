@@ -8,6 +8,7 @@ use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 use Yggdrasil\Core\Exception\ActionNotFoundException;
 use Yggdrasil\Core\Exception\ActionForbiddenException;
+use Yggdrasil\Core\Routing\Router;
 
 /**
  * Class Kernel
@@ -72,7 +73,7 @@ final class Kernel
     private function executePassiveActions(Request $request, Response $response): Response
     {
         foreach ($this->getRouter()->getConfiguration()->getPassiveActions() as $action) {
-            $route = $this->getRouter()->getAliasedRoute($action, [], true);
+            $route = $this->getRouter()->getAliasedRoute($action, [], Router::PASSIVE_ACTION);
 
             if (!method_exists($route->getController(), $route->getAction())) {
                 throw new ActionNotFoundException($action . ' passive action is present in registry, but can\'t be found or is improperly configured.');
