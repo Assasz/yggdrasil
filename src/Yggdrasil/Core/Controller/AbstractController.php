@@ -48,23 +48,40 @@ abstract class AbstractController
     }
 
     /**
-     * Renders given view
+     * Renders given view as response
      *
      * @param string $view    Name of view file
      * @param array  $params  Parameters supposed to be passed to the view
-     * @param bool   $partial Indicates if rendered view is partial
-     * @return Response|string
+     * @return Response
      *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    protected function render(string $view, array $params = [], bool $partial = false)
+    protected function render(string $view, array $params = []): Response
     {
         $this->getTemplateEngine()->addGlobal('_request', $this->getRequest());
         $template = $this->getTemplateEngine()->render($view, $params);
 
-        return (!$partial) ? $this->getResponse()->setContent($template) : $template;
+        return $this->getResponse()->setContent($template);
+    }
+
+    /**
+     * Renders partial view
+     *
+     * @param string $view    Name of view file
+     * @param array  $params  Parameters supposed to be passed to the view
+     * @return string
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    protected function renderPartial(string $view, array $params = []): string
+    {
+        $this->getTemplateEngine()->addGlobal('_request', $this->getRequest());
+
+        return $this->getTemplateEngine()->render($view, $params);
     }
 
     /**
