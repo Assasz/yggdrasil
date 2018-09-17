@@ -33,7 +33,7 @@ abstract class ApiController
     use DriverAccessorTrait;
 
     /**
-     * AbstractController constructor.
+     * ApiController constructor.
      *
      * @param DriverCollection $drivers
      * @param Request $request
