@@ -52,6 +52,7 @@ class FormExtension extends \Twig_Extension
             new \Twig_Function('begin_form', [$this, 'beginForm']),
             new \Twig_Function('end_form', [$this, 'endForm']),
             new \Twig_Function('form_field', [$this, 'addFormField']),
+            new \Twig_Function('text_area', [$this, 'addTextArea']),
             new \Twig_Function('select_list', [$this, 'addSelectList']),
             new \Twig_Function('button', [$this, 'addButton']),
             new \Twig_Function('csrf_token', [$this, 'generateCsrfToken']),
@@ -68,7 +69,7 @@ class FormExtension extends \Twig_Extension
     {
         $this->formOptions = $this->getFormOptions($name);
 
-        $form = '<form id="' . $name . '" action="' . $action . '" method="post"';
+        $form = "<form id=\"{$name}\" action=\"{$action}\" method=\"post\"";
 
         $usePjax = (isset($this->formOptions['use_pjax'])) ?
             filter_var($this->formOptions['use_pjax'], FILTER_VALIDATE_BOOLEAN)
@@ -81,7 +82,7 @@ class FormExtension extends \Twig_Extension
                 continue;
             }
 
-            $form .= ' ' . $attr . '="' . $value . '"';
+            $form .= " {$attr}=\"{$value}\"";
         }
 
         echo $form . $pjaxAttr . '>';
@@ -165,6 +166,61 @@ class FormExtension extends \Twig_Extension
             $wrapper->addElement($input);
         }
 
+        $wrapper->addElement($caption);
+
+        echo $wrapper;
+    }
+
+    /**
+     * Adds textarea to HTML form
+     *
+     * @param string $name Textarea name, equivalent to ID and name attributes
+     */
+    public function addTextArea(string $name): void
+    {
+        $options = $this->formOptions['fields'][$name];
+
+        $wrapper = $this->createWrapper();
+
+        $label = '';
+
+        if (isset($options['label']['text'])) {
+            $label = $this->createLabel($options['label']['text'], $name);
+
+            unset($options['label']['text']);
+        }
+
+        $textarea = HtmlTag::createElement('textarea')
+            ->set('id', $name)
+            ->set('name', $name);
+
+        $caption = '';
+
+        if (isset($options['caption']['text'])) {
+            $textarea->set('aria-describedby', $name . '_caption');
+            $caption = $this->createCaption($options['caption']['text'], $name);
+
+            unset($options['caption']['text']);
+        }
+
+        $elements = ['wrapper', 'label', 'textarea', 'caption'];
+
+        foreach ($options as $option => $attrs) {
+            foreach ($elements as $element) {
+                if ($element === $option) {
+                    if (in_array($element, ['label', 'caption']) && empty($$element)) {
+                        continue;
+                    }
+
+                    foreach ($attrs as $attr => $value) {
+                        $$element->set($attr, $value);
+                    }
+                }
+            }
+        }
+
+        $wrapper->addElement($label);
+        $wrapper->addElement($textarea);
         $wrapper->addElement($caption);
 
         echo $wrapper;
