@@ -81,7 +81,8 @@ final class Kernel
 
             $controllerName = $route->getController();
             $controller = new $controllerName($this->drivers, $request, $response);
-            $response = call_user_func_array([$controller, $route->getAction()], $route->getActionParams());
+
+            $response = $controller->{$route->getAction()}(...$route->getActionParams());
         }
 
         return $response;
@@ -126,7 +127,7 @@ final class Kernel
         $controllerName = $route->getController();
         $controller = new $controllerName($this->drivers, $request, $response);
 
-        return call_user_func_array([$controller, $route->getAction()], $route->getActionParams());
+        return $controller->{$route->getAction()}(...$route->getActionParams());
     }
 
     /**
@@ -151,6 +152,6 @@ final class Kernel
 
         $controller = new $controllerName($this->drivers, $request, $response);
 
-        return call_user_func([$controller, $actionName]);
+        return $controller->{$actionName}();
     }
 }
