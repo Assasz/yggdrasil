@@ -5,7 +5,7 @@ namespace Yggdrasil\Core\Service;
 /**
  * Interface ServiceInterface
  *
- * Interactor between input port and output port of service
+ * Interactor between input port and output port
  *
  * @package Yggdrasil\Core\Service
  * @author Paweł Antosiak <contact@pawelantosiak.com>
