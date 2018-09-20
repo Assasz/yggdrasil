@@ -369,7 +369,7 @@ class FormExtension extends \Twig_Extension
             return $elementMarkup;
         }
 
-        if (in_array($elementName, ['label', 'caption', 'wrapper']) && empty($elementMarkup)) {
+        if (in_array($elementName, ['label', 'caption']) && empty($elementMarkup)) {
             return $elementMarkup;
         }
 
