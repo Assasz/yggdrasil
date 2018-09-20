@@ -118,7 +118,7 @@ class FormExtension extends \Twig_Extension
     {
         $options = $this->formOptions['fields'][$name];
 
-        $wrapper = $this->createWrapper();
+        $wrapper = (isset($options['wrapper'])) ? $this->createWrapper() : '';
 
         $label = '';
 
@@ -142,20 +142,15 @@ class FormExtension extends \Twig_Extension
             unset($options['caption']['text']);
         }
 
-        $elements = ['wrapper', 'label', 'input', 'caption'];
+        $elements = [
+            'wrapper' => $wrapper,
+            'label' => $label,
+            'input' => $input,
+            'caption' => $caption
+        ];
 
-        foreach ($options as $option => $attrs) {
-            foreach ($elements as $element) {
-                if ($element === $option) {
-                    if (in_array($element, ['label', 'caption']) && empty($$element)) {
-                        continue;
-                    }
-
-                    foreach ($attrs as $attr => $value) {
-                        $$element->set($attr, $value);
-                    }
-                }
-            }
+        foreach ($elements as $name => $element) {
+            $$name = $this->assignOptionsToElement($options, $name, $element);
         }
 
         if (in_array($options['input']['type'] ?? 'text', ['checkbox', 'radio', 'file'])) {
@@ -180,7 +175,7 @@ class FormExtension extends \Twig_Extension
     {
         $options = $this->formOptions['fields'][$name];
 
-        $wrapper = $this->createWrapper();
+        $wrapper = (isset($options['wrapper'])) ? $this->createWrapper() : '';
 
         $label = '';
 
@@ -203,20 +198,15 @@ class FormExtension extends \Twig_Extension
             unset($options['caption']['text']);
         }
 
-        $elements = ['wrapper', 'label', 'textarea', 'caption'];
+        $elements = [
+            'wrapper' => $wrapper,
+            'label' => $label,
+            'textarea' => $textarea,
+            'caption' => $caption
+        ];
 
-        foreach ($options as $option => $attrs) {
-            foreach ($elements as $element) {
-                if ($element === $option) {
-                    if (in_array($element, ['label', 'caption']) && empty($$element)) {
-                        continue;
-                    }
-
-                    foreach ($attrs as $attr => $value) {
-                        $$element->set($attr, $value);
-                    }
-                }
-            }
+        foreach ($elements as $name => $element) {
+            $$name = $this->assignOptionsToElement($options, $name, $element);
         }
 
         $wrapper->addElement($label);
@@ -236,7 +226,7 @@ class FormExtension extends \Twig_Extension
     {
         $options = $this->formOptions['fields'][$name];
 
-        $wrapper = $this->createWrapper();
+        $wrapper = (isset($options['wrapper'])) ? $this->createWrapper() : '';
 
         $label = '';
 
@@ -247,7 +237,8 @@ class FormExtension extends \Twig_Extension
         }
 
         $list = HtmlTag::createElement('select')
-            ->set('id', $name);
+            ->set('id', $name)
+            ->set('name', $name);
 
         $caption = '';
 
@@ -258,38 +249,22 @@ class FormExtension extends \Twig_Extension
             unset($options['caption']['text']);
         }
 
-        $itemsElements = [];
-
         foreach ($items as $value => $text) {
-            $itemsElements[] = $list->addElement('option')
+            $item[] = $list->addElement('option')
                 ->set('value', $value)
                 ->text($text);
         }
 
-        $elements = ['wrapper', 'label', 'list', 'item', 'caption'];
+        $elements = [
+            'wrapper' => $wrapper,
+            'label' => $label,
+            'list' => $list,
+            'item' => $item ?? [],
+            'caption' => $caption
+        ];
 
-        foreach ($options as $option => $attrs) {
-            foreach ($elements as $element) {
-                if ($element === $option) {
-                    if (in_array($element, ['label', 'caption']) && empty($$element)) {
-                        continue;
-                    }
-
-                    if ('item' === $element) {
-                        foreach ($itemsElements as $item) {
-                            foreach ($attrs as $attr => $value) {
-                                $item->set($attr, $value);
-                            }
-                        }
-
-                        continue;
-                    }
-
-                    foreach ($attrs as $attr => $value) {
-                        $$element->set($attr, $value);
-                    }
-                }
-            }
+        foreach ($elements as $name => $element) {
+            $$name = $this->assignOptionsToElement($options, $name, $element);
         }
 
         $wrapper->addElement($label);
@@ -378,6 +353,35 @@ class FormExtension extends \Twig_Extension
         return HtmlTag::createElement('small')
             ->set('id', $name . '_caption')
             ->text($text);
+    }
+
+    /**
+     * Assigns options to form field element and returns ready markup
+     *
+     * @param array        $options       Form options for given field
+     * @param string       $elementName   Form field element name, e.g. label
+     * @param Markup|array $elementMarkup Form field element markup, or array of markup objects (select list items)
+     * @return Markup|array
+     */
+    private function assignOptionsToElement(array $options, string $elementName, $elementMarkup)
+    {
+        if (in_array($elementName, ['label', 'caption', 'wrapper']) && empty($elementMarkup)) {
+            return $elementMarkup;
+        }
+
+        foreach ($options[$elementName] as $attr => $value) {
+            if ('item' === $elementName) {
+                foreach ($elementMarkup as $item) {
+                    $item->set($attr, $value);
+                }
+
+                return $elementMarkup;
+            }
+
+            $elementMarkup->set($attr, $value);
+        }
+
+        return $elementMarkup;
     }
 
     /**
