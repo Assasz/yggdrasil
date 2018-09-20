@@ -118,7 +118,7 @@ class FormExtension extends \Twig_Extension
     {
         $options = $this->formOptions['fields'][$name];
 
-        $wrapper = (isset($options['wrapper'])) ? $this->createWrapper() : '';
+        $wrapper = $this->createWrapper();
 
         $label = '';
 
@@ -175,7 +175,7 @@ class FormExtension extends \Twig_Extension
     {
         $options = $this->formOptions['fields'][$name];
 
-        $wrapper = (isset($options['wrapper'])) ? $this->createWrapper() : '';
+        $wrapper = $this->createWrapper();
 
         $label = '';
 
@@ -226,7 +226,7 @@ class FormExtension extends \Twig_Extension
     {
         $options = $this->formOptions['fields'][$name];
 
-        $wrapper = (isset($options['wrapper'])) ? $this->createWrapper() : '';
+        $wrapper = $this->createWrapper();
 
         $label = '';
 
@@ -365,6 +365,10 @@ class FormExtension extends \Twig_Extension
      */
     private function assignOptionsToElement(array $options, string $elementName, $elementMarkup)
     {
+        if (!isset($options[$elementName])) {
+            return $elementMarkup;
+        }
+
         if (in_array($elementName, ['label', 'caption', 'wrapper']) && empty($elementMarkup)) {
             return $elementMarkup;
         }
