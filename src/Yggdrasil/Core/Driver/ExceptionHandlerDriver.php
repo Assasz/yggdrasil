@@ -48,7 +48,7 @@ abstract class ExceptionHandlerDriver implements DriverInterface
                 $handler = 'Whoops\Handler\\' . $configuration['exception_handler']['handler'] ?? 'PrettyPageHandler';
                 $run->pushHandler(new $handler());
             } else {
-                $run->pushHandler(self::getProdHandler($appConfiguration));
+                $run->pushHandler(static::getProdHandler($appConfiguration));
             }
 
             $logger = (new ExceptionLogger())
@@ -72,10 +72,5 @@ abstract class ExceptionHandlerDriver implements DriverInterface
      * @param ConfigurationInterface $appConfiguration
      * @return \Closure
      */
-    protected static function getProdHandler(ConfigurationInterface $appConfiguration): \Closure
-    {
-        return function () {
-            echo '<p>Internal server error</p>';
-        };
-    }
+    abstract protected static function getProdHandler(ConfigurationInterface $appConfiguration): \Closure;
 }
