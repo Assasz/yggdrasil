@@ -46,7 +46,7 @@ class EntitySerializer
                     continue;
                 }
 
-                $propertyName = lcfirst(substr($method, 3));
+                $propertyName = lcfirst(substr($method, (strpos($method, 'is') === 0) ? 2 : 3));
 
                 $value = $entity->{$method}();
 
