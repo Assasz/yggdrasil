@@ -277,7 +277,7 @@ class FormExtension extends \Twig_Extension
     /**
      * Adds button to HTML form
      *
-     * @param string $name    Button name, equivalent to ID attribute
+     * @param string $name Button name, equivalent to ID attribute
      */
     public function addButton(string $name): void
     {
@@ -302,7 +302,7 @@ class FormExtension extends \Twig_Extension
     /**
      * Generates CSRF token
      *
-     * @param int $length Number of bytes to use in generating token
+     * @param int $length Number of bytes to use to generate token
      * @return string
      *
      * @throws \Exception
@@ -311,8 +311,7 @@ class FormExtension extends \Twig_Extension
     {
         $token = bin2hex(random_bytes($length));
 
-        $session = new Session();
-        $session->set('csrf_token', $token);
+        (new Session())->set('csrf_token', $token);
 
         return $token;
     }
