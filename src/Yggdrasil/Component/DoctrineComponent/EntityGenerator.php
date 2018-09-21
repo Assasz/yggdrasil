@@ -222,7 +222,7 @@ class EntityGenerator
         }
 
         $setter
-            ->addBody('$this->' . $name . ' = $' . $name . ';')
+            ->addBody('$this->' . $name . ' = $' . $name . ';' . PHP_EOL)
             ->addBody('return $this;')
             ->setReturnType($this->entityData['namespace'] . '\\' . ucfirst($this->entityData['class']));
 
