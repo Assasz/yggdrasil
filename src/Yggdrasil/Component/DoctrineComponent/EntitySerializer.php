@@ -39,7 +39,10 @@ class EntitySerializer
             $methods[$i] = get_class_methods($entity);
 
             foreach ($methods[$i] as $method) {
-                if (strpos($method, 'get') === false || strpos($method, 'get') !== 0) {
+                if (
+                  (strpos($method, 'get') === false || strpos($method, 'get') !== 0) &&
+                  (strpos($method, 'is') === false || strpos($method, 'is') !== 0)
+                ) {
                     continue;
                 }
 
