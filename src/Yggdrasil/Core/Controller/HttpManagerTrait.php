@@ -111,7 +111,6 @@ trait HttpManagerTrait
      */
     protected function json(array $data = [], string $status = Response::HTTP_OK): JsonResponse
     {
-        $this->getResponse()->headers->set('Content-Type', 'application/json');
         $headers = $this->getResponse()->headers->all();
 
         return new JsonResponse($data, $status, $headers);

@@ -5,6 +5,7 @@ namespace Yggdrasil\Core\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\Base\DriverCollection;
 
@@ -69,8 +70,8 @@ abstract class AbstractController
     /**
      * Renders partial view
      *
-     * @param string $view    Name of view file
-     * @param array  $params  Parameters supposed to be passed to the view
+     * @param string $view   Name of view file
+     * @param array  $params Parameters supposed to be passed to the view
      * @return string
      *
      * @throws \Twig_Error_Loader
@@ -97,5 +98,25 @@ abstract class AbstractController
         $headers = $this->getResponse()->headers->all();
 
         return new RedirectResponse($query, Response::HTTP_FOUND, $headers);
+    }
+
+  /**
+   * Streams view
+   *
+   * @param string $view   Name of view file
+   * @param array  $params Parameters supposed to be passed to the view
+   * @return StreamedResponse
+   */
+    protected function stream(string $view, array $params = []): StreamedResponse
+    {
+        $templateEngine = $this->getTemplateEngine();
+
+        $callback = function () use ($templateEngine, $view, $params) {
+            $templateEngine->display($view, $params);
+        };
+
+        $headers = $this->getResponse()->headers->all();
+
+        return new StreamedResponse($callback, Response::HTTP_OK, $headers);
     }
 }
