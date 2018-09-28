@@ -2,9 +2,9 @@
 
 namespace Yggdrasil\Core\Driver;
 
+use Whoops\Run;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\Base\DriverInterface;
-use Whoops\Run;
 use Yggdrasil\Core\Exception\ExceptionLogger;
 use Yggdrasil\Core\Exception\MissingConfigurationException;
 

@@ -4,9 +4,9 @@ namespace Yggdrasil\Core\Driver;
 
 use Symfony\Component\Yaml\Yaml;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
+use Yggdrasil\Core\Driver\Base\DriverInterface;
 use Yggdrasil\Core\Exception\MissingConfigurationException;
 use Yggdrasil\Core\Routing\Router;
-use Yggdrasil\Core\Driver\Base\DriverInterface;
 use Yggdrasil\Core\Routing\RoutingConfiguration;
 
 /**

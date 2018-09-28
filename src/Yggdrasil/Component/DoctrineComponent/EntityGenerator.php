@@ -3,8 +3,8 @@
 namespace Yggdrasil\Component\DoctrineComponent;
 
 use Nette\PhpGenerator\ClassType;
-use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\Helpers;
+use Nette\PhpGenerator\PhpFile;
 
 /**
  * Class EntityGenerator
