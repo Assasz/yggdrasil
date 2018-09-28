@@ -31,7 +31,7 @@ abstract class ValidatorDriver implements DriverInterface
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure validator
      * @return RecursiveValidator
      *
-     * @throws MissingConfigurationException if resource path is not configured
+     * @throws MissingConfigurationException if resource_path is not configured
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): RecursiveValidator
     {

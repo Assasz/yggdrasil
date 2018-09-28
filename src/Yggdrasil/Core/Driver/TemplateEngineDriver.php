@@ -32,7 +32,7 @@ abstract class TemplateEngineDriver implements DriverInterface
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure template engine
      * @return \Twig_Environment
      *
-     * @throws MissingConfigurationException if view path or application_name is not configured
+     * @throws MissingConfigurationException if view_path, form_path or application_name is not configured
      */
     public static function getInstance(ConfigurationInterface $appConfiguration): \Twig_Environment
     {
