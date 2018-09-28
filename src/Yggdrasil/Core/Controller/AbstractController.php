@@ -100,13 +100,13 @@ abstract class AbstractController
         return new RedirectResponse($query, Response::HTTP_FOUND, $headers);
     }
 
-  /**
-   * Streams view
-   *
-   * @param string $view   Name of view file
-   * @param array  $params Parameters supposed to be passed to the view
-   * @return StreamedResponse
-   */
+    /**
+     * Streams view
+     *
+     * @param string $view   Name of view file
+     * @param array  $params Parameters supposed to be passed to the view
+     * @return StreamedResponse
+     */
     protected function stream(string $view, array $params = []): StreamedResponse
     {
         $templateEngine = $this->getTemplateEngine();
