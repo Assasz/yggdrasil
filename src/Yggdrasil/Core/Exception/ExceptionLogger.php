@@ -35,7 +35,7 @@ final class ExceptionLogger
      *
      * @param \Throwable $throwable
      */
-    public function log(\Throwable $throwable)
+    public function log(\Throwable $throwable): void
     {
         $date = (new \DateTime())->format('Y-m-d H:i:s');
 
