@@ -49,27 +49,22 @@ abstract class EntityManagerDriver implements DriverInterface
             }
 
             $connectionParams = [
-                'dbname' => $configuration['entity_manager']['db_name'],
-                'user' => $configuration['entity_manager']['db_user'],
+                'dbname'   => $configuration['entity_manager']['db_name'],
+                'user'     => $configuration['entity_manager']['db_user'],
                 'password' => $configuration['entity_manager']['db_password'],
-                'host' => $configuration['entity_manager']['db_host'],
-                'port' => $configuration['entity_manager']['db_port'] ?? 3306,
-                'driver' => $configuration['entity_manager']['db_driver'] ?? 'pdo_mysql',
-                'charset' => $configuration['entity_manager']['db_charset'] ?? 'UTF8'
+                'host'     => $configuration['entity_manager']['db_host'],
+                'port'     => $configuration['entity_manager']['db_port']    ?? 3306,
+                'driver'   => $configuration['entity_manager']['db_driver']  ?? 'pdo_mysql',
+                'charset'  => $configuration['entity_manager']['db_charset'] ?? 'UTF8'
             ];
 
-            $entityPath = [
-                dirname(__DIR__, 7) . '/src/' .
-                $configuration['entity_manager']['entity_namespace'] . '/'
-            ];
+            $entityPath = [dirname(__DIR__, 7) . '/src/' . $configuration['entity_manager']['entity_namespace'] . '/'];
 
             $config = Setup::createAnnotationMetadataConfiguration($entityPath);
             $config->addEntityNamespace('Entity', $configuration['entity_manager']['entity_namespace']);
 
             $connection = DriverManager::getConnection($connectionParams, $config);
-            $connection
-                ->getDatabasePlatform()
-                ->registerDoctrineTypeMapping('enum', 'string');
+            $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
             self::$managerInstance = EntityManager::create($connection, $config);
         }
