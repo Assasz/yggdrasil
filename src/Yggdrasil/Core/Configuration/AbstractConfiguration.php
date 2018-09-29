@@ -65,11 +65,22 @@ abstract class AbstractConfiguration
      */
     public function loadDriver(string $key)
     {
-        if (!array_key_exists($key, $this->drivers)) {
+        if (!$this->hasDriver($key)) {
             throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that ' . $key . ' driver is properly configured.');
         }
 
         return $this->drivers[$key]::getInstance($this);
+    }
+
+    /**
+     * Checks if given driver exist in registry
+     *
+     * @param string $key Name of driver
+     * @return bool
+     */
+    public function hasDriver(string $key): bool
+    {
+        return array_key_exists($key, $this->drivers);
     }
 
     /**

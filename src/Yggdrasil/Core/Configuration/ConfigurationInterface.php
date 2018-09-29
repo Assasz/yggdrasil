@@ -33,6 +33,14 @@ interface ConfigurationInterface
     public function loadDriver(string $key);
 
     /**
+     * Checks if given driver exist in registry
+     *
+     * @param string $key Name of driver
+     * @return bool
+     */
+    public function hasDriver(string $key): bool;
+
+    /**
      * Returns configuration
      *
      * @return array

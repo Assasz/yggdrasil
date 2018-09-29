@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Core\Driver;
 
+use Doctrine\Common\Cache\RedisCache;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
@@ -62,6 +63,15 @@ abstract class EntityManagerDriver implements DriverInterface
 
             $config = Setup::createAnnotationMetadataConfiguration($entityPath);
             $config->addEntityNamespace('Entity', $configuration['entity_manager']['entity_namespace']);
+
+            if (!DEBUG && $appConfiguration->hasDriver('cache')) {
+                $cacheDriver = new RedisCache();
+                $cacheDriver->setRedis($appConfiguration->loadDriver('cache'));
+
+                $config->setQueryCacheImpl($cacheDriver);
+                $config->setResultCacheImpl($cacheDriver);
+                $config->setMetadataCacheImpl($cacheDriver);
+            }
 
             $connection = DriverManager::getConnection($connectionParams, $config);
             $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
