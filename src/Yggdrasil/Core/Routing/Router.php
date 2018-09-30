@@ -171,7 +171,11 @@ final class Router
                 $isApiAction = false;
 
                 foreach ($httpMethods as $method) {
-                    $isApiAction = (!strstr($action, $method)) ?: true;
+                    if (strstr($action, $method . 'Action')) {
+                        $isApiAction = true;
+
+                        break;
+                    }
                 }
 
                 $actionAlias = str_replace(array_merge($httpMethods, ['Action']), '', $action->getName());
