@@ -115,4 +115,14 @@ trait HttpManagerTrait
 
         return new JsonResponse($data, $status, $headers);
     }
+
+    /**
+     * Checks if action is requested with Yjax
+     *
+     * @return bool
+     */
+    protected function isYjaxRequest(): bool
+    {
+        return $this->getRequest()->headers->has('X-YJAX');
+    }
 }
