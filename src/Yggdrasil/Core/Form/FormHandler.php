@@ -100,24 +100,4 @@ final class FormHandler
     {
         return array_key_exists($key, $this->dataCollection);
     }
-
-    /**
-     * Helper method that serializes form data into service request object
-     * Can be useful in particular cases
-     *
-     * @param ServiceRequestInterface $request
-     * @return ServiceRequestInterface
-     */
-    public function serializeData(ServiceRequestInterface $request): ServiceRequestInterface
-    {
-        foreach ($this->dataCollection as $key => $value) {
-            $setter = 'set' . ucfirst($key);
-
-            if (method_exists($request, $setter)) {
-                $request->{$setter}($value);
-            }
-        }
-
-        return $request;
-    }
 }
