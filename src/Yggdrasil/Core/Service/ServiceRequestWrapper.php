@@ -8,7 +8,7 @@ namespace Yggdrasil\Core\Service;
  * @package Yggdrasil\Core\Service
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-final class ServiceRequestWrapper
+abstract class ServiceRequestWrapper
 {
     /**
      * Wraps service request in data collection
