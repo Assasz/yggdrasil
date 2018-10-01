@@ -65,12 +65,16 @@ abstract class EntityManagerDriver implements DriverInterface
             $config->addEntityNamespace('Entity', $configuration['entity_manager']['entity_namespace']);
 
             if (!DEBUG && $appConfiguration->hasDriver('cache')) {
-                $cacheDriver = new RedisCache();
-                $cacheDriver->setRedis($appConfiguration->loadDriver('cache'));
+                $cache = $appConfiguration->loadDriver('cache');
 
-                $config->setQueryCacheImpl($cacheDriver);
-                $config->setResultCacheImpl($cacheDriver);
-                $config->setMetadataCacheImpl($cacheDriver);
+                if ($cache instanceof \Redis) {
+                    $cacheDriver = new RedisCache();
+                    $cacheDriver->setRedis($cache);
+
+                    $config->setQueryCacheImpl($cacheDriver);
+                    $config->setResultCacheImpl($cacheDriver);
+                    $config->setMetadataCacheImpl($cacheDriver);
+                }
             }
 
             $connection = DriverManager::getConnection($connectionParams, $config);
