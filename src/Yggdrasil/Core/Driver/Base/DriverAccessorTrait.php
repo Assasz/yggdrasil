@@ -2,10 +2,6 @@
 
 namespace Yggdrasil\Core\Driver\Base;
 
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Validator\Validator\RecursiveValidator;
-use Whoops\Run;
 use Yggdrasil\Core\Exception\NotServiceReturnedException;
 use Yggdrasil\Core\Exception\ServiceNotFoundException;
 use Yggdrasil\Core\Routing\Router;
@@ -44,9 +40,9 @@ trait DriverAccessorTrait
     /**
      * Returns entity manager instance
      *
-     * @return EntityManager
+     * @return mixed
      */
-    protected function getEntityManager(): EntityManager
+    protected function getEntityManager()
     {
         return $this->drivers->get('entityManager');
     }
@@ -54,9 +50,9 @@ trait DriverAccessorTrait
     /**
      * Returns template engine instance
      *
-     * @return \Twig_Environment
+     * @return mixed
      */
-    protected function getTemplateEngine(): \Twig_Environment
+    protected function getTemplateEngine()
     {
         return $this->drivers->get('templateEngine');
     }
@@ -74,9 +70,9 @@ trait DriverAccessorTrait
     /**
      * Returns validator instance
      *
-     * @return RecursiveValidator
+     * @return mixed
      */
-    protected function getValidator(): RecursiveValidator
+    protected function getValidator()
     {
         return $this->drivers->get('validator');
     }
@@ -84,9 +80,9 @@ trait DriverAccessorTrait
     /**
      * Returns mailer instance
      *
-     * @return \Swift_Mailer
+     * @return mixed
      */
-    protected function getMailer(): \Swift_Mailer
+    protected function getMailer()
     {
         return $this->drivers->get('mailer');
     }
@@ -94,9 +90,9 @@ trait DriverAccessorTrait
     /**
      * Returns container instance
      *
-     * @return ContainerBuilder
+     * @return mixed
      */
-    protected function getContainer(): ContainerBuilder
+    protected function getContainer()
     {
         return $this->drivers->get('container');
     }
@@ -104,11 +100,21 @@ trait DriverAccessorTrait
     /**
      * Returns exception handler instance
      *
-     * @return Run
+     * @return mixed
      */
-    protected function getExceptionHandler(): Run
+    protected function getExceptionHandler()
     {
         return $this->drivers->get('exceptionHandler');
+    }
+
+    /**
+     * Returns cache instance
+     *
+     * @return mixed
+     */
+    protected function getCache()
+    {
+        return $this->drivers->get('cache');
     }
 
     /**
