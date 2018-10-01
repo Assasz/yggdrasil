@@ -2,7 +2,7 @@
 
 namespace Yggdrasil\Core\Driver;
 
-use Doctrine\Common\Cache\{ApcuCache, MemcachedCache, XcacheCache, RedisCache};
+use Doctrine\Common\Cache\{MemcachedCache, RedisCache};
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
