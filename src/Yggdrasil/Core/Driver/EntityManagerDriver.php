@@ -2,7 +2,7 @@
 
 namespace Yggdrasil\Core\Driver;
 
-use Doctrine\Common\Cache\RedisCache;
+use Doctrine\Common\Cache\{ApcuCache, MemcachedCache, XcacheCache, RedisCache};
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
@@ -70,7 +70,14 @@ abstract class EntityManagerDriver implements DriverInterface
                 if ($cache instanceof \Redis) {
                     $cacheDriver = new RedisCache();
                     $cacheDriver->setRedis($cache);
+                }
 
+                if ($cache instanceof \Memcached) {
+                    $cacheDriver = new MemcachedCache();
+                    $cacheDriver->setMemcached($cache);
+                }
+
+                if (isset($cacheDriver)) {
                     $config->setQueryCacheImpl($cacheDriver);
                     $config->setResultCacheImpl($cacheDriver);
                     $config->setMetadataCacheImpl($cacheDriver);
