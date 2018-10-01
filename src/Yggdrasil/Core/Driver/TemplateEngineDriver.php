@@ -48,7 +48,7 @@ abstract class TemplateEngineDriver implements DriverInterface
             $formPath = $basePath . $configuration['template_engine']['form_path'];
 
             $loader = new \Twig_Loader_Filesystem($viewPath);
-            $twig = new \Twig_Environment($loader);
+            $twig = new \Twig_Environment($loader, ['cache' => (!DEBUG) ? dirname(__DIR__, 7) . '/var/twig' : false]);
 
             $twig->addGlobal('_appname', $configuration['template_engine']['application_name']);
             $twig->addExtension(new StandardExtension());
