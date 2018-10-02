@@ -54,27 +54,6 @@ class DebugExtension extends \Twig_Extension
         $debugBar = HtmlTag::createElement('div')
             ->set('id', 'debug_bar');
 
-        if (in_array('requestCollector', $data)) {
-            $requestDataList = HtmlTag::createElement('ul')
-                ->set('id', 'request_data_list');
-
-            foreach ($data['requestCollector'] as $dataGroup => $dataValues) {
-                $dataGroupList = HtmlTag::createElement('ul')
-                    ->set('id', $dataGroup . '_list');
-
-                foreach ($dataValues as $key => $value) {
-                    $listItem = HtmlTag::createElement('li')
-                        ->text($key . ': ' . $value);
-
-                    $dataGroupList->addElement($listItem);
-                }
-
-                $requestDataList->addElement($dataGroupList);
-            }
-
-            $debugBar->addElement($requestDataList);
-        }
-
         echo $debugBar;
     }
 }

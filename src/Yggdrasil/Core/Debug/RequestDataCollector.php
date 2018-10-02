@@ -18,7 +18,7 @@ class RequestDataCollector implements DataCollectorInterface
      *
      * @var string
      */
-    private const NAME = 'requestCollector';
+    private const NAME = 'requestDataCollector';
 
     /**
      * Data source
@@ -35,9 +35,7 @@ class RequestDataCollector implements DataCollectorInterface
     public function collect(): array
     {
         return [
-            'post_data' => $this->source->request->all(),
-            'get_data'  => $this->source->query->all(),
-            'cookies'  => $this->source->cookies->all()
+            'Route' => $this->source->query->get('route'),
         ];
     }
 
