@@ -2,7 +2,6 @@
 
 namespace Yggdrasil\Core\Driver;
 
-use Yggdrasil\Component\TwigComponent\DebugExtension;
 use Yggdrasil\Component\TwigComponent\FormExtension;
 use Yggdrasil\Component\TwigComponent\RoutingExtension;
 use Yggdrasil\Component\TwigComponent\StandardExtension;
@@ -55,7 +54,6 @@ abstract class TemplateEngineDriver implements DriverInterface
             $twig->addExtension(new StandardExtension());
             $twig->addExtension(new RoutingExtension($appConfiguration->loadDriver('router')));
             $twig->addExtension(new FormExtension($formPath));
-            $twig->addExtension(new DebugExtension($appConfiguration->loadDriver('debugProfiler')));
 
             self::$engineInstance = $twig;
         }
