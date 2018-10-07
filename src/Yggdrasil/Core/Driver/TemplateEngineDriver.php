@@ -55,9 +55,24 @@ abstract class TemplateEngineDriver implements DriverInterface
             $twig->addExtension(new RoutingExtension($appConfiguration->loadDriver('router')));
             $twig->addExtension(new FormExtension($formPath));
 
+            foreach (self::getExtensionRegistry($appConfiguration) as $extension) {
+                $twig->addExtension($extension);
+            }
+
             self::$engineInstance = $twig;
         }
 
         return self::$engineInstance;
+    }
+
+    /**
+     * Returns registered Twig extensions (excluding built-in)
+     *
+     * @param ConfigurationInterface $appConfiguration
+     * @return array
+     */
+    protected static function getExtensionRegistry(ConfigurationInterface $appConfiguration): array
+    {
+        return [];
     }
 }
