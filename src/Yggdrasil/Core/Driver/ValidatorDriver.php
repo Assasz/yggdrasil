@@ -36,11 +36,11 @@ abstract class ValidatorDriver implements DriverInterface
     public static function getInstance(ConfigurationInterface $appConfiguration): RecursiveValidator
     {
         if (self::$validatorInstance === null) {
-            $configuration = $appConfiguration->getConfiguration();
-
             if (!$appConfiguration->isConfigured(['resource_path'], 'validator')) {
                 throw new MissingConfigurationException('There is missing parameter in your configuration: resource_path in validator section.');
             }
+
+            $configuration = $appConfiguration->getConfiguration();
 
             $validationPath = dirname(__DIR__, 7) .
                 '/src/' . $configuration['validator']['resource_path'] . '/validation.yaml';

@@ -36,11 +36,11 @@ abstract class ExceptionHandlerDriver implements DriverInterface
     public static function getInstance(ConfigurationInterface $appConfiguration): Run
     {
         if (self::$handlerInstance === null) {
-            $configuration = $appConfiguration->getConfiguration();
-
             if (!$appConfiguration->isConfigured(['handler', 'log_path'], 'exception_handler')) {
                 throw new MissingConfigurationException('There is missing parameter in your configuration: handler or log_path in exception_handler section.');
             }
+
+            $configuration = $appConfiguration->getConfiguration();
 
             $run = new Run();
 

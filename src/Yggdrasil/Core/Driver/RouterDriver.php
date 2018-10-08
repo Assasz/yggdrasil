@@ -37,12 +37,13 @@ abstract class RouterDriver implements DriverInterface
     public static function getInstance(ConfigurationInterface $appConfiguration): Router
     {
         if (self::$routerInstance === null) {
-            $configuration = $appConfiguration->getConfiguration();
             $requiredConfig = ['default_controller', 'default_action', 'controller_namespace', 'base_url', 'resource_path'];
 
             if (!$appConfiguration->isConfigured($requiredConfig, 'router')) {
                 throw new MissingConfigurationException('There are missing parameters in your configuration: default_controller, default_action, controller_namespace, base_url or resource_path in router section.');
             }
+
+            $configuration = $appConfiguration->getConfiguration();
 
             $passiveActions = Yaml::parseFile(dirname(__DIR__, 7) . '/src/' . $configuration['router']['resource_path'] . '/passive_actions.yaml');
 

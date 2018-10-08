@@ -38,14 +38,14 @@ abstract class ContainerDriver implements DriverInterface
     public static function getInstance(ConfigurationInterface $appConfiguration): ContainerBuilder
     {
         if (self::$containerInstance === null) {
-            $container = new ContainerBuilder();
-            $configuration = $appConfiguration->getConfiguration();
-
             if (!$appConfiguration->isConfigured(['resource_path'], 'container')) {
                 throw new MissingConfigurationException('There is missing parameter in your configuration: resource_path in container section.');
             }
 
+            $configuration = $appConfiguration->getConfiguration();
             $resourcePath = dirname(__DIR__, 7) . '/src/' . $configuration['container']['resource_path'];
+
+            $container = new ContainerBuilder();
 
             $loader = new YamlFileLoader($container, new FileLocator($resourcePath));
             $loader->load('services.yaml');
