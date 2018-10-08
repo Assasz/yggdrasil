@@ -16,6 +16,23 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class StandardExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
     /**
+     * Application name
+     *
+     * @var string
+     */
+    private $appName;
+
+    /**
+     * StandardExtension constructor.
+     *
+     * @param string $appName
+     */
+    public function __construct(string $appName)
+    {
+        $this->appName = $appName;
+    }
+
+    /**
      * Returns set of globals
      *
      * @return array
@@ -25,8 +42,9 @@ class StandardExtension extends \Twig_Extension implements \Twig_Extension_Globa
         $session = new Session();
 
         return [
+            '_appname' => $this->appName,
             '_session' => $session,
-            '_user' => $session->get('user')
+            '_user'    => $session->get('user')
         ];
     }
 
@@ -41,19 +59,9 @@ class StandardExtension extends \Twig_Extension implements \Twig_Extension_Globa
             new \Twig_Function('flashbag', [$this, 'getFlashBag']),
             new \Twig_Function('is_granted', [$this, 'isGranted']),
             new \Twig_Function('is_pjax', [$this, 'isPjax']),
+            new \Twig_Function('is_yjax', [$this, 'isYjax']),
             new \Twig_Function('partial', [$this, 'embedPartial'])
         ];
-    }
-
-    /**
-     * Checks if website is requested with Pjax
-     *
-     * @param Request $request
-     * @return bool
-     */
-    public function isPjax(Request $request): bool
-    {
-        return ($request->headers->get('X-PJAX') !== null);
     }
 
     /**
@@ -75,6 +83,28 @@ class StandardExtension extends \Twig_Extension implements \Twig_Extension_Globa
     public function isGranted(): bool
     {
         return (new Session())->get('is_granted', false);
+    }
+
+    /**
+     * Checks if view is requested with Pjax
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public function isPjax(Request $request): bool
+    {
+        return $request->headers->has('X-PJAX');
+    }
+
+    /**
+     * Checks if view is requested with Yjax
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public function isYjax(Request $request): bool
+    {
+        return $request->headers->has('X-YJAX');
     }
 
     /**
