@@ -66,23 +66,11 @@ abstract class EntityManagerDriver implements DriverInterface
             $config->addEntityNamespace('Entity', $configuration['entity_manager']['entity_namespace']);
 
             if (!DEBUG && $appConfiguration->hasDriver('cache')) {
-                $cache = $appConfiguration->loadDriver('cache');
+                $cacheDriver = self::getCacheDriver($appConfiguration);
 
-                if ($cache instanceof \Redis) {
-                    $cacheDriver = new RedisCache();
-                    $cacheDriver->setRedis($cache);
-                }
-
-                if ($cache instanceof \Memcached) {
-                    $cacheDriver = new MemcachedCache();
-                    $cacheDriver->setMemcached($cache);
-                }
-
-                if (isset($cacheDriver)) {
-                    $config->setQueryCacheImpl($cacheDriver);
-                    $config->setResultCacheImpl($cacheDriver);
-                    $config->setMetadataCacheImpl($cacheDriver);
-                }
+                $config->setQueryCacheImpl($cacheDriver);
+                $config->setResultCacheImpl($cacheDriver);
+                $config->setMetadataCacheImpl($cacheDriver);
             }
 
             $connection = DriverManager::getConnection($connectionParams, $config);
@@ -92,5 +80,21 @@ abstract class EntityManagerDriver implements DriverInterface
         }
 
         return self::$managerInstance;
+    }
+
+    /**
+     * Returns cache driver for entity manager configuration
+     *
+     * @param ConfigurationInterface $appConfiguration
+     * @return RedisCache
+     */
+    protected static function getCacheDriver(ConfigurationInterface $appConfiguration): RedisCache
+    {
+        $redis = $appConfiguration->loadDriver('cache');
+
+        $cacheDriver = new RedisCache();
+        $cacheDriver->setRedis($redis);
+
+        return $cacheDriver;
     }
 }
