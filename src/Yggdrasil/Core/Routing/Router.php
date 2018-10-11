@@ -65,18 +65,18 @@ final class Router
         $query = $request->query->get('route');
         $this->routeParams = explode('/', trim($query, '/'));
 
-        $isApiCall = false;
+        $route = new Route();
 
         if ($this->routeParams[0] === 'api') {
             unset($this->routeParams[0]);
             $this->routeParams = array_values($this->routeParams);
 
-            $isApiCall = true;
+            $route->setApiCall(true);
         }
 
-        $route = (new Route())
+        $route
             ->setController($this->resolveController())
-            ->setAction(($isApiCall) ?
+            ->setAction(($route->isApiCall()) ?
                 $this->resolveApiAction($request->getMethod()) :
                 $this->resolveAction())
             ->setActionParams($this->resolveActionParams());
