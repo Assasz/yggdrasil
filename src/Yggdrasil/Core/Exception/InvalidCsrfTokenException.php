@@ -1,7 +1,6 @@
 <?php
 
 namespace Yggdrasil\Core\Exception;
-use Throwable;
 
 /**
  * Class InvalidCsrfTokenException
@@ -18,9 +17,9 @@ class InvalidCsrfTokenException extends \RuntimeException
      *
      * @param string $message
      * @param int $code
-     * @param Throwable|null $previous
+     * @param \Throwable|null $previous
      */
-    public function __construct(string $message = "Invalid CSRF token.", int $code = 0, Throwable $previous = null)
+    public function __construct(string $message = "Invalid CSRF token.", int $code = 0, \Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
