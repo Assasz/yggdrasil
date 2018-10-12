@@ -52,7 +52,7 @@ final class FormHandler
             $session = new Session();
 
             if ($session->get('csrf_token') !== $request->request->get('csrf_token')) {
-                throw new InvalidCsrfTokenException('Invalid CSRF token.');
+                throw new InvalidCsrfTokenException();
             }
 
             $request->request->remove('csrf_token');
@@ -84,7 +84,7 @@ final class FormHandler
     public function getData(string $key)
     {
         if (!$this->hasData($key)) {
-            throw new \InvalidArgumentException($key . ' not found in form data, that you submitted.');
+            throw new \InvalidArgumentException($key . ' not found in submitted form data.');
         }
 
         return $this->dataCollection[$key];
