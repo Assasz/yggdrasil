@@ -123,10 +123,10 @@ final class Router
             $queryParams[] = $param;
         }
 
-        if (empty($queryParams[2]) && $queryParams[1] . 'Action' === $this->configuration->getDefaultAction()) {
+        if (empty($queryParams[2]) && $queryParams[1] === $this->configuration->getDefaultAction()) {
             unset($queryParams[1]);
 
-            if (ucfirst($queryParams[0]) . 'Controller' === $this->configuration->getDefaultController()) {
+            if (ucfirst($queryParams[0]) === $this->configuration->getDefaultController()) {
                 unset($queryParams[0]);
             }
         }
@@ -201,10 +201,10 @@ final class Router
     private function resolveController(): string
     {
         $controller = (!empty($this->routeParams[0])) ?
-            $this->configuration->getControllerNamespace() . ucfirst($this->routeParams[0]) . 'Controller' :
+            $this->configuration->getControllerNamespace() . ucfirst($this->routeParams[0]) :
             $this->configuration->getControllerNamespace() . $this->configuration->getDefaultController();
 
-        return $controller;
+        return $controller . 'Controller';
     }
 
     /**
@@ -215,10 +215,10 @@ final class Router
     private function resolveAction(): string
     {
         $action = (!empty($this->routeParams[1])) ?
-            $this->routeParams[1] . 'Action' :
+            $this->routeParams[1] :
             $this->configuration->getDefaultAction();
 
-        return $action;
+        return $action . 'Action';
     }
 
     /**
@@ -244,10 +244,10 @@ final class Router
         $method = ucfirst(strtolower($method));
 
         $action = (!empty($this->routeParams[1])) ?
-            $this->routeParams[1] . $method . 'Action' :
+            $this->routeParams[1] . $method :
             $this->configuration->getDefaultAction();
 
-        return $action;
+        return $action . 'Action';
     }
 
     /**
