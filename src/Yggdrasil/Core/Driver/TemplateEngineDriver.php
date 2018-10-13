@@ -37,8 +37,10 @@ abstract class TemplateEngineDriver implements DriverInterface
     public static function getInstance(ConfigurationInterface $appConfiguration): \Twig_Environment
     {
         if (self::$engineInstance === null) {
-            if (!$appConfiguration->isConfigured(['view_path', 'form_path', 'application_name'], 'template_engine')) {
-                throw new MissingConfigurationException('There are missing parameters in your configuration: view_path, form_path or application_name in template_engine section.');
+            $requiredConfig = ['view_path', 'form_path', 'application_name'];
+
+            if (!$appConfiguration->isConfigured($requiredConfig, 'template_engine')) {
+                throw new MissingConfigurationException($requiredConfig, 'template_engine');
             }
 
             $configuration = $appConfiguration->getConfiguration();

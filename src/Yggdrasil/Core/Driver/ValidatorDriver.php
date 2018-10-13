@@ -37,7 +37,7 @@ abstract class ValidatorDriver implements DriverInterface
     {
         if (self::$validatorInstance === null) {
             if (!$appConfiguration->isConfigured(['resource_path'], 'validator')) {
-                throw new MissingConfigurationException('There is missing parameter in your configuration: resource_path in validator section.');
+                throw new MissingConfigurationException(['resource_path'], 'validator');
             }
 
             $configuration = $appConfiguration->getConfiguration();

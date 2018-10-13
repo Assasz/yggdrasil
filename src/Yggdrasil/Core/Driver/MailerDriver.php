@@ -34,8 +34,10 @@ abstract class MailerDriver implements DriverInterface
     public static function getInstance(ConfigurationInterface $appConfiguration): \Swift_Mailer
     {
         if (self::$mailerInstance === null) {
-            if (!$appConfiguration->isConfigured(['host', 'username', 'password'], 'mailer')) {
-                throw new MissingConfigurationException('There are missing parameters in your configuration. host, username or password in section mailer');
+            $requiredConfig = ['host', 'username', 'password'];
+
+            if (!$appConfiguration->isConfigured($requiredConfig, 'mailer')) {
+                throw new MissingConfigurationException($requiredConfig, 'mailer');
             }
 
             $configuration = $appConfiguration->getConfiguration();

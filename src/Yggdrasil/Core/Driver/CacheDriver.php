@@ -34,8 +34,10 @@ abstract class CacheDriver implements DriverInterface
     public static function getInstance(ConfigurationInterface $appConfiguration): \Redis
     {
         if (self::$cacheInstance === null) {
-            if (!$appConfiguration->isConfigured(['redis_host', 'redis_port'], 'cache')) {
-                throw new MissingConfigurationException('There are missing parameters in your configuration: redis_host or redis_port in section cache.');
+            $requiredConfig = ['redis_host', 'redis_port'];
+
+            if (!$appConfiguration->isConfigured($requiredConfig, 'cache')) {
+                throw new MissingConfigurationException($requiredConfig, 'cache');
             }
 
             $configuration = $appConfiguration->getConfiguration();

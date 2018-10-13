@@ -17,7 +17,7 @@ class InvalidCsrfTokenException extends \RuntimeException
      *
      * @param string $message
      * @param int $code
-     * @param \Throwable|null $previous
+     * @param \Throwable? $previous
      */
     public function __construct(string $message = "Invalid CSRF token.", int $code = 0, \Throwable $previous = null)
     {

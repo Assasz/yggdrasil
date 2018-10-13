@@ -45,7 +45,7 @@ abstract class EntityManagerDriver implements DriverInterface
             $requiredConfig = ['db_name', 'db_user', 'db_password', 'db_host', 'entity_namespace'];
 
             if (!$appConfiguration->isConfigured($requiredConfig, 'entity_manager')) {
-                throw new MissingConfigurationException('There are missing parameters in your configuration: db_name, db_user, db_password, db_host or entity_namespace in section entity_manager.');
+                throw new MissingConfigurationException($requiredConfig, 'entity_manager');
             }
 
             $configuration = $appConfiguration->getConfiguration();

@@ -39,7 +39,7 @@ abstract class ContainerDriver implements DriverInterface
     {
         if (self::$containerInstance === null) {
             if (!$appConfiguration->isConfigured(['resource_path'], 'container')) {
-                throw new MissingConfigurationException('There is missing parameter in your configuration: resource_path in container section.');
+                throw new MissingConfigurationException(['resource_path'], 'container');
             }
 
             $configuration = $appConfiguration->getConfiguration();
