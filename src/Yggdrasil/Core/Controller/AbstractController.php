@@ -88,12 +88,17 @@ abstract class AbstractController
     /**
      * Redirects to given action
      *
-     * @param string $alias  Alias of action like Controller:action
-     * @param array  $params Parameters supposed to be passed to the action
+     * @param string? $alias  Alias of action like Controller:action
+     * @param array   $params Parameters supposed to be passed to the action
      * @return RedirectResponse
      */
-    protected function redirectToAction(string $alias, array $params = []): RedirectResponse
+    protected function redirectToAction(string $alias = null, array $params = []): RedirectResponse
     {
+        if (empty($alias)) {
+            $routerConfig = $this->getRouter()->getConfiguration();
+            $alias = $routerConfig->getDefaultController() . ':' . $routerConfig->getDefaultAction();
+        }
+
         $query = $this->getRouter()->getQuery($alias, $params);
         $headers = $this->getResponse()->headers->all();
 
