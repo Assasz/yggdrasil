@@ -88,7 +88,7 @@ abstract class AbstractController
     /**
      * Redirects to given action
      *
-     * @param string? $alias  Alias of action like Controller:action
+     * @param string? $alias  Alias of action like Controller:action, if left empty default action will be chosen
      * @param array   $params Parameters supposed to be passed to the action
      * @return RedirectResponse
      */
