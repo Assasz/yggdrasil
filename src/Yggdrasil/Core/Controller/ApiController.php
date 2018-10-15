@@ -59,6 +59,35 @@ abstract class ApiController
      */
     protected function fromBody(string $key)
     {
+        $dataCollection = $this->parseBody();
+
+        if (!isset($dataCollection[$key])) {
+            throw new \InvalidArgumentException('Data with key ' . $key . ' doesn\'t exist in request body.');
+        }
+
+        return $dataCollection[$key];
+    }
+
+    /**
+     * Checks if data with given key exist in request body
+     *
+     * @param string $key
+     * @return bool
+     */
+    protected function inBody(string $key): bool
+    {
+        $dataCollection = $this->parseBody();
+
+        return isset($dataCollection[$key]);
+    }
+
+    /**
+     * Parses request body into array
+     *
+     * @return array
+     */
+    protected function parseBody(): array
+    {
         if ($this->getRequest()->headers->get('Content-Type') === 'application/json') {
             $dataCollection = json_decode($this->getRequest()->getContent(), true);
         } else {
@@ -72,19 +101,7 @@ abstract class ApiController
             }
         }
 
-        if (array_key_exists('csrf_token', $dataCollection)) {
-            $session = new Session();
-
-            if ($dataCollection['csrf_token'] !== $session->get('csrf_token')) {
-                throw new InvalidCsrfTokenException();
-            }
-        }
-
-        if (!isset($dataCollection[$key])) {
-            throw new \InvalidArgumentException('Data with key ' . $key . ' doesn\'t exist in request body.');
-        }
-
-        return $dataCollection[$key];
+        return $dataCollection;
     }
 
     /**
