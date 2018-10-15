@@ -4,8 +4,10 @@ namespace Yggdrasil\Core\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\Base\DriverCollection;
+use Yggdrasil\Core\Exception\InvalidCsrfTokenException;
 
 /**
  * Class ApiController
@@ -53,6 +55,7 @@ abstract class ApiController
      * @return mixed
      *
      * @throws \InvalidArgumentException if data specified by key doesn't exist
+     * @throws InvalidCsrfTokenException if CSRF token doesn't match token stored in session
      */
     protected function fromBody(string $key)
     {
@@ -66,6 +69,14 @@ abstract class ApiController
                 );
             } else {
                 parse_str($this->getRequest()->getContent(), $dataCollection);
+            }
+        }
+
+        if (array_key_exists('csrf_token', $dataCollection)) {
+            $session = new Session();
+
+            if ($dataCollection['csrf_token'] !== $session->get('csrf_token')) {
+                throw new InvalidCsrfTokenException();
             }
         }
 
