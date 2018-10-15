@@ -61,7 +61,7 @@ abstract class ApiController
     {
         $dataCollection = $this->parseBody();
 
-        if (!isset($dataCollection[$key])) {
+        if (!$this->inBody($key)) {
             throw new \InvalidArgumentException('Data with key ' . $key . ' doesn\'t exist in request body.');
         }
 
