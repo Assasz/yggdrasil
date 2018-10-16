@@ -26,7 +26,7 @@ final class WampServerAdapter
      *
      * @var RouteCollector
      */
-    private $mapper;
+    private $collector;
 
     /**
      * Application configuration
@@ -39,13 +39,13 @@ final class WampServerAdapter
      * WampServerAdapter constructor.
      *
      * @param WampServer $server
-     * @param RouteCollector $mapper
+     * @param RouteCollector $collector
      * @param ConfigurationInterface $appConfiguration
      */
-    public function __construct(WampServer $server, RouteCollector $mapper, ConfigurationInterface $appConfiguration)
+    public function __construct(WampServer $server, RouteCollector $collector, ConfigurationInterface $appConfiguration)
     {
         $this->server = $server;
-        $this->mapper = $mapper;
+        $this->collector = $collector;
         $this->appConfiguration = $appConfiguration;
     }
 
@@ -58,9 +58,9 @@ final class WampServerAdapter
     {
         $configuration = $this->appConfiguration->getConfiguration();
 
-        $routes = $this->mapper
+        $routes = $this->collector
             ->setConfiguration($this->appConfiguration)
-            ->getRouteMap();
+            ->getRouteCollection();
 
         $this->server
             ->setConfiguration($configuration['wamp'])
