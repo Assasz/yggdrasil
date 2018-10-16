@@ -12,7 +12,7 @@ use Ratchet\App;
  * @package Yggdrasil\Component\NidhoggComponent
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class WampServer
+final class WampServer
 {
     /**
      * WampServer configuration
@@ -35,8 +35,13 @@ class WampServer
     {
         $server = new App($this->configuration['host'], $this->configuration['port']);
 
-        foreach ($this->routes as $route => $socket) {
-          $server->route($route, $socket);
+        foreach ($this->routes as $route) {
+            $server->route(
+                $route->getPath(),
+                $route->getTopic(),
+                $route->getAllowedOrigins(),
+                $route->getHost()
+            );
         }
 
         $server->run();

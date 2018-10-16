@@ -2,7 +2,6 @@
 
 namespace Yggdrasil\Component\NidhoggComponent;
 
-use HaydenPierce\ClassFinder\ClassFinder;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 
 /**
@@ -13,7 +12,7 @@ use Yggdrasil\Core\Configuration\ConfigurationInterface;
  * @package Yggdrasil\Component\NidhoggComponent
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class WampAdapter
+final class WampAdapter
 {
     /**
      * Instance of WampServer
@@ -21,6 +20,13 @@ class WampAdapter
      * @var WampServer
      */
     private $server;
+
+    /**
+     * Instance of RouteCollector
+     *
+     * @var RouteCollector
+     */
+    private $mapper;
 
     /**
      * Application configuration
@@ -33,31 +39,32 @@ class WampAdapter
      * WampAdapter constructor.
      *
      * @param WampServer $server
+     * @param RouteCollector $mapper
      * @param ConfigurationInterface $appConfiguration
      */
-    public function __construct(WampServer $server, ConfigurationInterface $appConfiguration)
+    public function __construct(WampServer $server, RouteCollector $mapper, ConfigurationInterface $appConfiguration)
     {
+        $this->server = $server;
+        $this->mapper = $mapper;
         $this->appConfiguration = $appConfiguration;
-        $configuration = $this->appConfiguration->getConfiguration();
-
-        $this->server = $server->setConfiguration($configuration['wamp']);
     }
 
-  /**
-     * Returns routes for sockets in given namespace [route => socket]
-     *
-     * @return array
+    /**
+     * Runs configured WampServer
      *
      * @throws \Exception
      */
-    public function getRoutes(): array
+    public function runServer(): void
     {
         $configuration = $this->appConfiguration->getConfiguration();
 
-        $sockets = ClassFinder::getClassesInNamespace(rtrim($configuration['wamp']['socket_namespace'], '\\'));
+        $routes = $this->mapper
+            ->setConfiguration($this->appConfiguration)
+            ->getRouteMap();
 
-        foreach ($sockets as $socket) {
-            $socketReflection = new \ReflectionClass($socket);
-        }
+        $this->server
+            ->setConfiguration($configuration['wamp'])
+            ->setRoutes($routes)
+            ->run();
     }
 }

@@ -10,7 +10,7 @@ namespace Yggdrasil\Core\Exception;
  * @package Yggdrasil\Core\Exception
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class ActionForbiddenException extends \LogicException
+class ActionForbiddenException extends \RuntimeException
 {
 
 }
