@@ -5,14 +5,14 @@ namespace Yggdrasil\Component\NidhoggComponent;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 
 /**
- * Class WampAdapter
+ * Class WampServerAdapter
  *
  * Adapter for WampServer
  *
  * @package Yggdrasil\Component\NidhoggComponent
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-final class WampAdapter
+final class WampServerAdapter
 {
     /**
      * Instance of WampServer
@@ -36,7 +36,7 @@ final class WampAdapter
     private $appConfiguration;
 
     /**
-     * WampAdapter constructor.
+     * WampServerAdapter constructor.
      *
      * @param WampServer $server
      * @param RouteCollector $mapper
