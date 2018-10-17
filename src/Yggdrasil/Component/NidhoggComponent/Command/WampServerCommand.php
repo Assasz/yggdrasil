@@ -39,7 +39,7 @@ class WampServerCommand extends Command
         parent::__construct();
     }
 
-  /**
+    /**
      * Configures command
      */
     protected function configure(): void
