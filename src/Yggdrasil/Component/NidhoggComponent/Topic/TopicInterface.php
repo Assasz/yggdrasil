@@ -1,11 +1,11 @@
 <?php
 
-namespace Yggdrasil\Component\NidhoggComponent;
+namespace Yggdrasil\Component\NidhoggComponent\Topic;
 
 /**
  * Interface TopicInterface
  *
- * @package Yggdrasil\Component\NidhoggComponent
+ * @package Yggdrasil\Component\NidhoggComponent\Topic
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 interface TopicInterface

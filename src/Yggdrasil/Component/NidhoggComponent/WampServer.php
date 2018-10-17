@@ -39,8 +39,8 @@ final class WampServer
             $server->route(
                 $route->getPath(),
                 $route->getTopic(),
-                $route->getAllowedOrigins(),
-                $route->getHost()
+                $route->getTopic()->getAllowedOrigins(),
+                $route->getTopic()->getHost()
             );
         }
 

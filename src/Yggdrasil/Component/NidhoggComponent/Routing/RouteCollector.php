@@ -1,17 +1,18 @@
 <?php
 
-namespace Yggdrasil\Component\NidhoggComponent;
+namespace Yggdrasil\Component\NidhoggComponent\Routing;
 
 use HaydenPierce\ClassFinder\ClassFinder;
-use Ratchet\Wamp\WampServerInterface;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
+use Yggdrasil\Component\NidhoggComponent\Exception\NotTopicFoundException;
+use Yggdrasil\Component\NidhoggComponent\Topic\TopicInterface;
 
 /**
  * Class RouteCollector
  *
  * Collects routes for WampServer
  *
- * @package Yggdrasil\Component\NidhoggComponent
+ * @package Yggdrasil\Component\NidhoggComponent\Routing
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 final class RouteCollector
@@ -40,7 +41,7 @@ final class RouteCollector
      * Returns routes collected by topics existing in application
      *
      * @return array
-     * @example [/chat/member => ChatMemberTopic]
+     * @example route: /chat/member => ChatMemberTopic
      *
      * @throws \Exception
      * @throws \ReflectionException
@@ -50,9 +51,7 @@ final class RouteCollector
     {
         $routeCollection = [];
         $configuration   = $this->appConfiguration->getConfiguration();
-        $topics          = ClassFinder::getClassesInNamespace(
-            rtrim($configuration['wamp']['topic_namespace'], '\\')
-        );
+        $topics          = ClassFinder::getClassesInNamespace(rtrim($configuration['wamp']['topic_namespace'], '\\'));
 
         foreach ($topics as $topic) {
             $topicReflection = new \ReflectionClass($topic);
@@ -68,9 +67,7 @@ final class RouteCollector
 
             $route = (new Route())
                 ->setPath(implode('/', $routeParts))
-                ->setTopic($topicInstance)
-                ->setAllowedOrigins($topicInstance->getAllowedOrigins())
-                ->setHost($topicInstance->getHost());
+                ->setTopic($topicInstance);
 
             $routeCollection[] = $route;
         }

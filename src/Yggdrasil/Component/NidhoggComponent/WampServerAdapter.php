@@ -3,6 +3,7 @@
 namespace Yggdrasil\Component\NidhoggComponent;
 
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
+use Yggdrasil\Component\NidhoggComponent\Routing\RouteCollector;
 
 /**
  * Class WampServerAdapter
@@ -26,7 +27,7 @@ final class WampServerAdapter
      *
      * @var RouteCollector
      */
-    private $collector;
+    private $routeCollector;
 
     /**
      * Application configuration
@@ -39,13 +40,13 @@ final class WampServerAdapter
      * WampServerAdapter constructor.
      *
      * @param WampServer $server
-     * @param RouteCollector $collector
+     * @param RouteCollector $routeCollector
      * @param ConfigurationInterface $appConfiguration
      */
-    public function __construct(WampServer $server, RouteCollector $collector, ConfigurationInterface $appConfiguration)
+    public function __construct(WampServer $server, RouteCollector $routeCollector, ConfigurationInterface $appConfiguration)
     {
         $this->server = $server;
-        $this->collector = $collector;
+        $this->routeCollector = $routeCollector;
         $this->appConfiguration = $appConfiguration;
     }
 
@@ -58,7 +59,7 @@ final class WampServerAdapter
     {
         $configuration = $this->appConfiguration->getConfiguration();
 
-        $routes = $this->collector
+        $routes = $this->routeCollector
             ->setConfiguration($this->appConfiguration)
             ->getRouteCollection();
 

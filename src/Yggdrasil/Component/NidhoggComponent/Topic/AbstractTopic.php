@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Component\NidhoggComponent;
+namespace Yggdrasil\Component\NidhoggComponent\Topic;
 
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
@@ -13,7 +13,7 @@ use Yggdrasil\Core\Driver\Base\DriverCollection;
  *
  * Base class for application WAMP topics
  *
- * @package Yggdrasil\Component\NidhoggComponent
+ * @package Yggdrasil\Component\NidhoggComponent\Topic
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 abstract class AbstractTopic implements TopicInterface, WampServerInterface
