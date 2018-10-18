@@ -45,7 +45,7 @@ class WampServerCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('wamp-server:run')
+            ->setName('nidhogg:wamp-server:run')
             ->setDescription('Runs WAMP server.')
             ->setHelp('This command will start WAMP server.');
     }
