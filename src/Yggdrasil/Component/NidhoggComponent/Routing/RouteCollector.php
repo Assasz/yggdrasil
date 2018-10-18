@@ -50,23 +50,22 @@ final class RouteCollector
     public function getRouteCollection(): array
     {
         $routeCollection = [];
-        $configuration   = $this->appConfiguration->getConfiguration();
-        $topics          = ClassFinder::getClassesInNamespace(rtrim($configuration['wamp']['topic_namespace'], '\\'));
+        $configuration = $this->appConfiguration->getConfiguration();
+        $topics = ClassFinder::getClassesInNamespace(rtrim($configuration['wamp']['topic_namespace'], '\\'));
 
         foreach ($topics as $topic) {
             $topicReflection = new \ReflectionClass($topic);
             $topicName       = $topicReflection->getName();
             $topicShortName  = $topicReflection->getShortName();
-
-            $routeParts  = preg_split('/(?=[A-Z])/', $topicShortName);
-            $topicInstance = new $topicName($this->appConfiguration->loadDrivers());
+            $topicPath       = implode('/', preg_split('/(?=[A-Z])/', $topicShortName));
+            $topicInstance   = new $topicName($this->appConfiguration->loadDrivers());
 
             if (!$topicInstance instanceof TopicInterface) {
                 throw new NotTopicFoundException($topicShortName . ' is not a topic instance.');
             }
 
             $route = (new Route())
-                ->setPath(implode('/', $routeParts))
+                ->setPath($topicPath)
                 ->setTopic($topicInstance);
 
             $routeCollection[] = $route;

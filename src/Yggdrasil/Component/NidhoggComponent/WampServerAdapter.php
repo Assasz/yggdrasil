@@ -57,14 +57,12 @@ final class WampServerAdapter
      */
     public function runServer(): void
     {
-        $configuration = $this->appConfiguration->getConfiguration();
-
         $routes = $this->routeCollector
             ->setConfiguration($this->appConfiguration)
             ->getRouteCollection();
 
         $this->server
-            ->setConfiguration($configuration['wamp'])
+            ->setConfiguration($this->appConfiguration)
             ->setRoutes($routes)
             ->run();
     }

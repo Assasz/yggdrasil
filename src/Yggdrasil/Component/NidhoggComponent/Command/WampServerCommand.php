@@ -60,10 +60,15 @@ class WampServerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        (new WampServerAdapter(new WampServer(), new RouteCollector(), $this->appConfiguration))->runServer();
+        $this->appConfiguration
+            ->loadDriver('wampServer')
+            ->runServer();
 
         $configuration = $this->appConfiguration->getConfiguration();
 
-        $output->writeln('WAMP server is running on ' . $configuration['wamp']['host'] . ':' . $configuration['wamp']['port']);
+        $output->writeln([
+            "WAMP server is running!",
+            "On {$configuration['wamp']['host']}:{$configuration['wamp']['port']}"
+        ]);
     }
 }

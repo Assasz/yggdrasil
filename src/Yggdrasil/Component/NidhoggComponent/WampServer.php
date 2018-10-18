@@ -3,6 +3,7 @@
 namespace Yggdrasil\Component\NidhoggComponent;
 
 use Ratchet\App;
+use Yggdrasil\Core\Configuration\ConfigurationInterface;
 
 /**
  * Class WampServer
@@ -15,47 +16,28 @@ use Ratchet\App;
 final class WampServer
 {
     /**
-     * WampServer configuration
+     * Application configuration
      *
-     * @var array
+     * @var ConfigurationInterface
      */
-    private $configuration;
+    private $appConfiguration;
 
     /**
-     * Collection of socket routes
+     * Collection of topic routes
      *
      * @var array
      */
     private $routes;
 
     /**
-     * Runs server
-     */
-    public function run(): void
-    {
-        $server = new App($this->configuration['host'], $this->configuration['port']);
-
-        foreach ($this->routes as $route) {
-            $server->route(
-                $route->getPath(),
-                $route->getTopic(),
-                $route->getTopic()->getAllowedOrigins(),
-                $route->getTopic()->getHost()
-            );
-        }
-
-        $server->run();
-    }
-
-    /**
-     * Sets WampServer configuration
+     * Sets application configuration
      *
-     * @param array $configuration
+     * @param ConfigurationInterface $appConfiguration
      * @return WampServer
      */
-    public function setConfiguration(array $configuration): WampServer
+    public function setConfiguration(ConfigurationInterface $appConfiguration): WampServer
     {
-        $this->configuration = $configuration;
+        $this->appConfiguration = $appConfiguration;
 
         return $this;
     }
@@ -71,5 +53,26 @@ final class WampServer
         $this->routes = $routes;
 
         return $this;
+    }
+
+    /**
+     * Runs server
+     */
+    public function run(): void
+    {
+        $configuration = $this->appConfiguration->getConfiguration();
+
+        $server = new App($configuration['wamp']['host'], $configuration['wamp']['port']);
+
+        foreach ($this->routes as $route) {
+            $server->route(
+                $route->getPath(),
+                $route->getTopic(),
+                $route->getTopic()->getAllowedOrigins(),
+                $route->getTopic()->getHost()
+            );
+        }
+
+        $server->run();
     }
 }
