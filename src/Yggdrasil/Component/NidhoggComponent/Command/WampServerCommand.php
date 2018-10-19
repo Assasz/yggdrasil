@@ -64,7 +64,7 @@ class WampServerCommand extends Command
 
         $output->writeln([
             "WAMP server is running!",
-            "On {$configuration['wamp']['host']}:{$configuration['wamp']['port']}"
+            "On {$configuration['wamp_server']['host']}:{$configuration['wamp_server']['port']}"
         ]);
 
         $this->appConfiguration

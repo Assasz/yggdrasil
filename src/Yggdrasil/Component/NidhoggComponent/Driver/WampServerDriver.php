@@ -39,8 +39,8 @@ abstract class WampServerDriver implements DriverInterface
         if (self::$serverAdapterInstance === null) {
             $requiredConfig = ['host', 'port', 'topic_namespace'];
 
-            if (!$appConfiguration->isConfigured($requiredConfig, 'wamp')) {
-                throw new MissingConfigurationException($requiredConfig, 'wamp');
+            if (!$appConfiguration->isConfigured($requiredConfig, 'wamp_server')) {
+                throw new MissingConfigurationException($requiredConfig, 'wamp_server');
             }
 
             self::$serverAdapterInstance = new WampServerAdapter(

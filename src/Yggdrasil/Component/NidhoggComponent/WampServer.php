@@ -3,7 +3,11 @@
 namespace Yggdrasil\Component\NidhoggComponent;
 
 use Ratchet\App;
+use Ratchet\Session\SessionProvider;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler;
+use Yggdrasil\Component\NidhoggComponent\Exception\UnsupportedSessionProviderException;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
+use Yggdrasil\Core\Exception\DriverNotFoundException;
 
 /**
  * Class WampServer
@@ -57,17 +61,42 @@ final class WampServer
 
     /**
      * Runs server
+     *
+     * @throws DriverNotFoundException if cache driver is not enabled for session provider
+     * @throws UnsupportedSessionProviderException if configured session provider is
      */
     public function run(): void
     {
         $configuration = $this->appConfiguration->getConfiguration();
+        $hasSessionProvider = false;
 
-        $server = new App($configuration['wamp']['host'], $configuration['wamp']['port']);
+        $server = new App($configuration['wamp_server']['host'], $configuration['wamp_server']['port']);
+
+        if ($this->appConfiguration->isConfigured(['session_provider'], 'wamp_server')) {
+            if (!$this->appConfiguration->hasDriver('cache')) {
+                throw new DriverNotFoundException('Cache driver must be enabled to use session provider.');
+            }
+
+            $cache = $this->appConfiguration->loadDriver('cache');
+
+            if (!$cache instanceof \Redis) {
+                throw new UnsupportedSessionProviderException();
+            }
+
+            $hasSessionProvider = true;
+        }
 
         foreach ($this->routes as $route) {
+            if ($hasSessionProvider) {
+                $session = new SessionProvider(
+                    $route->getTopic(),
+                    new RedisSessionHandler($cache)
+                );
+            }
+
             $server->route(
                 $route->getPath(),
-                $route->getTopic(),
+                ($hasSessionProvider) ? $session : $route->getTopic(),
                 $route->getTopic()->getAllowedOrigins(),
                 $route->getTopic()->getHost()
             );

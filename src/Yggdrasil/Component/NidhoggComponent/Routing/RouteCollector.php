@@ -51,7 +51,7 @@ final class RouteCollector
     {
         $routeCollection = [];
         $configuration = $this->appConfiguration->getConfiguration();
-        $topics = ClassFinder::getClassesInNamespace(rtrim($configuration['wamp']['topic_namespace'], '\\'));
+        $topics = ClassFinder::getClassesInNamespace(rtrim($configuration['wamp_server']['topic_namespace'], '\\'));
 
         foreach ($topics as $topic) {
             $topicReflection = new \ReflectionClass($topic);

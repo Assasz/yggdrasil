@@ -102,22 +102,24 @@ abstract class AbstractTopic implements TopicInterface, WampServerInterface
      * When a new connection is opened it will be passed to this method
      *
      * @param  ConnectionInterface $conn The socket/connection that just connected to your application
+     *
      * @throws \Exception
      */
     public function onOpen(ConnectionInterface $conn): void
     {
-
+        echo "New connection! ({$conn->resourceId})\n";
     }
 
     /**
      * This is called before or after a socket is closed (depends on how it's closed).  SendMessage to $conn will not result in an error if it has already been closed.
      *
      * @param  ConnectionInterface $conn The socket/connection that is closing/closed
+     *
      * @throws \Exception
      */
     public function onClose(ConnectionInterface $conn): void
     {
-
+        echo "{$conn->resourceId} closed connection.\n";
     }
 
     /**
@@ -126,11 +128,12 @@ abstract class AbstractTopic implements TopicInterface, WampServerInterface
      *
      * @param  ConnectionInterface $conn
      * @param  \Exception          $e
+     *
      * @throws \Exception
      */
     public function onError(ConnectionInterface $conn, \Exception $e): void
     {
-
+        echo "Error: {$e->getMessage()}";
     }
 
     /**
