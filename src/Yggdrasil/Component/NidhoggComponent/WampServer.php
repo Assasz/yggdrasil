@@ -4,6 +4,8 @@ namespace Yggdrasil\Component\NidhoggComponent;
 
 use Ratchet\App;
 use Ratchet\Session\SessionProvider;
+use Ratchet\WebSocket\WsServer;
+use Ratchet\Wamp\WampServer as Wamp;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler;
 use Yggdrasil\Component\NidhoggComponent\Exception\UnsupportedSessionProviderException;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
@@ -89,7 +91,11 @@ final class WampServer
         foreach ($this->routes as $route) {
             if ($hasSessionProvider) {
                 $session = new SessionProvider(
-                    $route->getTopic(),
+                    new WsServer(
+                        new Wamp(
+                            $route->getTopic()
+                        )
+                    ),
                     new RedisSessionHandler($cache)
                 );
             }
