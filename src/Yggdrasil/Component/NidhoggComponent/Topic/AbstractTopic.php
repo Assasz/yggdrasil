@@ -2,7 +2,9 @@
 
 namespace Yggdrasil\Component\NidhoggComponent\Topic;
 
+use Psr\Http\Message\RequestInterface;
 use Ratchet\ConnectionInterface;
+use Ratchet\Http\HttpServerInterface;
 use Ratchet\Wamp\Topic;
 use Ratchet\Wamp\WampServerInterface;
 use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
@@ -16,7 +18,7 @@ use Yggdrasil\Core\Driver\Base\DriverCollection;
  * @package Yggdrasil\Component\NidhoggComponent\Topic
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-abstract class AbstractTopic implements TopicInterface, WampServerInterface
+abstract class AbstractTopic implements TopicInterface, WampServerInterface, HttpServerInterface
 {
     /**
      * Trait that provides access to application drivers
@@ -101,11 +103,12 @@ abstract class AbstractTopic implements TopicInterface, WampServerInterface
     /**
      * When a new connection is opened it will be passed to this method
      *
-     * @param  ConnectionInterface $conn The socket/connection that just connected to your application
+     * @param ConnectionInterface $conn The socket/connection that just connected to your application
+     * @param RequestInterface $request
      *
      * @throws \Exception
      */
-    public function onOpen(ConnectionInterface $conn): void
+    public function onOpen(ConnectionInterface $conn, RequestInterface $request = null): void
     {
         echo "New connection! ({$conn->resourceId})\n";
     }
