@@ -57,7 +57,11 @@ final class RouteCollector
             $topicReflection = new \ReflectionClass($topic);
             $topicName       = $topicReflection->getName();
             $topicShortName  = $topicReflection->getShortName();
-            $topicPath       = implode('/', preg_split('/(?=[A-Z])/', $topicShortName));
+            $topicNameParts  = preg_split('/(?=[A-Z])/', $topicShortName);
+
+            array_pop($topicNameParts);
+
+            $topicPath       = mb_strtolower(implode('/', $topicNameParts));
             $topicInstance   = new $topicName($this->appConfiguration->loadDrivers());
 
             if (!$topicInstance instanceof TopicInterface) {
