@@ -50,12 +50,17 @@ class RoutingExtension extends \Twig_Extension
     /**
      * Returns absolute path for requested action
      *
-     * @param string $alias  Alias of action like Controller:action
-     * @param array  $params Set of action parameters
+     * @param string? $alias  Alias of action like Controller:action, if left empty default action will be chosen
+     * @param array   $params Set of action parameters
      * @return string
      */
-    public function getPath(string $alias, array $params = []): string
+    public function getPath(string $alias = null, array $params = []): string
     {
+        if (empty($alias)) {
+            $routerConfig = $this->router->getConfiguration();
+            $alias = $routerConfig->getDefaultController() . ':' . $routerConfig->getDefaultAction();
+        }
+
         return $this->router->getQuery($alias, $params);
     }
 
