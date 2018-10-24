@@ -65,7 +65,7 @@ final class WampServer
      * Runs server
      *
      * @throws DriverNotFoundException if cache driver is not enabled for session provider
-     * @throws UnsupportedSessionProviderException if configured session provider is
+     * @throws UnsupportedSessionProviderException if enabled session provider is configured to not use Redis cache
      */
     public function run(): void
     {
