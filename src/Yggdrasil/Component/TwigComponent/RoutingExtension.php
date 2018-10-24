@@ -41,7 +41,7 @@ class RoutingExtension extends \Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new \Twig_Function('path', [$this, 'getPath']),
+            new \Twig_Function('path',  [$this, 'getPath']),
             new \Twig_Function('asset', [$this, 'getAsset']),
             new \Twig_Function('route', [$this, 'getRoute'])
         ];
@@ -58,7 +58,7 @@ class RoutingExtension extends \Twig_Extension
     {
         if (empty($alias)) {
             $routerConfig = $this->router->getConfiguration();
-            $alias = $routerConfig->getDefaultController() . ':' . $routerConfig->getDefaultAction();
+            $alias = "{$routerConfig->getDefaultController()}:{$routerConfig->getDefaultAction()}";
         }
 
         return $this->router->getQuery($alias, $params);

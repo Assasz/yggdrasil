@@ -56,11 +56,11 @@ class StandardExtension extends \Twig_Extension implements \Twig_Extension_Globa
     public function getFunctions(): array
     {
         return [
-            new \Twig_Function('flashbag', [$this, 'getFlashBag']),
+            new \Twig_Function('flashbag',   [$this, 'getFlashBag']),
             new \Twig_Function('is_granted', [$this, 'isGranted']),
-            new \Twig_Function('is_pjax', [$this, 'isPjax']),
-            new \Twig_Function('is_yjax', [$this, 'isYjax']),
-            new \Twig_Function('partial', [$this, 'embedPartial'])
+            new \Twig_Function('is_pjax',    [$this, 'isPjax']),
+            new \Twig_Function('is_yjax',    [$this, 'isYjax']),
+            new \Twig_Function('partial',    [$this, 'embedPartial'])
         ];
     }
 

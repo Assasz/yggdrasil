@@ -52,8 +52,7 @@ class EntitySerializer
 
                 if (is_object($value)) {
                     if ($value instanceof Collection) {
-                        $collection = $value->toArray();
-                        $value = self::toArray($collection, $depth);
+                        $value = self::toArray($value->toArray(), $depth);
                     } elseif ($value instanceof \DateTime) {
                         $value = $value->format('Y-m-d H:i:s');
                     } else {

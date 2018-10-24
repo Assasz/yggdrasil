@@ -69,8 +69,8 @@ final class Router
 
         if ($this->routeParams[0] === 'api') {
             unset($this->routeParams[0]);
-            $this->routeParams = array_values($this->routeParams);
 
+            $this->routeParams = array_values($this->routeParams);
             $route->setApiCall(true);
         }
 

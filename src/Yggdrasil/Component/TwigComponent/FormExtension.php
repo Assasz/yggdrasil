@@ -49,13 +49,13 @@ class FormExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_Function('begin_form', [$this, 'beginForm']),
-            new \Twig_Function('end_form', [$this, 'endForm']),
-            new \Twig_Function('form_field', [$this, 'addFormField']),
-            new \Twig_Function('text_area', [$this, 'addTextArea']),
+            new \Twig_Function('begin_form',  [$this, 'beginForm']),
+            new \Twig_Function('end_form',    [$this, 'endForm']),
+            new \Twig_Function('form_field',  [$this, 'addFormField']),
+            new \Twig_Function('text_area',   [$this, 'addTextArea']),
             new \Twig_Function('select_list', [$this, 'addSelectList']),
-            new \Twig_Function('button', [$this, 'addButton']),
-            new \Twig_Function('csrf_token', [$this, 'generateCsrfToken']),
+            new \Twig_Function('button',      [$this, 'addButton']),
+            new \Twig_Function('csrf_token',  [$this, 'generateCsrfToken']),
         ];
     }
 
@@ -75,7 +75,7 @@ class FormExtension extends \Twig_Extension
             filter_var($this->formOptions['use_pjax'], FILTER_VALIDATE_BOOLEAN)
             : true;
 
-        $pjaxAttr = ($usePjax) ? ' data-pjax' : '';
+        $pjaxAttr = ($usePjax) ? 'data-pjax' : '';
 
         foreach ($this->formOptions as $attr => $value) {
             if (in_array($attr, ['use_pjax', 'use_csrf', 'fields'])) {
@@ -85,7 +85,7 @@ class FormExtension extends \Twig_Extension
             $form .= " {$attr}=\"{$value}\"";
         }
 
-        echo $form . $pjaxAttr . '>';
+        echo "$form $pjaxAttr>";
     }
 
     /**
@@ -144,8 +144,8 @@ class FormExtension extends \Twig_Extension
 
         $elements = [
             'wrapper' => $wrapper,
-            'label' => $label,
-            'input' => $input,
+            'label'   => $label,
+            'input'   => $input,
             'caption' => $caption
         ];
 
@@ -199,10 +199,10 @@ class FormExtension extends \Twig_Extension
         }
 
         $elements = [
-            'wrapper' => $wrapper,
-            'label' => $label,
+            'wrapper'  => $wrapper,
+            'label'    => $label,
             'textarea' => $textarea,
-            'caption' => $caption
+            'caption'  => $caption
         ];
 
         foreach ($elements as $name => $element) {
@@ -257,9 +257,9 @@ class FormExtension extends \Twig_Extension
 
         $elements = [
             'wrapper' => $wrapper,
-            'label' => $label,
-            'list' => $list,
-            'item' => $item ?? [],
+            'label'   => $label,
+            'list'    => $list,
+            'item'    => $item ?? [],
             'caption' => $caption
         ];
 

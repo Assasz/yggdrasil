@@ -43,8 +43,8 @@ abstract class AbstractController
      */
     public function __construct(DriverCollection $drivers, Request $request, Response $response)
     {
-        $this->drivers = $drivers;
-        $this->request = $request;
+        $this->drivers  = $drivers;
+        $this->request  = $request;
         $this->response = $response;
     }
 
@@ -54,10 +54,6 @@ abstract class AbstractController
      * @param string $view    Name of view file
      * @param array  $params  Parameters supposed to be passed to the view
      * @return Response
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     protected function render(string $view, array $params = []): Response
     {
@@ -73,10 +69,6 @@ abstract class AbstractController
      * @param string $view   Name of view file
      * @param array  $params Parameters supposed to be passed to the view
      * @return string
-     *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     protected function renderPartial(string $view, array $params = []): string
     {
@@ -96,7 +88,7 @@ abstract class AbstractController
     {
         if (empty($alias)) {
             $routerConfig = $this->getRouter()->getConfiguration();
-            $alias = $routerConfig->getDefaultController() . ':' . $routerConfig->getDefaultAction();
+            $alias = "{$routerConfig->getDefaultController()}:{$routerConfig->getDefaultAction()}";
         }
 
         $query = $this->getRouter()->getQuery($alias, $params);
