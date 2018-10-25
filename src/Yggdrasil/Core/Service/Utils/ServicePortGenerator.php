@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Core\Service;
+namespace Yggdrasil\Core\Service\Utils;
 
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Helpers;
@@ -11,7 +11,7 @@ use Nette\PhpGenerator\PhpFile;
  *
  * Generates service port - request or response
  *
- * @package Yggdrasil\Core\Service
+ * @package Yggdrasil\Core\Service\Utils
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 class ServicePortGenerator
@@ -195,7 +195,7 @@ class ServicePortGenerator
     private function saveFile(): void
     {
         $sourceCode = Helpers::tabsToSpaces((string) $this->portFile);
-        $portPath = dirname(__DIR__, 7) . '/src/' . $this->portData['namespace'] . '/' . $this->portData['module'] . 'Module/' . $this->portData['type'] . '/';
+        $portPath = dirname(__DIR__, 7) . '/src/';
 
         $handle = fopen($portPath . $this->portData['class'] . $this->portData['type'] . '.php', 'w');
         fwrite($handle, $sourceCode);

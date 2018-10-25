@@ -1,11 +1,13 @@
 <?php
 
-namespace Yggdrasil\Core\Service;
+namespace Yggdrasil\Core\Service\Utils;
+
+use Yggdrasil\Core\Service\ServiceRequestInterface;
 
 /**
  * Class ServiceRequestWrapper
  *
- * @package Yggdrasil\Core\Service
+ * @package Yggdrasil\Core\Service\Utils
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 abstract class ServiceRequestWrapper
