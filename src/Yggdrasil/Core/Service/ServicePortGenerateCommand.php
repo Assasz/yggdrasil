@@ -9,6 +9,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
+use Yggdrasil\Core\Exception\MissingConfigurationException;
 
 /**
  * Class ServicePortGenerateCommand
@@ -55,9 +56,15 @@ class ServicePortGenerateCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
+     * @throws MissingConfigurationException if service_namespace is not configured
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
+        if (!$this->appConfiguration->isConfigured(['service_namespace'], 'container')) {
+            throw new MissingConfigurationException(['service_namespace'], 'container');
+        }
+
         $output->writeln([
             'Let\'s generate service port!',
             '----------------',
