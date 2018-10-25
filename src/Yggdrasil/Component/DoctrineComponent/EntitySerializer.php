@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\Collection;
  * @package Yggdrasil\Component\DoctrineComponent
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class EntitySerializer
+abstract class EntitySerializer
 {
     /**
      * Serializes entities into array
