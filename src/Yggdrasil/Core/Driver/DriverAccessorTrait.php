@@ -2,11 +2,6 @@
 
 namespace Yggdrasil\Core\Driver;
 
-use Yggdrasil\Core\Exception\NotServiceReturnedException;
-use Yggdrasil\Core\Exception\ServiceNotFoundException;
-use Yggdrasil\Core\Routing\Router;
-use Yggdrasil\Core\Service\ServiceInterface;
-
 /**
  * Trait DriverAccessorTrait
  *
@@ -115,28 +110,5 @@ trait DriverAccessorTrait
     protected function getCache(): DriverInterface
     {
         return $this->drivers->get('cache');
-    }
-
-    /**
-     * Helper method that returns given service instance from container directly
-     *
-     * @param string $alias Alias of service like module.service_name
-     * @return ServiceInterface
-     *
-     * @throws ServiceNotFoundException if given service doesn't exist
-     * @throws NotServiceReturnedException if object returned by container is not a service
-     * @throws \Exception
-     */
-    protected function getService(string $alias): ServiceInterface
-    {
-        if (!$this->getContainer()->has($alias)) {
-            throw new ServiceNotFoundException('Service with alias ' . $alias . ' doesn\'t exist.');
-        }
-
-        if (!$this->getContainer()->get($alias) instanceof ServiceInterface) {
-            throw new NotServiceReturnedException('Not a service returned by container for alias ' . $alias . '.');
-        }
-
-        return $this->getContainer()->get($alias);
     }
 }
