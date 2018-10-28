@@ -24,14 +24,14 @@ class WampServerDriver implements DriverInterface
      *
      * @var DriverInterface
      */
-    protected static $driverInstance;
+    private static $driverInstance;
 
     /**
      * Instance of server adapter
      *
      * @var WampServerAdapter
      */
-    protected static $serverAdapterInstance;
+    private static $serverAdapterInstance;
 
     /**
      * Prevents object creation and cloning

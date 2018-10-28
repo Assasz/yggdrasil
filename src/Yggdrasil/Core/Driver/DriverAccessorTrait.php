@@ -33,7 +33,7 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Returns entity manager instance
+     * Returns entity manager driver instance
      *
      * @return DriverInterface
      */
