@@ -2,7 +2,6 @@
 
 namespace Yggdrasil\Core\Configuration;
 
-use Doctrine\DBAL\Driver;
 use Yggdrasil\Core\Driver\DriverCollection;
 use Yggdrasil\Core\Driver\DriverInterface;
 use Yggdrasil\Core\Exception\ConfigurationNotFoundException;
@@ -11,7 +10,7 @@ use Yggdrasil\Core\Exception\DriverNotFoundException;
 /**
  * Class AbstractConfiguration
  *
- * Manages configuration of whole application
+ * Manages configuration of particular application
  *
  * @package Yggdrasil\Core\Configuration
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -58,7 +57,7 @@ abstract class AbstractConfiguration
     }
 
     /**
-     * Returns given driver instance
+     * Returns configured instance of given driver
      *
      * @param string $key Name of driver
      * @return DriverInterface
@@ -71,7 +70,7 @@ abstract class AbstractConfiguration
             throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that ' . $key . ' driver is properly configured.');
         }
 
-        return $this->drivers[$key]::getInstance($this);
+        return $this->drivers[$key]::install($this);
     }
 
     /**
@@ -96,10 +95,10 @@ abstract class AbstractConfiguration
     }
 
     /**
-     * Checks if given data exist in configuration
+     * Checks if given parameters exist in configuration
      *
-     * @param array  $keys    Set of keys of data to check
-     * @param string $section Name of configuration file section, in which given keys should exist
+     * @param array  $keys    Set of parameters keys to check
+     * @param string $section Name of configuration file section, in which given parameters should exist
      * @return bool
      */
     public function isConfigured(array $keys, string $section): bool

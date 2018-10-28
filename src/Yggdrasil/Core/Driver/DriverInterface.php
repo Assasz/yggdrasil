@@ -15,10 +15,10 @@ use Yggdrasil\Core\Configuration\ConfigurationInterface;
 interface DriverInterface
 {
     /**
-     * Returns configured instance of driver
+     * Installs driver in application
      *
      * @param ConfigurationInterface $appConfiguration Configuration needed to configure driver
-     * @return mixed
+     * @return DriverInterface
      */
-    public static function getInstance(ConfigurationInterface $appConfiguration): DriverInterface;
+    public static function install(ConfigurationInterface $appConfiguration): DriverInterface;
 }

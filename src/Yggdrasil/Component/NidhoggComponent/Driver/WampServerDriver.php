@@ -41,14 +41,14 @@ class WampServerDriver implements DriverInterface
     private function __clone() {}
 
     /**
-     * Returns server adapter instance
+     * Installs server adapter driver
      *
      * @param ConfigurationInterface $appConfiguration
      * @return DriverInterface
      *
      * @throws MissingConfigurationException if host, port or topic_namespace is not configured
      */
-    public static function getInstance(ConfigurationInterface $appConfiguration): DriverInterface
+    public static function install(ConfigurationInterface $appConfiguration): DriverInterface
     {
         if (self::$driverInstance === null) {
             $requiredConfig = ['host', 'port', 'topic_namespace'];
