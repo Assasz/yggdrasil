@@ -6,8 +6,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
-use Yggdrasil\Core\Driver\Base\DriverCollection;
+use Yggdrasil\Core\Driver\DriverAccessorTrait;
+use Yggdrasil\Core\Driver\DriverCollection;
 
 /**
  * Class AbstractController

@@ -3,7 +3,7 @@
 namespace Yggdrasil\Core\Service;
 
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
-use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
+use Yggdrasil\Core\Driver\DriverAccessorTrait;
 
 /**
  * Class AbstractService

@@ -2,7 +2,9 @@
 
 namespace Yggdrasil\Core\Configuration;
 
-use Yggdrasil\Core\Driver\Base\DriverCollection;
+use Doctrine\DBAL\Driver;
+use Yggdrasil\Core\Driver\DriverCollection;
+use Yggdrasil\Core\Driver\DriverInterface;
 use Yggdrasil\Core\Exception\ConfigurationNotFoundException;
 use Yggdrasil\Core\Exception\DriverNotFoundException;
 
@@ -56,14 +58,14 @@ abstract class AbstractConfiguration
     }
 
     /**
-     * Gets given driver and returns it's component instance directly
+     * Returns given driver instance
      *
      * @param string $key Name of driver
-     * @return mixed
+     * @return DriverInterface
      *
      * @throws DriverNotFoundException if given driver doesn't exist
      */
-    public function loadDriver(string $key)
+    public function loadDriver(string $key): DriverInterface
     {
         if (!$this->hasDriver($key)) {
             throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that ' . $key . ' driver is properly configured.');

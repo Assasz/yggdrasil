@@ -5,7 +5,7 @@ namespace Yggdrasil\Core;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
-use Yggdrasil\Core\Driver\Base\DriverAccessorTrait;
+use Yggdrasil\Core\Driver\DriverAccessorTrait;
 use Yggdrasil\Core\Exception\ActionForbiddenException;
 use Yggdrasil\Core\Exception\ActionNotFoundException;
 use Yggdrasil\Core\Routing\Router;

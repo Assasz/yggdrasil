@@ -6,7 +6,7 @@ use Yggdrasil\Component\NidhoggComponent\Routing\RouteCollector;
 use Yggdrasil\Component\NidhoggComponent\WampServer;
 use Yggdrasil\Component\NidhoggComponent\WampServerAdapter;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
-use Yggdrasil\Core\Driver\Base\DriverInterface;
+use Yggdrasil\Core\Driver\DriverInterface;
 use Yggdrasil\Core\Exception\MissingConfigurationException;
 
 /**
@@ -17,8 +17,15 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
  * @package Yggdrasil\Component\NidhoggComponent\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-abstract class WampServerDriver implements DriverInterface
+class WampServerDriver implements DriverInterface
 {
+    /**
+     * Instance of driver
+     *
+     * @var DriverInterface
+     */
+    protected static $driverInstance;
+
     /**
      * Instance of server adapter
      *
@@ -27,16 +34,23 @@ abstract class WampServerDriver implements DriverInterface
     protected static $serverAdapterInstance;
 
     /**
+     * Prevents object creation and cloning
+     */
+    private function __construct() {}
+
+    private function __clone() {}
+
+    /**
      * Returns server adapter instance
      *
      * @param ConfigurationInterface $appConfiguration
-     * @return WampServerAdapter
+     * @return DriverInterface
      *
      * @throws MissingConfigurationException if host, port or topic_namespace is not configured
      */
-    public static function getInstance(ConfigurationInterface $appConfiguration): WampServerAdapter
+    public static function getInstance(ConfigurationInterface $appConfiguration): DriverInterface
     {
-        if (self::$serverAdapterInstance === null) {
+        if (self::$driverInstance === null) {
             $requiredConfig = ['host', 'port', 'topic_namespace'];
 
             if (!$appConfiguration->isConfigured($requiredConfig, 'wamp_server')) {
@@ -47,8 +61,19 @@ abstract class WampServerDriver implements DriverInterface
                 new WampServer(), new RouteCollector(), $appConfiguration
             );
 
+            self::$driverInstance = new WampServerDriver();
         }
 
-        return self::$serverAdapterInstance;
+        return self::$driverInstance;
+    }
+
+    /**
+     * Runs WAMP server
+     *
+     * @throws \Exception
+     */
+    public function runServer()
+    {
+        self::$serverAdapterInstance->runServer();
     }
 }

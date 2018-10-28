@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Core\Driver\Base;
+namespace Yggdrasil\Core\Driver;
 
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Exception\DriverNotFoundException;
@@ -11,7 +11,7 @@ use Yggdrasil\Core\Exception\NotDriverProvidedException;
  *
  * Collection of application drivers
  *
- * @package Yggdrasil\Core\Driver\Base
+ * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 final class DriverCollection
@@ -59,14 +59,14 @@ final class DriverCollection
     }
 
     /**
-     * Returns component instance configured by given driver
+     * Returns driver instance
      *
      * @param string $key Name of driver
-     * @return mixed
+     * @return DriverInterface
      *
      * @throws DriverNotFoundException if requested driver doesn't exist
      */
-    public function get(string $key)
+    public function get(string $key): DriverInterface
     {
         if (!$this->has($key)) {
             throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that ' . $key . ' driver is properly configured.');

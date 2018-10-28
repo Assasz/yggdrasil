@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Core\Driver\Base;
+namespace Yggdrasil\Core\Driver;
 
 use Yggdrasil\Core\Exception\NotServiceReturnedException;
 use Yggdrasil\Core\Exception\ServiceNotFoundException;
@@ -27,12 +27,12 @@ trait DriverAccessorTrait
     private $drivers;
 
     /**
-     * Returns component instance configured by given driver
+     * Returns given driver instance
      *
      * @param string $key Name of driver
-     * @return mixed
+     * @return DriverInterface
      */
-    protected function getDriver(string $key)
+    protected function getDriver(string $key): DriverInterface
     {
         return $this->drivers->get($key);
     }
@@ -40,79 +40,79 @@ trait DriverAccessorTrait
     /**
      * Returns entity manager instance
      *
-     * @return mixed
+     * @return DriverInterface
      */
-    protected function getEntityManager()
+    protected function getEntityManager(): DriverInterface
     {
         return $this->drivers->get('entityManager');
     }
 
     /**
-     * Returns template engine instance
+     * Returns template engine driver instance
      *
-     * @return mixed
+     * @return DriverInterface
      */
-    protected function getTemplateEngine()
+    protected function getTemplateEngine(): DriverInterface
     {
         return $this->drivers->get('templateEngine');
     }
 
     /**
-     * Returns router instance
+     * Returns router driver instance
      *
-     * @return Router
+     * @return DriverInterface
      */
-    protected function getRouter(): Router
+    protected function getRouter(): DriverInterface
     {
         return $this->drivers->get('router');
     }
 
     /**
-     * Returns validator instance
+     * Returns validator driver instance
      *
-     * @return mixed
+     * @return DriverInterface
      */
-    protected function getValidator()
+    protected function getValidator(): DriverInterface
     {
         return $this->drivers->get('validator');
     }
 
     /**
-     * Returns mailer instance
+     * Returns mailer driver instance
      *
-     * @return mixed
+     * @return DriverInterface
      */
-    protected function getMailer()
+    protected function getMailer(): DriverInterface
     {
         return $this->drivers->get('mailer');
     }
 
     /**
-     * Returns container instance
+     * Returns container driver instance
      *
-     * @return mixed
+     * @return DriverInterface
      */
-    protected function getContainer()
+    protected function getContainer(): DriverInterface
     {
         return $this->drivers->get('container');
     }
 
     /**
-     * Returns exception handler instance
+     * Returns exception handler driver instance
      *
-     * @return mixed
+     * @return DriverInterface
      */
-    protected function getExceptionHandler()
+    protected function getExceptionHandler(): DriverInterface
     {
         return $this->drivers->get('exceptionHandler');
     }
 
     /**
-     * Returns cache instance
+     * Returns cache driver instance
      *
-     * @return mixed
+     * @return DriverInterface
      */
-    protected function getCache()
+    protected function getCache(): DriverInterface
     {
         return $this->drivers->get('cache');
     }
