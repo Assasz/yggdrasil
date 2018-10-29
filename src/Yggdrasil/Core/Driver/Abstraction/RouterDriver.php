@@ -48,9 +48,9 @@ abstract class RouterDriver
     /**
      * Returns route for requested action by alias
      *
-     * @param string $alias Alias of action like Controller:action:parameters where parameters are optional
-     * @param array $params Additional action parameters
-     * @param int $type Type of action to resolve
+     * @param string $alias  Alias of action like Controller:action:parameters where parameters are optional
+     * @param array  $params Additional action parameters
+     * @param int    $type   Type of action to find route for
      * @return Route
      */
     public function getAliasedRoute(string $alias, array $params = [], int $type = Router::ACTIVE_ACTION): Route
@@ -61,8 +61,8 @@ abstract class RouterDriver
     /**
      * Returns absolute path for requested action
      *
-     * @param string $alias Alias of action like Controller:action
-     * @param array $params Set of action parameters
+     * @param string $alias  Alias of action like Controller:action
+     * @param array  $params Set of action parameters
      * @return string
      */
     public function getQuery(string $alias, array $params = []): string
@@ -73,7 +73,7 @@ abstract class RouterDriver
     /**
      * Returns query map [Controller:action => query]
      *
-     * @param array $protected Controllers to ignore
+     * @param array $protected Controllers to skip
      * @return array
      *
      * @throws \Exception

@@ -89,7 +89,7 @@ final class Router
      *
      * @param string $alias   Alias of action like Controller:action:parameters where parameters are optional
      * @param array  $params  Additional action parameters
-     * @param int    $type    Type of action to resolve
+     * @param int    $type    Type of action to find route for
      * @return Route
      */
     public function getAliasedRoute(string $alias, array $params = [], int $type = self::ACTIVE_ACTION): Route
@@ -102,7 +102,9 @@ final class Router
 
         $route = (new Route())
             ->setController($this->resolveController())
-            ->setAction((self::PASSIVE_ACTION === $type) ? $this->resolvePassiveAction() : $this->resolveAction())
+            ->setAction((self::PASSIVE_ACTION === $type) ?
+                $this->resolvePassiveAction() :
+                $this->resolveAction())
             ->setActionParams($this->resolveActionParams());
 
         return $route;
@@ -139,7 +141,7 @@ final class Router
     /**
      * Returns query map [Controller:action => query]
      *
-     * @param array $protected Controllers to ignore
+     * @param array $protected Controllers to skip
      * @return array
      *
      * @throws \Exception

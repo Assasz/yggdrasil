@@ -26,10 +26,7 @@ abstract class TemplateEngineDriver
      * @param array $params
      * @return string
      */
-    public function render(string $view, array $params = []): string
-    {
-        return self::$engineInstance->render($view, $params);
-    }
+    abstract public function render(string $view, array $params = []): string;
 
     /**
      * Displays given view
@@ -37,10 +34,7 @@ abstract class TemplateEngineDriver
      * @param string $view
      * @param array $params
      */
-    public function display(string $view, array $params = []): void
-    {
-        self::$engineInstance->display($view, $params);
-    }
+    abstract public function display(string $view, array $params = []): void;
 
     /**
      * Adds global to template engine
@@ -48,8 +42,5 @@ abstract class TemplateEngineDriver
      * @param string $name
      * @param mixed $value
      */
-    public function addGlobal(string $name, $value): void
-    {
-        self::$engineInstance->addGlobal($name, $value);
-    }
+    abstract public function addGlobal(string $name, $value): void;
 }
