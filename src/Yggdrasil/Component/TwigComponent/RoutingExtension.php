@@ -41,9 +41,10 @@ class RoutingExtension extends \Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new \Twig_Function('path',  [$this, 'getPath']),
-            new \Twig_Function('asset', [$this, 'getAsset']),
-            new \Twig_Function('route', [$this, 'getRoute'])
+            new \Twig_Function('path',      [$this, 'getPath']),
+            new \Twig_Function('asset',     [$this, 'getAsset']),
+            new \Twig_Function('route',     [$this, 'getRoute']),
+            new \Twig_Function('query_map', [$this, 'getQueryMap'])
         ];
     }
 
@@ -84,5 +85,18 @@ class RoutingExtension extends \Twig_Extension
     public function getRoute(Request $request): Route
     {
         return $this->router->getRoute($request);
+    }
+
+    /**
+     * Returns query map [Controller:action => query]
+     *
+     * @param array $protected Controllers to skip
+     * @return array
+     *
+     * @throws \Exception
+     */
+    public function getQueryMap(array $protected = ['Error']): array
+    {
+        return $this->router->getQueryMap($protected);
     }
 }
