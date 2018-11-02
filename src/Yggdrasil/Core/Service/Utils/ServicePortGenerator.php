@@ -82,13 +82,10 @@ class ServicePortGenerator
                 ->setVisibility('private')
                 ->addComment($this->portData['class'] . ' ' . $name . PHP_EOL);
 
-            switch ($type) {
-                case in_array($type, ['string', 'int', 'float']):
-                    $property->addComment('@var ' . $type . ' $' . $name);
-                    break;
-                case 'datetime':
-                    $property->addComment('@var \DateTime $' . $name);
-                    break;
+            if ('datetime' === $type) {
+                $property->addComment('@var \DateTime $' . $name);
+            } else {
+                $property->addComment('@var ' . $type . ' $' . $name);
             }
         }
 
@@ -121,21 +118,18 @@ class ServicePortGenerator
     private function generateGetter(string $name, string $type): ServicePortGenerator
     {
         $getter = $this->portClass
-            ->addMethod('get' . ucfirst($name))
+            ->addMethod(('bool' === $type) ? 'is' . ucfirst($name) : 'get' . ucfirst($name))
             ->setVisibility('public')
             ->addComment('Returns ' . strtolower($this->portData['class']) . ' ' . $name . PHP_EOL);
 
-        switch (true) {
-            case in_array($type, ['string', 'int', 'float']):
-                $getter
-                    ->addComment('@return ' . $type)
-                    ->setReturnType($type);
-                break;
-            case 'datetime' === $type:
-                $getter
-                    ->addComment('@return \DateTime')
-                    ->setReturnType('\DateTime');
-                break;
+        if ('datetime' === $type) {
+            $getter
+                ->addComment('@return \DateTime')
+                ->setReturnType('\DateTime');
+        } else {
+            $getter
+                ->addComment('@return ' . $type)
+                ->setReturnType($type);
         }
 
         $getter->addBody('return $this->' . $name . ';');
@@ -157,21 +151,18 @@ class ServicePortGenerator
             ->setVisibility('public')
             ->addComment('Sets ' . strtolower($this->portData['class']) . ' ' . $name . PHP_EOL);
 
-        switch (true) {
-            case in_array($type, ['string', 'int', 'float']):
-                $setter
-                    ->addComment('@param ' . $type . ' $' . $name)
-                    ->addComment('@return ' . $this->portData['class'] . $this->portData['type'])
-                    ->addParameter($name)
-                    ->setTypeHint($type);
-                break;
-            case 'datetime' === $type:
-                $setter
-                    ->addComment('@param \DateTime $' . $name)
-                    ->addComment('@return ' . $this->portData['class'] . $this->portData['type'])
-                    ->addParameter($name)
-                    ->setTypeHint('\DateTime');
-                break;
+        if ('datetime' === $type) {
+            $setter
+                ->addComment('@param \DateTime $' . $name)
+                ->addComment('@return ' . $this->portData['class'] . $this->portData['type'])
+                ->addParameter($name)
+                ->setTypeHint('\DateTime');
+        } else {
+            $setter
+                ->addComment('@param ' . $type . ' $' . $name)
+                ->addComment('@return ' . $this->portData['class'] . $this->portData['type'])
+                ->addParameter($name)
+                ->setTypeHint($type);
         }
 
         $fullNamespaceParts = [
@@ -195,9 +186,9 @@ class ServicePortGenerator
     private function saveFile(): void
     {
         $sourceCode = Helpers::tabsToSpaces((string) $this->portFile);
-        $portPath = dirname(__DIR__, 7) . '/src/';
+        $basePath = dirname(__DIR__, 7) . '/src/';
 
-        $handle = fopen($portPath . $this->portData['class'] . $this->portData['type'] . '.php', 'w');
+        $handle = fopen($basePath . $this->portData['class'] . $this->portData['type'] . '.php', 'w');
         fwrite($handle, $sourceCode);
         fclose($handle);
     }
