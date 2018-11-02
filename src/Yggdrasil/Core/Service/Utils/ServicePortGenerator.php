@@ -186,9 +186,16 @@ class ServicePortGenerator
     private function saveFile(): void
     {
         $sourceCode = Helpers::tabsToSpaces((string) $this->portFile);
-        $basePath = dirname(__DIR__, 7) . '/src/';
 
-        $handle = fopen($basePath . $this->portData['class'] . $this->portData['type'] . '.php', 'w');
+        $fullPath = [
+            dirname(__DIR__, 8) . '/src',
+            $this->portData['namespace'],
+            $this->portData['module'] . 'Module',
+            $this->portData['type'],
+            $this->portData['class'] . $this->portData['type'] . '.php'
+        ];
+
+        $handle = fopen(implode('/', $fullPath), 'w');
         fwrite($handle, $sourceCode);
         fclose($handle);
     }
