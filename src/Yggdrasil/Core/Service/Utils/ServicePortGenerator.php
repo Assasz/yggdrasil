@@ -170,15 +170,21 @@ class ServicePortGenerator
     {
         $sourceCode = Helpers::tabsToSpaces((string) $this->portFile);
 
-        $fullPath = [
+        $fullPath = implode('/', [
             dirname(__DIR__, 8) . '/src',
             $this->portData['namespace'],
             $this->portData['module'] . 'Module',
             $this->portData['type'],
             $this->portData['class'] . $this->portData['type'] . '.php'
-        ];
+        ]);
 
-        $handle = fopen(implode('/', $fullPath), 'w');
+        $dirname = dirname($fullPath);
+
+        if (!is_dir($dirname)) {
+            mkdir($dirname, 0755, true);
+        }
+
+        $handle = fopen($fullPath, 'w');
         fwrite($handle, $sourceCode);
         fclose($handle);
     }
