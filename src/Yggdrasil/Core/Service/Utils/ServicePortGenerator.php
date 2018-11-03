@@ -77,11 +77,13 @@ class ServicePortGenerator
     private function generateProperties(): ServicePortGenerator
     {
         foreach ($this->portData['properties'] as $name => $type) {
+            $type = ('datetime' !== $type) ?: '\DateTime';
+
             $this->portClass
                 ->addProperty($name)
                 ->setVisibility('private')
                 ->addComment($this->portData['class'] . ' ' . $name . PHP_EOL)
-                ->addComment('@var ' . ('datetime' === $type) ? '\DateTime' : $type . ' $' . $name);
+                ->addComment('@var ' . $type . ' $' . $name);
         }
 
         return $this;
@@ -112,12 +114,14 @@ class ServicePortGenerator
      */
     private function generateGetter(string $name, string $type): ServicePortGenerator
     {
+        $type = ('datetime' !== $type) ?: '\DateTime';
+
         $this->portClass
             ->addMethod(('bool' === $type) ? 'is' . ucfirst($name) : 'get' . ucfirst($name))
             ->setVisibility('public')
             ->addComment('Returns ' . strtolower($this->portData['class']) . ' ' . $name . PHP_EOL)
-            ->addComment('@return ' . ('datetime' === $type) ? '\DateTime' : $type)
-            ->setReturnType(('datetime' === $type) ? '\DateTime' : $type)
+            ->addComment('@return ' . $type)
+            ->setReturnType($type)
             ->addBody('return $this->' . $name . ';');
 
         return $this;
@@ -132,18 +136,20 @@ class ServicePortGenerator
      */
     private function generateSetter(string $name, string $type): ServicePortGenerator
     {
+        $type = ('datetime' !== $type) ?: '\DateTime';
+
         $setter = $this->portClass
             ->addMethod('set' . ucfirst($name))
             ->setVisibility('public')
             ->addComment('Sets ' . strtolower($this->portData['class']) . ' ' . $name . PHP_EOL)
-            ->addComment('@param ' . ('datetime' === $type) ? '\DateTime' : $type . ' $' . $name)
+            ->addComment('@param ' . $type . ' $' . $name)
             ->addComment('@return ' . $this->portData['class'] . $this->portData['type'])
             ->addBody('$this->' . $name . ' = $' . $name . ';' . PHP_EOL)
             ->addBody('return $this;');
 
         $setter
             ->addParameter($name)
-            ->setTypeHint(('datetime' === $type) ? '\DateTime' : $type);
+            ->setTypeHint($type);
 
         $fullNamespaceParts = [
             $this->portData['namespace'],
