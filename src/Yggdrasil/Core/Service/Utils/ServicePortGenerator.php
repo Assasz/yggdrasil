@@ -138,10 +138,12 @@ class ServicePortGenerator
             ->addComment('Sets ' . strtolower($this->portData['class']) . ' ' . $name . PHP_EOL)
             ->addComment('@param ' . ('datetime' === $type) ? '\DateTime' : $type . ' $' . $name)
             ->addComment('@return ' . $this->portData['class'] . $this->portData['type'])
-            ->addParameter($name)
-            ->setTypeHint(('datetime' === $type) ? '\DateTime' : $type)
             ->addBody('$this->' . $name . ' = $' . $name . ';' . PHP_EOL)
             ->addBody('return $this;');
+
+        $setter
+            ->addParameter($name)
+            ->setTypeHint(('datetime' === $type) ? '\DateTime' : $type);
 
         $fullNamespaceParts = [
             $this->portData['namespace'],
