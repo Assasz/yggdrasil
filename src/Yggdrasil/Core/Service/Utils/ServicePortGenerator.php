@@ -61,9 +61,8 @@ class ServicePortGenerator
 
         $this->portClass = $this->portFile
             ->addNamespace($namespace)
-            ->addUse('Yggdrasil\Core\Service\Service' . $this->portData['type'] . 'Interface')
             ->addClass($this->portData['class'] . $this->portData['type'])
-            ->addImplement('Service' . $this->portData['type'] . 'Interface')
+            ->addImplement('Yggdrasil\Core\Service\Service' . $this->portData['type'] . 'Interface')
             ->addComment($this->portData['class'] . ' service ' . strtolower($this->portData['type']) . PHP_EOL)
             ->addComment('@package ' . $namespace);
 
