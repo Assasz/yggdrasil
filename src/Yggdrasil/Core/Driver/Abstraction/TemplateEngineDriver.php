@@ -29,14 +29,6 @@ abstract class TemplateEngineDriver
     abstract public function render(string $view, array $params = []): string;
 
     /**
-     * Displays given view
-     *
-     * @param string $view
-     * @param array $params
-     */
-    abstract public function display(string $view, array $params = []): void;
-
-    /**
      * Adds global to template engine
      *
      * @param string $name

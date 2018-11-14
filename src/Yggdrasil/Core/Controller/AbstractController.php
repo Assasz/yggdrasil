@@ -109,7 +109,7 @@ abstract class AbstractController
         $templateEngine = $this->getTemplateEngine();
 
         $callback = function () use ($templateEngine, $view, $params) {
-            $templateEngine->display($view, $params);
+            echo $templateEngine->render($view, $params);
         };
 
         $headers = $this->getResponse()->headers->all();
