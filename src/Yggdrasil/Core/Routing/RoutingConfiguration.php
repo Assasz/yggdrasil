@@ -146,7 +146,7 @@ final class RoutingConfiguration
      */
     public function getPassiveActions(): array
     {
-        return $this->passiveActions['passive_actions'];
+        return $this->passiveActions['passive_actions'] ?? [];
     }
 
     /**
