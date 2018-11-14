@@ -121,7 +121,7 @@ class ServicePortGenerateCommand extends Command
                 new Question('Property name: '),
             'propertyType' =>
                 new ChoiceQuestion('Property type: ', [
-                    'string', 'int', 'float', 'datetime', 'bool'
+                    'string', 'int', 'float', 'datetime', 'bool', 'array'
                 ], 0),
             'continue' =>
                 new ConfirmationQuestion('Continue with next property? (y/n)', true)
