@@ -77,7 +77,9 @@ class ServicePortGenerator
     private function generateProperties(): ServicePortGenerator
     {
         foreach ($this->portData['properties'] as $name => $type) {
-            $type = ('datetime' !== $type) ?: '\DateTime';
+            if ('datetime' === $type) {
+                $type = '\DateTime';
+            }
 
             $this->portClass
                 ->addProperty($name)
@@ -114,7 +116,9 @@ class ServicePortGenerator
      */
     private function generateGetter(string $name, string $type): ServicePortGenerator
     {
-        $type = ('datetime' !== $type) ?: '\DateTime';
+        if ('datetime' === $type) {
+            $type = '\DateTime';
+        }
 
         $this->portClass
             ->addMethod(('bool' === $type) ? 'is' . ucfirst($name) : 'get' . ucfirst($name))
@@ -136,7 +140,9 @@ class ServicePortGenerator
      */
     private function generateSetter(string $name, string $type): ServicePortGenerator
     {
-        $type = ('datetime' !== $type) ?: '\DateTime';
+        if ('datetime' === $type) {
+            $type = '\DateTime';
+        }
 
         $setter = $this->portClass
             ->addMethod('set' . ucfirst($name))
