@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Component\DoctrineComponent;
+namespace Yggdrasil\Core\Entity;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,9 +13,9 @@ use Yggdrasil\Core\Configuration\ConfigurationInterface;
 /**
  * Class EntityGenerateCommand
  *
- * Console command that generates Doctrine entity
+ * Console command that generates domain entity
  *
- * @package Skeleton\Ports\Command
+ * @package Yggdrasil\Core\Entity
  */
 class EntityGenerateCommand extends Command
 {
@@ -45,8 +45,8 @@ class EntityGenerateCommand extends Command
     {
         $this
             ->setName('yggdrasil:entity:generate')
-            ->setDescription('Generates basic Doctrine entity')
-            ->setHelp('This command allows you to generate Doctrine entity.');
+            ->setDescription('Generates basic domain entity')
+            ->setHelp('This command allows you to generate basic domain entity.');
     }
 
     /**
@@ -58,7 +58,8 @@ class EntityGenerateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $output->writeln([
-            'Let\'s generate Doctrine entity!',
+            '----------------',
+            'Domain entity generator',
             '----------------',
             ''
         ]);
@@ -66,7 +67,6 @@ class EntityGenerateCommand extends Command
         $helper      = $this->getHelper('question');
         $questionSet = $this->createQuestionSet();
         $entityName  = $helper->ask($input, $output, $questionSet['entityName']);
-        $tableName   = $helper->ask($input, $output, $questionSet['tableName']);
 
         do {
             $propertyNames[] = $helper->ask($input, $output, $questionSet['propertyName']);
@@ -81,7 +81,6 @@ class EntityGenerateCommand extends Command
         $entityData = [
             'namespace'  => $entityNamespace,
             'class'      => $entityName,
-            'table'      => $tableName,
             'properties' => $properties
         ];
 
@@ -100,13 +99,11 @@ class EntityGenerateCommand extends Command
         return [
             'entityName' =>
                 new Question('Entity name: '),
-            'tableName' =>
-                new Question('Table name: '),
             'propertyName' =>
                 new Question('Property name: '),
             'propertyType' =>
                 new ChoiceQuestion('Property type: ', [
-                    'string', 'text', 'int', 'float', 'datetime'
+                    'string', 'int', 'float', 'datetime'
                 ], 0),
             'continue' =>
                 new ConfirmationQuestion('Continue with next property? (y/n)', true)

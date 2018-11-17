@@ -66,7 +66,8 @@ class ServicePortGenerateCommand extends Command
         }
 
         $output->writeln([
-            'Let\'s generate service port!',
+            '----------------',
+            'Service port generator',
             '----------------',
             ''
         ]);
@@ -110,7 +111,7 @@ class ServicePortGenerateCommand extends Command
     {
         return [
             'servicePortName' =>
-                new Question('Service port name: '),
+                new Question('Service name: '),
             'servicePortType' =>
                 new ChoiceQuestion('Service port type: ', [
                     'Request', 'Response'

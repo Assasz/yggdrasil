@@ -1,15 +1,13 @@
 <?php
 
-namespace Yggdrasil\Component\DoctrineComponent;
-
-use Doctrine\Common\Collections\Collection;
+namespace Yggdrasil\Core\Entity;
 
 /**
  * Class EntitySerializer
  *
- * Serializes Doctrine entities
+ * Serializes domain entities
  *
- * @package Yggdrasil\Component\DoctrineComponent
+ * @package Yggdrasil\Core\Entity
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 abstract class EntitySerializer
@@ -51,13 +49,9 @@ abstract class EntitySerializer
                 $value = $entity->{$method}();
 
                 if (is_object($value)) {
-                    if ($value instanceof Collection) {
-                        $value = self::toArray($value->toArray(), $depth);
-                    } elseif ($value instanceof \DateTime) {
-                        $value = $value->format('Y-m-d H:i:s');
-                    } else {
+                    ($value instanceof \DateTime) ?
+                        $value = $value->format('Y-m-d H:i:s') :
                         $value = self::toArray([$value], $depth);
-                    }
                 }
 
                 $data[$i][$propertyName] = $value;
