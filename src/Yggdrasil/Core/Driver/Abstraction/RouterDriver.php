@@ -84,6 +84,17 @@ abstract class RouterDriver
     }
 
     /**
+     * Returns alias of active action in lower case
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function getActionAlias(Request $request): string
+    {
+        return self::$routerInstance->getActionAlias($request);
+    }
+
+    /**
      * Returns routing configuration
      *
      * @return RoutingConfiguration

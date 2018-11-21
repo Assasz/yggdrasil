@@ -196,6 +196,37 @@ final class Router
     }
 
     /**
+     * Returns alias of active action in lower case
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function getActionAlias(Request $request): string
+    {
+        $actionAlias = str_replace('/', ':', $request->query->get('route'));
+
+        if (empty($actionAlias)) {
+            $actionAlias = $this->getConfiguration()->getDefaultController() . ':' . $this->getConfiguration()->getDefaultAction();
+        }
+
+        if (!strpos($actionAlias, ':')) {
+            $actionAlias = $actionAlias . ':' . $this->getConfiguration()->getDefaultAction();
+        }
+
+        return strtolower($actionAlias);
+    }
+
+    /**
+     * Returns routing configuration
+     *
+     * @return RoutingConfiguration
+     */
+    public function getConfiguration(): RoutingConfiguration
+    {
+        return $this->configuration;
+    }
+
+    /**
      * Resolves controller depending on route parameter
      *
      * @return string
@@ -266,15 +297,5 @@ final class Router
         }
 
         return $actionParams;
-    }
-
-    /**
-     * Returns routing configuration
-     *
-     * @return RoutingConfiguration
-     */
-    public function getConfiguration(): RoutingConfiguration
-    {
-        return $this->configuration;
     }
 }

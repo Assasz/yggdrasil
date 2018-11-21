@@ -72,7 +72,14 @@ final class Kernel
      */
     private function executePassiveActions(Request $request, Response $response): Response
     {
-        foreach ($this->getRouter()->getConfiguration()->getPassiveActions() as $action) {
+        foreach ($this->getRouter()->getConfiguration()->getPassiveActions() as $action => $whitelist) {
+            $allowedActions = array_map('strtolower', $whitelist);
+            $actionAlias    = $this->getRouter()->getActionAlias($request);
+
+            if (!in_array($actionAlias, $allowedActions) && !in_array('all', $allowedActions)) {
+                continue;
+            }
+
             $route = $this->getRouter()->getAliasedRoute($action, [], Router::PASSIVE_ACTION);
 
             if (!method_exists($route->getController(), $route->getAction())) {
