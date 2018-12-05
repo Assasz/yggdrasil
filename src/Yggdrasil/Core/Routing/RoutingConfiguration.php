@@ -41,6 +41,13 @@ final class RoutingConfiguration
     private $defaultAction;
 
     /**
+     * Default HTTP Not Found message
+     *
+     * @var string
+     */
+    private $defaultNotFoundMsg;
+
+    /**
      * Collection of registered passive actions
      *
      * @var array
@@ -135,6 +142,29 @@ final class RoutingConfiguration
     public function setDefaultAction(string $defaultAction): RoutingConfiguration
     {
         $this->defaultAction = $defaultAction;
+
+        return $this;
+    }
+
+    /**
+     * Returns default HTTP Not Found message
+     *
+     * @return string
+     */
+    public function getDefaultNotFoundMsg(): string
+    {
+        return $this->defaultNotFoundMsg;
+    }
+
+    /**
+     * Sets default HTTP Not Found message
+     *
+     * @param string $msg
+     * @return RoutingConfiguration
+     */
+    public function setDefaultNotFoundMsg(string $msg): RoutingConfiguration
+    {
+        $this->defaultNotFoundMsg = $msg;
 
         return $this;
     }

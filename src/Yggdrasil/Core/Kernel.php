@@ -112,7 +112,7 @@ final class Kernel
         if (!method_exists($route->getController(), $route->getAction())) {
             if (!DEBUG) {
                 return $response
-                    ->setContent('Not found.')
+                    ->setContent($this->getRouter()->getConfiguration()->getDefaultNotFoundMsg() ?? 'Not found.')
                     ->setStatusCode(Response::HTTP_NOT_FOUND);
             }
 
