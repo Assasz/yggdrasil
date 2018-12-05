@@ -33,23 +33,6 @@ final class Route
      */
     private $actionParams;
 
-    /**
-     * Indicates if api is called
-     *
-     * @var bool
-     */
-    private $isApiCall;
-
-    /**
-     * Route constructor.
-     *
-     * Sets default value to isApiCall flag
-     */
-    public function __construct()
-    {
-        $this->isApiCall = false;
-    }
-
   /**
      * Returns controller name
      *
@@ -115,29 +98,6 @@ final class Route
     public function setActionParams(array $actionParams): Route
     {
         $this->actionParams = $actionParams;
-
-        return $this;
-    }
-
-    /**
-     * Checks if api is called
-     *
-     * @return bool
-     */
-    public function isApiCall(): bool
-    {
-        return $this->isApiCall;
-    }
-
-    /**
-     * Sets isApiCall flag
-     *
-     * @param bool $isApiCall
-     * @return Route
-     */
-    public function setApiCall(bool $isApiCall): Route
-    {
-        $this->isApiCall = $isApiCall;
 
         return $this;
     }

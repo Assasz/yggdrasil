@@ -65,20 +65,9 @@ final class Router
         $query = $request->query->get('route');
         $this->routeParams = explode('/', trim($query, '/'));
 
-        $route = new Route();
-
-        if ($this->routeParams[0] === 'api') {
-            unset($this->routeParams[0]);
-
-            $this->routeParams = array_values($this->routeParams);
-            $route->setApiCall(true);
-        }
-
-        $route
+        $route = (new Route())
             ->setController($this->resolveController())
-            ->setAction(($route->isApiCall()) ?
-                $this->resolveApiAction($request->getMethod()) :
-                $this->resolveAction())
+            ->setAction($this->resolveAction())
             ->setActionParams($this->resolveActionParams());
 
         return $route;
@@ -169,24 +158,8 @@ final class Router
                     continue;
                 }
 
-                $httpMethods = ['Get', 'Post', 'Put', 'Delete'];
-                $isApiAction = false;
-
-                foreach ($httpMethods as $method) {
-                    if (strstr($action, $method . 'Action')) {
-                        $isApiAction = true;
-
-                        break;
-                    }
-                }
-
-                $actionAlias = str_replace(array_merge($httpMethods, ['Action']), '', $action->getName());
-
+                $actionAlias = str_replace('Action', '', $action->getName());
                 $alias = $controllerAlias . ':' . $actionAlias;
-
-                if ($isApiAction) {
-                    $alias = 'API:' . $alias;
-                }
 
                 $queryMap[$alias] = $this->getQuery($alias);
             }
@@ -264,23 +237,6 @@ final class Router
         $action = $this->routeParams[1] . 'PassiveAction';
 
         return $action;
-    }
-
-    /**
-     * Resolves api action depending on route parameter and HTTP method
-     *
-     * @param string $method HTTP method
-     * @return string
-     */
-    private function resolveApiAction(string $method): string
-    {
-        $method = ucfirst(strtolower($method));
-
-        $action = (!empty($this->routeParams[1])) ?
-            $this->routeParams[1] . $method :
-            $this->configuration->getDefaultAction();
-
-        return $action . 'Action';
     }
 
     /**
