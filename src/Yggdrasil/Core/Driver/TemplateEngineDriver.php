@@ -1,13 +1,13 @@
 <?php
 
-namespace Yggdrasil\Core\Driver\Abstraction;
+namespace Yggdrasil\Core\Driver;
 
 /**
  * Class TemplateEngineDriver
  *
  * Abstract template engine driver
  *
- * @package Yggdrasil\Core\Driver\Abstraction
+ * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 abstract class TemplateEngineDriver

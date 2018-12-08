@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Core\Driver\Abstraction;
+namespace Yggdrasil\Core\Driver;
 
 use Yggdrasil\Core\Routing\Route;
 use Yggdrasil\Core\Routing\Router;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Abstract router driver
  *
- * @package Yggdrasil\Core\Driver\Abstraction
+ * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 abstract class RouterDriver

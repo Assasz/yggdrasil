@@ -14,7 +14,7 @@ use Nette\PhpGenerator\PhpFile;
  * @package Yggdrasil\Core\Entity
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class EntityGenerator
+final class EntityGenerator
 {
     /**
      * Data passed by command

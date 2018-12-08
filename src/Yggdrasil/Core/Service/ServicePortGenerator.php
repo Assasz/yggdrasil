@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Core\Service\Utils;
+namespace Yggdrasil\Core\Service;
 
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Helpers;
@@ -9,12 +9,12 @@ use Nette\PhpGenerator\PhpFile;
 /**
  * Class ServicePortGenerator
  *
- * Generates service port - request or response
+ * Generates service port object - request as input port or response as output port
  *
- * @package Yggdrasil\Core\Service\Utils
+ * @package Yggdrasil\Core\Service
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class ServicePortGenerator
+final class ServicePortGenerator
 {
     /**
      * Data passed by command
