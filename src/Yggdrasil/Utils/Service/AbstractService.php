@@ -42,7 +42,7 @@ abstract class AbstractService
      */
     protected function validateContracts(): void
     {
-        foreach ($this->getContracts() as $supplier => $contract) {
+        foreach ($this->getContracts() as $contract => $supplier) {
             if (!is_subclass_of($supplier, $contract)) {
                 throw new BrokenContractException($contract);
             }
@@ -52,7 +52,7 @@ abstract class AbstractService
     /**
      * Returns contracts between service and external suppliers
      *
-     * @example [$this->getEntityManager() => EntityManagerInterface::class]
+     * @example [EntityManagerInterface::class => $this->getEntityManager()]
      *
      * @return array
      */
