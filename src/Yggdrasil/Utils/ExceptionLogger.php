@@ -1,11 +1,11 @@
 <?php
 
-namespace Yggdrasil\Core\Exception\Logger;
+namespace Yggdrasil\Utils;
 
 /**
  * Class ExceptionLogger
  *
- * @package Yggdrasil\Core\Exception\Logger
+ * @package Yggdrasil\Utils
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 final class ExceptionLogger

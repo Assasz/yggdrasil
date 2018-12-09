@@ -1,13 +1,13 @@
 <?php
 
-namespace Yggdrasil\Core\Entity;
+namespace Yggdrasil\Utils\Entity;
 
 /**
  * Class EntitySerializer
  *
  * Serializes domain entities
  *
- * @package Yggdrasil\Core\Entity
+ * @package Yggdrasil\Utils\Entity
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 abstract class EntitySerializer

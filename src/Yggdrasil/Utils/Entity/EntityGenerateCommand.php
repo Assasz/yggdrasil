@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Core\Entity;
+namespace Yggdrasil\Utils\Entity;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +15,7 @@ use Yggdrasil\Core\Configuration\ConfigurationInterface;
  *
  * Console command that generates domain entity
  *
- * @package Yggdrasil\Core\Entity
+ * @package Yggdrasil\Utils\Entity
  */
 class EntityGenerateCommand extends Command
 {

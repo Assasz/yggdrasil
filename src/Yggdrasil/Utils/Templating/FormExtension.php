@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Component\TwigComponent;
+namespace Yggdrasil\Utils\Templating;
 
 use HtmlGenerator\HtmlTag;
 use HtmlGenerator\Markup;
@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Provides form extension for Twig
  *
- * @package Yggdrasil\Component\TwigComponent
+ * @package Yggdrasil\Utils\Templating
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 class FormExtension extends \Twig_Extension

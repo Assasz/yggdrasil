@@ -1,11 +1,11 @@
 <?php
 
-namespace Yggdrasil\Core\Form;
+namespace Yggdrasil\Utils\Form;
 
 /**
  * Class FormDataWrapper
  *
- * @package Yggdrasil\Core\Form
+ * @package Yggdrasil\Utils\Form
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 abstract class FormDataWrapper

@@ -1,18 +1,17 @@
 <?php
 
-namespace Yggdrasil\Core\Form;
+namespace Yggdrasil\Utils\Form;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Yggdrasil\Core\Exception\InvalidCsrfTokenException;
-use Yggdrasil\Core\Service\ServiceRequestInterface;
 
 /**
  * Class FormHandler
  *
  * Handles form submission
  *
- * @package Yggdrasil\Core\Form
+ * @package Yggdrasil\Utils\Form
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 final class FormHandler

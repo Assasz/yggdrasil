@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Component\TwigComponent;
+namespace Yggdrasil\Utils\Templating;
 
 use Symfony\Component\HttpFoundation\Request;
 use Yggdrasil\Core\Routing\Route;
@@ -11,7 +11,7 @@ use Yggdrasil\Core\Routing\Router;
  *
  * Provides routing extension for Twig
  *
- * @package Yggdrasil\Component\TwigComponent
+ * @package Yggdrasil\Utils\Templating
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 class RoutingExtension extends \Twig_Extension

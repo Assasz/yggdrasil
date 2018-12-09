@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Core\Entity;
+namespace Yggdrasil\Utils\Entity;
 
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Helpers;
@@ -11,7 +11,7 @@ use Nette\PhpGenerator\PhpFile;
  *
  * Generates basic domain entity
  *
- * @package Yggdrasil\Core\Entity
+ * @package Yggdrasil\Utils\Entity
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 final class EntityGenerator
@@ -178,7 +178,7 @@ final class EntityGenerator
     private function saveFile(): void
     {
         $sourceCode = Helpers::tabsToSpaces((string) $this->entityFile);
-        $entityPath = dirname(__DIR__, 7) . '/src/' . $this->entityData['namespace'] . '/';
+        $entityPath = dirname(__DIR__, 7) . '/src/';
 
         $handle = fopen($entityPath . $this->entityData['class'] . '.php', 'w');
         fwrite($handle, $sourceCode);

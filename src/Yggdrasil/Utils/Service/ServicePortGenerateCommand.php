@@ -1,6 +1,6 @@
 <?php
 
-namespace Yggdrasil\Core\Service;
+namespace Yggdrasil\Utils\Service;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,7 +16,7 @@ use Yggdrasil\Core\Exception\MissingConfigurationException;
  *
  * Console command that generates service port
  *
- * @package Yggdrasil\Core\Service
+ * @package Yggdrasil\Utils\Service
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 class ServicePortGenerateCommand extends Command
