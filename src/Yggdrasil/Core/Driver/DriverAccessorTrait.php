@@ -22,6 +22,16 @@ trait DriverAccessorTrait
     private $drivers;
 
     /**
+     * Returns collection of all drivers
+     *
+     * @return DriverCollection
+     */
+    protected function getDrivers(): DriverCollection
+    {
+        return $this->drivers;
+    }
+
+    /**
      * Returns given driver instance
      *
      * @param string $key Name of driver
