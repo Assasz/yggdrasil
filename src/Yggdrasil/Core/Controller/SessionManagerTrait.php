@@ -17,10 +17,10 @@ trait SessionManagerTrait
     /**
      * Starts user session and returns session instance
      *
-     * @param mixed $user Authenticated user instance
+     * @param object $user Authenticated user instance
      * @return Session
      */
-    protected function startUserSession($user): Session
+    protected function startUserSession(object $user): Session
     {
         $session = new Session();
 
@@ -28,17 +28,6 @@ trait SessionManagerTrait
         $session->set('user', $user);
 
         return $session;
-    }
-
-    /**
-     * Ends user session
-     */
-    protected function endUserSession(): void
-    {
-        $session = new Session();
-
-        $session->set('is_granted', false);
-        $session->remove('user');
     }
 
     /**
@@ -54,9 +43,9 @@ trait SessionManagerTrait
     /**
      * Returns authenticated user instance from session
      *
-     * @return mixed
+     * @return object
      */
-    protected function getUser()
+    protected function getUser(): object
     {
         return (new Session())->get('user');
     }
