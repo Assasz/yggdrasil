@@ -27,25 +27,33 @@ abstract class AbstractService
      * Loads drivers from configuration
      *
      * @param ConfigurationInterface $appConfiguration Configuration passed by ContainerDriver
+     *
+     * @throws \ReflectionException
      */
     public function __construct(ConfigurationInterface $appConfiguration)
     {
         $this->drivers = $appConfiguration->loadDrivers();
 
-        $this->validateContracts();
+        $this->registerContracts();
     }
 
     /**
-     * Validates registered contracts between service and external suppliers
+     * Registers contracts between service and external suppliers
      *
      * @throws BrokenContractException
+     * @throws \ReflectionException
      */
-    protected function validateContracts(): void
+    protected function registerContracts(): void
     {
         foreach ($this->getContracts() as $contract => $supplier) {
             if (!is_subclass_of($supplier, $contract)) {
                 throw new BrokenContractException($contract);
             }
+
+            $reflection = new \ReflectionClass($contract);
+            $property = str_replace('Interface', '', $reflection->getShortName());
+
+            $this->{lcfirst($property)} = $supplier;
         }
     }
 
