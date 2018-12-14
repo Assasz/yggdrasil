@@ -42,6 +42,16 @@ final class DriverCollection
     }
 
     /**
+     * Returns all drivers in an array
+     *
+     * @return array
+     */
+    public function all(): array
+    {
+        return $this->drivers;
+    }
+
+    /**
      * Adds driver to collection
      *
      * @param string $key Name of driver
