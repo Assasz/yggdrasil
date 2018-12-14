@@ -6,8 +6,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
+use Yggdrasil\Core\Driver\RouterDriver;
 use Yggdrasil\Core\Exception\ActionForbiddenException;
 use Yggdrasil\Core\Exception\ActionNotFoundException;
+use Yggdrasil\Core\Exception\DriverNotFoundException;
 use Yggdrasil\Core\Routing\Router;
 
 /**
@@ -26,6 +28,13 @@ final class Kernel
     use DriverAccessorTrait;
 
     /**
+     * Instance of Router driver
+     *
+     * @var RouterDriver
+     */
+    private $router;
+
+    /**
      * Kernel constructor.
      *
      * Initializes application
@@ -35,6 +44,12 @@ final class Kernel
     public function __construct(ConfigurationInterface $appConfiguration)
     {
         $this->drivers = $appConfiguration->loadDrivers();
+
+        if (!$this->drivers->has('router') || !$this->getRouter() instanceof RouterDriver) {
+            throw new DriverNotFoundException("Provided Router driver cannot be found or is invalid.");
+        }
+
+        $this->router = $this->getRouter();
 
         if ($this->drivers->has('exceptionHandler')) {
             $this->getExceptionHandler();
@@ -72,15 +87,15 @@ final class Kernel
      */
     private function executePassiveActions(Request $request, Response $response): Response
     {
-        foreach ($this->getRouter()->getConfiguration()->getPassiveActions() as $action => $whitelist) {
+        foreach ($this->router->getConfiguration()->getPassiveActions() as $action => $whitelist) {
             $allowedActions = array_map('strtolower', $whitelist);
-            $actionAlias    = $this->getRouter()->getActionAlias($request);
+            $actionAlias    = $this->router->getActionAlias($request);
 
             if (!in_array($actionAlias, $allowedActions) && !in_array('all', $allowedActions)) {
                 continue;
             }
 
-            $route = $this->getRouter()->getAliasedRoute($action, [], Router::PASSIVE_ACTION);
+            $route = $this->router->getAliasedRoute($action, [], Router::PASSIVE_ACTION);
 
             if (!method_exists($route->getController(), $route->getAction())) {
                 throw new ActionNotFoundException($action . ' passive action is present in registry, but can\'t be found or is improperly configured.');
@@ -107,19 +122,19 @@ final class Kernel
      */
     private function executeAction(Request $request, Response $response)
     {
-        $route = $this->getRouter()->getRoute($request);
+        $route = $this->router->getRoute($request);
 
         if (!method_exists($route->getController(), $route->getAction())) {
             if (!DEBUG) {
                 return $response
-                    ->setContent($this->getRouter()->getConfiguration()->getDefaultNotFoundMsg() ?? 'Not found.')
+                    ->setContent($this->router->getConfiguration()->getDefaultNotFoundMsg() ?? 'Not found.')
                     ->setStatusCode(Response::HTTP_NOT_FOUND);
             }
 
             throw new ActionNotFoundException($route->getAction() . ' for ' . $route->getController() . ' not found.');
         }
 
-        $errorController = $this->getRouter()->getConfiguration()->getControllerNamespace() . 'ErrorController';
+        $errorController = $this->router->getConfiguration()->getControllerNamespace() . 'ErrorController';
 
         if (1 === preg_match('(Partial|Passive)', $route->getAction()) || $errorController === $route->getController()) {
             if (!DEBUG) {
@@ -146,7 +161,7 @@ final class Kernel
      */
     private function handleError(Request $request, Response $response)
     {
-        $controllerName = $this->getRouter()->getConfiguration()->getControllerNamespace() . 'ErrorController';
+        $controllerName = $this->router->getConfiguration()->getControllerNamespace() . 'ErrorController';
         $actionName = 'code' . $response->getStatusCode() . 'Action';
 
         if (!method_exists($controllerName, $actionName)) {

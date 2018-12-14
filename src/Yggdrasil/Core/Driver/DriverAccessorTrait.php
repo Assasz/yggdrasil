@@ -121,4 +121,15 @@ trait DriverAccessorTrait
     {
         return $this->drivers->get('cache');
     }
+
+    /**
+     * Install drivers in class by generating magic properties
+     * Hint type of these properties by using '@property' tag
+     */
+    protected function installDrivers(): void
+    {
+        foreach ($this->drivers as $name => $driver) {
+            $this->{$name} = $this->drivers->get($name);
+        }
+    }
 }

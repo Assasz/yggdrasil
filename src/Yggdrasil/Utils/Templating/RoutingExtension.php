@@ -3,8 +3,8 @@
 namespace Yggdrasil\Utils\Templating;
 
 use Symfony\Component\HttpFoundation\Request;
+use Yggdrasil\Core\Driver\RouterDriver;
 use Yggdrasil\Core\Routing\Route;
-use Yggdrasil\Core\Routing\Router;
 
 /**
  * Class RoutingExtension
@@ -19,16 +19,16 @@ class RoutingExtension extends \Twig_Extension
     /**
      * Router instance
      *
-     * @var Router
+     * @var RouterDriver
      */
     private $router;
 
     /**
      * RoutingExtension constructor.
      *
-     * @param Router $router
+     * @param RouterDriver $router
      */
-    public function __construct(Router $router)
+    public function __construct(RouterDriver $router)
     {
         $this->router = $router;
     }

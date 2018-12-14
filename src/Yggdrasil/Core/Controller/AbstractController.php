@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\DriverCollection;
+use Yggdrasil\Core\Driver\RouterDriver;
+use Yggdrasil\Core\Driver\TemplateEngineDriver;
+use Yggdrasil\Core\Exception\DriverNotFoundException;
 
 /**
  * Class AbstractController
@@ -16,6 +19,9 @@ use Yggdrasil\Core\Driver\DriverCollection;
  *
  * @package Yggdrasil\Core\Controller
  * @author Paweł Antosiak <contact@pawelantosiak.com>
+ *
+ * @property RouterDriver $router
+ * @property TemplateEngineDriver $templateEngine
  */
 abstract class AbstractController
 {
@@ -46,6 +52,8 @@ abstract class AbstractController
         $this->drivers  = $drivers;
         $this->request  = $request;
         $this->response = $response;
+
+        $this->installDrivers();
     }
 
     /**
@@ -57,8 +65,12 @@ abstract class AbstractController
      */
     protected function render(string $view, array $params = []): Response
     {
-        $this->getTemplateEngine()->addGlobal('_request', $this->getRequest());
-        $template = $this->getTemplateEngine()->render($view, $params);
+        if (!isset($this->templateEngine) || !$this->templateEngine instanceof TemplateEngineDriver) {
+            throw new DriverNotFoundException("render() method is not supported until proper Template Engine driver cannot be found.");
+        }
+
+        $this->templateEngine->addGlobal('_request', $this->getRequest());
+        $template = $this->templateEngine->render($view, $params);
 
         return $this->getResponse()->setContent($template);
     }
@@ -72,9 +84,13 @@ abstract class AbstractController
      */
     protected function renderPartial(string $view, array $params = []): string
     {
-        $this->getTemplateEngine()->addGlobal('_request', $this->getRequest());
+        if (!isset($this->templateEngine) || !$this->templateEngine instanceof TemplateEngineDriver) {
+            throw new DriverNotFoundException("renderPartial() method is not supported until proper Template Engine driver cannot be found.");
+        }
 
-        return $this->getTemplateEngine()->render($view, $params);
+        $this->templateEngine->addGlobal('_request', $this->getRequest());
+
+        return $this->templateEngine->render($view, $params);
     }
 
     /**
@@ -87,11 +103,11 @@ abstract class AbstractController
     protected function redirectToAction(string $alias = null, array $params = []): RedirectResponse
     {
         if (empty($alias)) {
-            $routerConfig = $this->getRouter()->getConfiguration();
+            $routerConfig = $this->router->getConfiguration();
             $alias = "{$routerConfig->getDefaultController()}:{$routerConfig->getDefaultAction()}";
         }
 
-        $query = $this->getRouter()->getQuery($alias, $params);
+        $query = $this->router->getQuery($alias, $params);
         $headers = $this->getResponse()->headers->all();
 
         return new RedirectResponse($query, Response::HTTP_FOUND, $headers);
@@ -106,7 +122,11 @@ abstract class AbstractController
      */
     protected function stream(string $view, array $params = []): StreamedResponse
     {
-        $templateEngine = $this->getTemplateEngine();
+        if (!isset($this->templateEngine) || !$this->templateEngine instanceof TemplateEngineDriver) {
+            throw new DriverNotFoundException("stream() method is not supported until proper Template Engine driver cannot be found.");
+        }
+
+        $templateEngine = $this->templateEngine;
 
         $callback = function () use ($templateEngine, $view, $params) {
             echo $templateEngine->render($view, $params);

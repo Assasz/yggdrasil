@@ -25,16 +25,6 @@ abstract class RouterDriver
     protected static $routerInstance;
 
     /**
-     * Returns router instance
-     *
-     * @return Router
-     */
-    public function getComponentInstance(): Router
-    {
-        return self::$routerInstance;
-    }
-
-    /**
      * Returns route for requested action
      *
      * @param Request $request
