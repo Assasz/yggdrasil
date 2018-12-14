@@ -2,6 +2,8 @@
 
 namespace Yggdrasil\Core\Driver;
 
+use Yggdrasil\Core\Exception\DriverNotSupportedException;
+
 /**
  * Trait DriverAccessorTrait
  *
@@ -43,83 +45,35 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Returns entity manager driver instance
+     * Returns router driver instance
      *
-     * @return DriverInterface
+     * @return RouterDriver
+     *
+     * @throws DriverNotSupportedException
      */
-    protected function getEntityManager(): DriverInterface
+    protected function getRouter(): RouterDriver
     {
-        return $this->drivers->get('entityManager');
+        if (!$this->drivers->get('router') instanceof RouterDriver) {
+            throw new DriverNotSupportedException('Provided router driver is not supported.');
+        }
+
+        return $this->drivers->get('router');
     }
 
     /**
      * Returns template engine driver instance
      *
-     * @return DriverInterface
+     * @return TemplateEngineDriver
+     *
+     * @throws DriverNotSupportedException
      */
-    protected function getTemplateEngine(): DriverInterface
+    protected function getTemplateEngine(): TemplateEngineDriver
     {
+        if (!$this->drivers->get('templateEngine') instanceof TemplateEngineDriver) {
+            throw new DriverNotSupportedException('Provided template engine driver is not supported.');
+        }
+
         return $this->drivers->get('templateEngine');
-    }
-
-    /**
-     * Returns router driver instance
-     *
-     * @return DriverInterface
-     */
-    protected function getRouter(): DriverInterface
-    {
-        return $this->drivers->get('router');
-    }
-
-    /**
-     * Returns validator driver instance
-     *
-     * @return DriverInterface
-     */
-    protected function getValidator(): DriverInterface
-    {
-        return $this->drivers->get('validator');
-    }
-
-    /**
-     * Returns mailer driver instance
-     *
-     * @return DriverInterface
-     */
-    protected function getMailer(): DriverInterface
-    {
-        return $this->drivers->get('mailer');
-    }
-
-    /**
-     * Returns container driver instance
-     *
-     * @return DriverInterface
-     */
-    protected function getContainer(): DriverInterface
-    {
-        return $this->drivers->get('container');
-    }
-
-    /**
-     * Returns exception handler driver instance
-     *
-     * @return DriverInterface
-     */
-    protected function getExceptionHandler(): DriverInterface
-    {
-        return $this->drivers->get('exceptionHandler');
-    }
-
-    /**
-     * Returns cache driver instance
-     *
-     * @return DriverInterface
-     */
-    protected function getCache(): DriverInterface
-    {
-        return $this->drivers->get('cache');
     }
 
     /**

@@ -6,9 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\DriverCollection;
-use Yggdrasil\Core\Driver\RouterDriver;
-use Yggdrasil\Core\Driver\TemplateEngineDriver;
-use Yggdrasil\Core\Exception\DriverNotFoundException;
 
 /**
  * Class ApiController
@@ -17,8 +14,6 @@ use Yggdrasil\Core\Exception\DriverNotFoundException;
  *
  * @package Yggdrasil\Core\Controller
  * @author Paweł Antosiak <contact@pawelantosiak.com>
- *
- * @property TemplateEngineDriver $templateEngine
  */
 abstract class ApiController
 {
@@ -117,13 +112,9 @@ abstract class ApiController
      */
     protected function renderPartial(string $view, array $params = []): string
     {
-        if (!isset($this->templateEngine) || !$this->templateEngine instanceof TemplateEngineDriver) {
-            throw new DriverNotFoundException("renderPartial() method is not supported until proper Template Engine driver cannot be found.");
-        }
+        $this->getTemplateEngine()->addGlobal('_request', $this->getRequest());
 
-        $this->templateEngine->addGlobal('_request', $this->getRequest());
-
-        return $this->templateEngine->render($view, $params);
+        return $this->getTemplateEngine()->render($view, $params);
     }
 
     /**
