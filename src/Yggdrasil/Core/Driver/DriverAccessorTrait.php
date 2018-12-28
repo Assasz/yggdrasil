@@ -77,7 +77,7 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Install drivers in class by generating magic properties
+     * Installs drivers in class by generating magic properties
      * Hint type of these properties by using '@property' tag
      */
     protected function installDrivers(): void
