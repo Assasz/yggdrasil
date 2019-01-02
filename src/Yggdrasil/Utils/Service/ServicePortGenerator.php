@@ -62,7 +62,6 @@ final class ServicePortGenerator
         $this->portClass = $this->portFile
             ->addNamespace($namespace)
             ->addClass($this->portData['class'] . $this->portData['type'])
-            ->addImplement('Yggdrasil\Core\Service\Service' . $this->portData['type'] . 'Interface')
             ->addComment($this->portData['class'] . ' service ' . strtolower($this->portData['type']) . PHP_EOL)
             ->addComment('@package ' . $namespace);
 
@@ -177,7 +176,7 @@ final class ServicePortGenerator
         $sourceCode = Helpers::tabsToSpaces((string) $this->portFile);
 
         $fullPath = implode('/', [
-            dirname(__DIR__, 8) . '/src',
+            dirname(__DIR__, 7) . '/src',
             $this->portData['namespace'],
             $this->portData['module'] . 'Module',
             $this->portData['type'],
@@ -201,9 +200,9 @@ final class ServicePortGenerator
     public function generate(): void
     {
         $this
-          ->generateClass()
-          ->generateProperties()
-          ->generateMethods()
-          ->saveFile();
+            ->generateClass()
+            ->generateProperties()
+            ->generateMethods()
+            ->saveFile();
     }
 }
