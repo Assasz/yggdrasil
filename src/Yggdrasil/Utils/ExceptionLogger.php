@@ -41,6 +41,12 @@ final class ExceptionLogger
 
         $log = "[$date] {$throwable->getMessage()} at line {$throwable->getLine()} in {$throwable->getFile()}" . PHP_EOL;
 
+        $dirname = dirname($this->logPath);
+
+        if (!is_dir($dirname)) {
+            mkdir($dirname, 0755);
+        }
+
         $handle = fopen($this->logPath, 'a');
         fwrite($handle, $log);
         fclose($handle);
