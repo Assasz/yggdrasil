@@ -37,7 +37,7 @@ abstract class AbstractConfiguration
     public function __construct()
     {
         $this->configuration = $this->parseConfiguration();
-        $this->drivers = $this->getDriverRegistry();
+        $this->drivers = $this->getDriversRegistry();
     }
 
     /**
