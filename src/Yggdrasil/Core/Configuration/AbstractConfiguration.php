@@ -136,11 +136,11 @@ abstract class AbstractConfiguration
     abstract protected function getConfigPath(): string;
 
     /**
-     * Returns application driver registry
+     * Returns application drivers registry
      *
      * @example ['entityManager' => EntityManagerDriver::class]
      *
      * @return array
      */
-    abstract protected function getDriverRegistry(): array;
+    abstract protected function getDriversRegistry(): array;
 }
