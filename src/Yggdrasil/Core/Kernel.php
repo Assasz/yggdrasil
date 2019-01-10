@@ -6,11 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
-use Yggdrasil\Core\Driver\RouterDriver;
 use Yggdrasil\Core\Exception\ActionForbiddenException;
 use Yggdrasil\Core\Exception\ActionNotFoundException;
-use Yggdrasil\Core\Exception\DriverNotFoundException;
-use Yggdrasil\Core\Routing\PassiveActionValidator;
 use Yggdrasil\Core\Routing\Router;
 
 /**
