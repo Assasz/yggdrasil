@@ -83,7 +83,7 @@ final class Kernel
                 continue;
             }
 
-            if (in_array('!' . $activeAction, $allowedActions) && in_array('all', $allowedActions)) {
+            if (in_array('-' . $activeAction, $allowedActions) && in_array('all', $allowedActions)) {
                 continue;
             }
 
