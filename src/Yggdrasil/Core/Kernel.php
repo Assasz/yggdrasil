@@ -10,6 +10,7 @@ use Yggdrasil\Core\Driver\RouterDriver;
 use Yggdrasil\Core\Exception\ActionForbiddenException;
 use Yggdrasil\Core\Exception\ActionNotFoundException;
 use Yggdrasil\Core\Exception\DriverNotFoundException;
+use Yggdrasil\Core\Routing\PassiveActionValidator;
 use Yggdrasil\Core\Routing\Router;
 
 /**
@@ -75,10 +76,14 @@ final class Kernel
     private function executePassiveActions(Request $request, Response $response): Response
     {
         foreach ($this->getRouter()->getConfiguration()->getPassiveActions() as $action => $whitelist) {
+            $activeAction = $this->getRouter()->getActionAlias($request);
             $allowedActions = array_map('strtolower', $whitelist);
-            $actionAlias    = $this->getRouter()->getActionAlias($request);
 
-            if (!in_array($actionAlias, $allowedActions) && !in_array('all', $allowedActions)) {
+            if (!in_array($activeAction, $allowedActions) && !in_array('all', $allowedActions)) {
+                continue;
+            }
+
+            if (in_array('!' . $activeAction, $allowedActions) && in_array('all', $allowedActions)) {
                 continue;
             }
 
