@@ -10,7 +10,7 @@ use Yggdrasil\Core\Driver\DriverCollection;
 /**
  * Class ApiController
  *
- * Base class for REST api controllers
+ * Base class for API controllers
  *
  * @package Yggdrasil\Core\Controller
  * @author Paweł Antosiak <contact@pawelantosiak.com>

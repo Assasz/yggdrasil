@@ -6,10 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
-use Yggdrasil\Core\Driver\RouterDriver;
 use Yggdrasil\Core\Exception\ActionForbiddenException;
 use Yggdrasil\Core\Exception\ActionNotFoundException;
-use Yggdrasil\Core\Exception\DriverNotFoundException;
 use Yggdrasil\Core\Routing\Router;
 
 /**
@@ -75,10 +73,13 @@ final class Kernel
     private function executePassiveActions(Request $request, Response $response): Response
     {
         foreach ($this->getRouter()->getConfiguration()->getPassiveActions() as $action => $whitelist) {
-            $allowedActions = array_map('strtolower', $whitelist);
-            $actionAlias    = $this->getRouter()->getActionAlias($request);
+            $activeAction = $this->getRouter()->getActionAlias($request);
 
-            if (!in_array($actionAlias, $allowedActions) && !in_array('all', $allowedActions)) {
+            if (!in_array($activeAction, $whitelist) && !in_array('all', $whitelist)) {
+                continue;
+            }
+
+            if (in_array('-' . $activeAction, $whitelist) && in_array('all', $whitelist)) {
                 continue;
             }
 
