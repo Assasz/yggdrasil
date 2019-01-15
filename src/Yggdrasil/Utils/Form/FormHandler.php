@@ -31,7 +31,7 @@ final class FormHandler
     private const HTTP_POST = 'POST';
 
     /**
-     * Collection od form data
+     * Collection of form data
      *
      * @var array
      */
