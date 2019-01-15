@@ -17,6 +17,18 @@ use Yggdrasil\Core\Exception\InvalidCsrfTokenException;
 final class FormHandler
 {
     /**
+     * GET HTTP method
+     *
+     * @var string
+     */
+    private const HTTP_GET = 'GET';
+
+    /**
+     * POST HTTP method
+     */
+    private const HTTP_POST = 'POST';
+
+    /**
      * Collection od form data
      *
      * @var array
@@ -37,13 +49,14 @@ final class FormHandler
      * Returns result of form submission
      *
      * @param Request $request
+     * @param string  $method Expected form HTTP method
      * @return bool
      *
      * @throws InvalidCsrfTokenException if received CSRF token doesn't match token stored in session
      */
-    public function handle(Request $request): bool
+    public function handle(Request $request, string $method = self::HTTP_POST): bool
     {
-        if (!$request->isMethod('POST')) {
+        if (!$request->isMethod($method)) {
             return false;
         }
 
