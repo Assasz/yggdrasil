@@ -25,6 +25,8 @@ final class FormHandler
 
     /**
      * POST HTTP method
+     *
+     * @var string
      */
     private const HTTP_POST = 'POST';
 
