@@ -74,13 +74,12 @@ final class Kernel
     {
         foreach ($this->getRouter()->getConfiguration()->getPassiveActions() as $action => $whitelist) {
             $activeAction = $this->getRouter()->getActionAlias($request);
-            $allowedActions = array_map('strtolower', $whitelist);
 
-            if (!in_array($activeAction, $allowedActions) && !in_array('all', $allowedActions)) {
+            if (!in_array($activeAction, $whitelist) && !in_array('all', $whitelist)) {
                 continue;
             }
 
-            if (in_array('-' . $activeAction, $allowedActions) && in_array('all', $allowedActions)) {
+            if (in_array('-' . $activeAction, $whitelist) && in_array('all', $whitelist)) {
                 continue;
             }
 

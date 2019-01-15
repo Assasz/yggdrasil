@@ -169,24 +169,36 @@ final class Router
     }
 
     /**
-     * Returns alias of active action in lower case
+     * Returns alias of active action
      *
      * @param Request $request
      * @return string
+     *
+     * @throws \Exception
      */
     public function getActionAlias(Request $request): string
     {
         $actionAlias = str_replace('/', ':', $request->query->get('route'));
 
         if (empty($actionAlias)) {
-            $actionAlias = $this->getConfiguration()->getDefaultController() . ':' . $this->getConfiguration()->getDefaultAction();
+            return $this->getConfiguration()->getDefaultController() . ':' . $this->getConfiguration()->getDefaultAction();
         }
 
         if (!strpos($actionAlias, ':')) {
-            $actionAlias = $actionAlias . ':' . $this->getConfiguration()->getDefaultAction();
+            return $actionAlias . ':' . $this->getConfiguration()->getDefaultAction();
         }
 
-        return strtolower($actionAlias);
+        $aliases = array_keys($this->getQueryMap([]));
+
+        foreach ($aliases as $alias) {
+            if (strtolower($alias) === strtolower($actionAlias)) {
+                $actionAlias = $alias;
+
+                break;
+            }
+        }
+
+        return $actionAlias;
     }
 
     /**
