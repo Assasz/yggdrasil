@@ -21,14 +21,14 @@ final class FormHandler
      *
      * @var string
      */
-    private const HTTP_GET = 'GET';
+    public const HTTP_GET = 'GET';
 
     /**
      * POST HTTP method
      *
      * @var string
      */
-    private const HTTP_POST = 'POST';
+    public const HTTP_POST = 'POST';
 
     /**
      * Collection of form data
