@@ -12,14 +12,14 @@ use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Exception\MissingConfigurationException;
 
 /**
- * Class ServicePortGenerateCommand
+ * Class ServiceDTOGenerateCommand
  *
- * Console command that generates service port
+ * Console command that generates service DTO (Data Transfer Object)
  *
  * @package Yggdrasil\Utils\Service
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class ServicePortGenerateCommand extends Command
+class ServiceDTOGenerateCommand extends Command
 {
     /**
      * Application configuration
@@ -29,7 +29,7 @@ class ServicePortGenerateCommand extends Command
     private $appConfiguration;
 
     /**
-     * ServicePortGenerateCommand constructor.
+     * ServiceDTOGenerateCommand constructor.
      *
      * @param ConfigurationInterface $appConfiguration
      */
@@ -46,9 +46,9 @@ class ServicePortGenerateCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('yggdrasil:service-port:generate')
-            ->setDescription('Generates service port')
-            ->setHelp('This command allows you to generate service port.');
+            ->setName('yggdrasil:service-dto:generate')
+            ->setDescription('Generates service DTO')
+            ->setHelp('This command allows you to generate service DTO.');
     }
 
     /**
@@ -67,7 +67,7 @@ class ServicePortGenerateCommand extends Command
 
         $output->writeln([
             '----------------',
-            'Service port generator',
+            'Service DTO generator',
             '----------------',
             ''
         ]);
@@ -75,9 +75,9 @@ class ServicePortGenerateCommand extends Command
         $helper      = $this->getHelper('question');
         $questionSet = $this->createQuestionSet();
 
-        $servicePortName = $helper->ask($input, $output, $questionSet['servicePortName']);
-        $servicePortType = $helper->ask($input, $output, $questionSet['servicePortType']);
-        $moduleName      = $helper->ask($input, $output, $questionSet['moduleName']);
+        $serviceDTOName = $helper->ask($input, $output, $questionSet['serviceDTOName']);
+        $serviceDTOType = $helper->ask($input, $output, $questionSet['serviceDTOType']);
+        $moduleName     = $helper->ask($input, $output, $questionSet['moduleName']);
 
         do {
             $propertyNames[] = $helper->ask($input, $output, $questionSet['propertyName']);
@@ -89,17 +89,17 @@ class ServicePortGenerateCommand extends Command
         $configuration    = $this->appConfiguration->getConfiguration();
         $serviceNamespace = rtrim($configuration['container']['service_namespace'], '\\');
 
-        $servicePortData = [
+        $serviceDTOData = [
             'namespace'  => $serviceNamespace,
-            'class'      => $servicePortName,
-            'type'       => $servicePortType,
+            'class'      => $serviceDTOName,
+            'type'       => $serviceDTOType,
             'module'     => $moduleName,
             'properties' => $properties
         ];
 
-        (new ServicePortGenerator($servicePortData))->generate();
+        (new ServiceDTOGenerator($serviceDTOData))->generate();
 
-        $output->writeln('Service ' . strtolower($servicePortType) . ' generated successfully!');
+        $output->writeln('Service ' . strtolower($serviceDTOType) . ' generated successfully!');
     }
 
     /**
@@ -110,10 +110,10 @@ class ServicePortGenerateCommand extends Command
     private function createQuestionSet(): array
     {
         return [
-            'servicePortName' =>
+            'serviceDTOName' =>
                 new Question('Service name: '),
-            'servicePortType' =>
-                new ChoiceQuestion('Service port type: ', [
+            'serviceDTOType' =>
+                new ChoiceQuestion('Service DTO type: ', [
                     'Request', 'Response'
                 ], 0),
             'moduleName' =>
