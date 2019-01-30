@@ -48,6 +48,18 @@ final class EntityGenerator
     }
 
     /**
+     * Generates entity
+     */
+    public function generate(): void
+    {
+        $this
+            ->generateClass()
+            ->generateProperties()
+            ->generateMethods()
+            ->saveFile();
+    }
+
+    /**
      * Generates entity class
      *
      * @return EntityGenerator
@@ -183,17 +195,5 @@ final class EntityGenerator
         $handle = fopen($entityPath . $this->entityData['class'] . '.php', 'w');
         fwrite($handle, $sourceCode);
         fclose($handle);
-    }
-
-    /**
-     * Generates entity
-     */
-    public function generate(): void
-    {
-        $this
-            ->generateClass()
-            ->generateProperties()
-            ->generateMethods()
-            ->saveFile();
     }
 }
