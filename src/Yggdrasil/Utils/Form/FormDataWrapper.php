@@ -11,22 +11,22 @@ namespace Yggdrasil\Utils\Form;
 abstract class FormDataWrapper
 {
     /**
-     * Wraps given object with form data collection
+     * Wraps given DTO with form data collection
      *
-     * @param object $request
+     * @param object $dto
      * @param array $data
      * @return object
      */
-    public static function wrap(object $request, array $data): object
+    public static function wrap(object $dto, array $data): object
     {
         foreach ($data as $key => $value) {
             $setter = 'set' . ucfirst($key);
 
-            if (method_exists($request, $setter)) {
-                $request->{$setter}($value);
+            if (method_exists($dto, $setter)) {
+                $dto->{$setter}($value);
             }
         }
 
-        return $request;
+        return $dto;
     }
 }
