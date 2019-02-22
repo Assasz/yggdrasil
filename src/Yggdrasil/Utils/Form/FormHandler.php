@@ -4,7 +4,7 @@ namespace Yggdrasil\Utils\Form;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Yggdrasil\Core\Exception\InvalidCsrfTokenException;
+use Yggdrasil\Utils\Exception\InvalidCsrfTokenException;
 
 /**
  * Class FormHandler

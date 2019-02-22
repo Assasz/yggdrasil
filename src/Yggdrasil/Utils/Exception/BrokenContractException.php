@@ -1,13 +1,13 @@
 <?php
 
-namespace Yggdrasil\Core\Exception;
+namespace Yggdrasil\Utils\Exception;
 
 /**
  * Class BrokenContractException
  *
  * Thrown when contract between client and supplier has broken
  *
- * @package Yggdrasil\Core\Exception
+ * @package Yggdrasil\Utils\Exception
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 class BrokenContractException extends \LogicException

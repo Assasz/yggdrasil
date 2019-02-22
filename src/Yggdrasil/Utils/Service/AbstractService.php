@@ -4,7 +4,7 @@ namespace Yggdrasil\Utils\Service;
 
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
-use Yggdrasil\Core\Exception\BrokenContractException;
+use Yggdrasil\Utils\Exception\BrokenContractException;
 
 /**
  * Class AbstractService
