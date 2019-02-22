@@ -59,13 +59,17 @@ class SeedsPersistCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      *
+     * @throws DriverNotFoundException if entity manager driver cannot be found
      * @throws MissingConfigurationException if seeds_namespace is not configured
      * @throws SeedsNotFoundException if seeds class cannot be found
-     * @throws DriverNotFoundException if entity manager driver cannot be found
      * @throws InvalidSeedsException if seeds class is not a subclass of AbstractSeeds
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
+        if (!$this->appConfiguration->hasDriver('entityManager')) {
+            throw new DriverNotFoundException('To persist seeds entity manager driver is required.');
+        }
+
         if (!$this->appConfiguration->isConfigured(['seeds_namespace'], 'entity_manager')) {
             throw new MissingConfigurationException(['seeds_namespace'], 'entity_manager');
         }
@@ -75,10 +79,6 @@ class SeedsPersistCommand extends Command
 
         if (!class_exists($seedsName)) {
             throw new SeedsNotFoundException($seedsName . ' class doesn\'t exist.');
-        }
-
-        if (!$this->appConfiguration->hasDriver('entityManager')) {
-            throw new DriverNotFoundException('To persist seeds entity manager driver is required.');
         }
 
         $seeds = new $seedsName($this->appConfiguration->loadDriver('entityManager'));
