@@ -47,10 +47,10 @@ class SeedsPersistCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('app:seeds:persist')
+            ->setName('yggdrasil:seeds:persist')
             ->addArgument('name', InputArgument::REQUIRED, 'Name of seeds to persist.')
-            ->setDescription('Persists entity seeds in database')
-            ->setHelp('This command allows you to persist entity seeds in database');
+            ->setDescription('Persists entity seeds in persistance storage')
+            ->setHelp('This command allows you to persist entity seeds in persistance storage');
     }
 
     /**
