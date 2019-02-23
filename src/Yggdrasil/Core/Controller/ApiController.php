@@ -60,7 +60,7 @@ abstract class ApiController
     {
         $dataCollection = $this->parseBody();
 
-        if (!$this->inBody($key)) {
+        if (!$this->inBody([$key])) {
             throw new \InvalidArgumentException('Data with key ' . $key . ' doesn\'t exist in request body.');
         }
 
@@ -68,16 +68,14 @@ abstract class ApiController
     }
 
     /**
-     * Checks if data with given key exist in request body
+     * Checks if data with given keys exist in request body
      *
-     * @param string $key
+     * @param array $keys
      * @return bool
      */
-    protected function inBody(string $key): bool
+    protected function inBody(array $keys): bool
     {
-        $dataCollection = $this->parseBody();
-
-        return isset($dataCollection[$key]);
+        return !array_diff_key(array_flip($keys), $this->parseBody());
     }
 
     /**

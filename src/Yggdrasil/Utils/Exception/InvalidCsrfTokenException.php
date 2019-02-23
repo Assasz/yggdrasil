@@ -1,13 +1,13 @@
 <?php
 
-namespace Yggdrasil\Core\Exception;
+namespace Yggdrasil\Utils\Exception;
 
 /**
  * Class InvalidCsrfTokenException
  *
  * Thrown when received CSRF token doesn't match token stored in session
  *
- * @package Yggdrasil\Core\Exception
+ * @package Yggdrasil\Utils\Exception
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 class InvalidCsrfTokenException extends \RuntimeException
