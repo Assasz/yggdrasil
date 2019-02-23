@@ -36,8 +36,8 @@ final class Kernel
     {
         $this->drivers = $appConfiguration->loadDrivers();
 
-        if ($this->drivers->has('exceptionHandler')) {
-            $this->drivers->get('exceptionHandler');
+        if ($this->drivers->has('errorHandler')) {
+            $this->drivers->get('errorHandler');
         }
     }
 
