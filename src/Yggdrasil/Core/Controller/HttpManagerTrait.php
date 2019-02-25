@@ -143,7 +143,7 @@ trait HttpManagerTrait
             return new JsonResponse($data, $status, $headers);
         }
 
-        return new JsonResponse($serializedData ?? $data, $status, $headers);
+        return new JsonResponse((!empty($serializedData)) ? $serializedData : $data, $status, $headers);
     }
 
     /**
