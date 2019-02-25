@@ -103,6 +103,19 @@ trait HttpManagerTrait
     }
 
     /**
+     * Returns Unprocessable Entity (422) response
+     *
+     * @param string $message
+     * @return Response
+     */
+    protected function unprocessableEntity(string $message = "Unprocessable Entity."): Response
+    {
+        return $this->getResponse()
+            ->setContent($message)
+            ->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
      * Returns JSON encoded response
      *
      * @param array  $data   Data supposed to be returned
