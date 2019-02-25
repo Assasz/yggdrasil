@@ -30,10 +30,6 @@ abstract class EntitySerializer
         $i = 0;
 
         foreach ($entities as $entity) {
-            if (!is_object($entity)) {
-                continue;
-            }
-
             $methods[$i] = get_class_methods($entity);
 
             foreach ($methods[$i] as $method) {
