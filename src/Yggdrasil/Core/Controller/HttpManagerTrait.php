@@ -5,6 +5,7 @@ namespace Yggdrasil\Core\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Yggdrasil\Utils\Entity\EntitySerializer;
 
 /**
  * Trait HttpManagerTrait
@@ -126,7 +127,23 @@ trait HttpManagerTrait
     {
         $headers = $this->getResponse()->headers->all();
 
-        return new JsonResponse($data, $status, $headers);
+        try {
+            $serializedData = [];
+
+            foreach ($data as $key => $item) {
+                if (is_array($item)) {
+                    $serializedData[$key] = EntitySerializer::toArray($item);
+                }
+
+                if (is_object($item)) {
+                    $serializedData[$key] = EntitySerializer::toArray([$item])[0];
+                }
+            }
+        } catch(\Throwable $t) {
+            return new JsonResponse($data, $status, $headers);
+        }
+
+        return new JsonResponse($serializedData ?? $data, $status, $headers);
     }
 
     /**
