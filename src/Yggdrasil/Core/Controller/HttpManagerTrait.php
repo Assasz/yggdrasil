@@ -119,32 +119,33 @@ trait HttpManagerTrait
     /**
      * Returns JSON encoded response
      *
-     * @param array  $data          Data supposed to be returned
-     * @param string $status        Response status code
-     * @param bool   $serialization If true, default entity serialization will be applied
+     * @param array  $data   Data supposed to be returned
+     * @param string $status Response status code
      * @return JsonResponse
      */
-    protected function json(array $data = [], string $status = Response::HTTP_OK, bool $serialization = true): JsonResponse
+    protected function json(array $data = [], string $status = Response::HTTP_OK): JsonResponse
     {
         $headers = $this->getResponse()->headers->all();
-
-        if (!$serialization) {
-            return new JsonResponse($data, $status, $headers);
-        }
 
         $serializedData = [];
 
         foreach ($data as $key => $item) {
-            if (is_array($item)) {
+            if (is_array($item) && is_object($item[0])) {
                 $serializedData[$key] = EntitySerializer::toArray($item);
+
+                unset($data[$key]);
             }
 
             if (is_object($item)) {
                 $serializedData[$key] = EntitySerializer::toArray([$item])[0];
+
+                unset($data[$key]);
             }
         }
 
-        return new JsonResponse((!empty($serializedData)) ? $serializedData : $data, $status, $headers);
+        $serializedData = array_merge($serializedData, $data);
+
+        return new JsonResponse($serializedData, $status, $headers);
     }
 
     /**
