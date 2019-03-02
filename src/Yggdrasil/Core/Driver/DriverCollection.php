@@ -31,13 +31,6 @@ final class DriverCollection implements \Iterator, \Countable
     private $appConfiguration;
 
     /**
-     * Collection current index
-     *
-     * @var int
-     */
-    private $currentIndex;
-
-    /**
      * DriverCollection constructor.
      *
      * @param ConfigurationInterface $appConfiguration
@@ -46,7 +39,6 @@ final class DriverCollection implements \Iterator, \Countable
     {
         $this->drivers = [];
         $this->appConfiguration = $appConfiguration;
-        $this->currentIndex = 0;
     }
 
     /**
@@ -138,33 +130,33 @@ final class DriverCollection implements \Iterator, \Countable
      */
     public function current(): string
     {
-        return $this->drivers[$this->currentIndex];
+        return current($this->drivers);
     }
 
     /**
      * Returns current collection index
      *
-     * @return int
+     * @return string
      */
-    public function key(): int
+    public function key(): string
     {
-        return $this->currentIndex;
+        return key($this->drivers);
     }
 
     /**
      * Increments collection index
      */
-    public function next()
+    public function next(): void
     {
-        $this->currentIndex++;
+        next($this->drivers);
     }
 
     /**
      * Rewinds collection
      */
-    public function rewind()
+    public function rewind(): void
     {
-        $this->currentIndex = 0;
+        reset($this->drivers);
     }
 
     /**
@@ -174,6 +166,6 @@ final class DriverCollection implements \Iterator, \Countable
      */
     public function valid(): bool
     {
-        return isset($this->drivers[$this->currentIndex]);
+        return key($this->drivers) !== null;
     }
 }
