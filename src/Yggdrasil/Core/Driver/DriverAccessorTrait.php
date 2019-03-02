@@ -82,7 +82,7 @@ trait DriverAccessorTrait
      */
     protected function installDrivers(): void
     {
-        foreach ($this->drivers->all() as $name => $driver) {
+        foreach ($this->drivers as $name => $driver) {
             $this->{$name} = $this->drivers->get($name);
         }
     }

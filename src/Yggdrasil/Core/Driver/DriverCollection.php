@@ -14,7 +14,7 @@ use Yggdrasil\Core\Exception\NotDriverProvidedException;
  * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-final class DriverCollection
+final class DriverCollection implements \Iterator, \Countable
 {
     /**
      * Application drivers
@@ -31,6 +31,13 @@ final class DriverCollection
     private $appConfiguration;
 
     /**
+     * Collection current index
+     *
+     * @var int
+     */
+    private $currentIndex;
+
+    /**
      * DriverCollection constructor.
      *
      * @param ConfigurationInterface $appConfiguration
@@ -39,6 +46,7 @@ final class DriverCollection
     {
         $this->drivers = [];
         $this->appConfiguration = $appConfiguration;
+        $this->currentIndex = 0;
     }
 
     /**
@@ -111,5 +119,61 @@ final class DriverCollection
         }
 
         unset($this->drivers[$key]);
+    }
+
+    /**
+     * Counts collection items
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->drivers);
+    }
+
+    /**
+     * Returns current collection item
+     *
+     * @return string
+     */
+    public function current(): string
+    {
+        return $this->drivers[$this->currentIndex];
+    }
+
+    /**
+     * Returns current collection index
+     *
+     * @return int
+     */
+    public function key(): int
+    {
+        return $this->currentIndex;
+    }
+
+    /**
+     * Increments collection index
+     */
+    public function next()
+    {
+        $this->currentIndex++;
+    }
+
+    /**
+     * Rewinds collection
+     */
+    public function rewind()
+    {
+        $this->currentIndex = 0;
+    }
+
+    /**
+     * Validates current collection index
+     *
+     * @return bool
+     */
+    public function valid(): bool
+    {
+        return isset($this->drivers[$this->currentIndex]);
     }
 }
