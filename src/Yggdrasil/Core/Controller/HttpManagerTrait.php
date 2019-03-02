@@ -109,7 +109,7 @@ trait HttpManagerTrait
      * @param string $message
      * @return Response
      */
-    protected function unprocessableEntity(string $message = "Unprocessable Entity."): Response
+    protected function unprocessableEntity(string $message = "Unprocessable entity."): Response
     {
         return $this->getResponse()
             ->setContent($message)

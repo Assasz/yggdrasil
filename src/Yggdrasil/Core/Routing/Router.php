@@ -62,6 +62,14 @@ final class Router
      */
     public function getRoute(Request $request): Route
     {
+        if ($this->configuration->isSimpleApiRouting()) {
+            $fastRoute = (new SimpleApiRouter($this->configuration))->resolveRoute($request);
+
+            if (!empty($fastRoute)) {
+                return $fastRoute;
+            }
+        }
+
         $query = $request->query->get('route');
         $this->routeParams = explode('/', trim($query, '/'));
 
