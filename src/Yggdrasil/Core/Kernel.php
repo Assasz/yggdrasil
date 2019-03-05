@@ -46,6 +46,7 @@ final class Kernel
      *
      * @param Request $request
      * @return mixed|Response
+     * @throws \Exception
      */
     public function handle(Request $request)
     {
@@ -66,8 +67,8 @@ final class Kernel
      * @param Request  $request
      * @param Response $response
      * @return Response
-     *
      * @throws ActionNotFoundException if passive action can't be found
+     * @throws \Exception
      */
     private function executePassiveActions(Request $request, Response $response): Response
     {
@@ -102,7 +103,6 @@ final class Kernel
      * @param Request  $request
      * @param Response $response Response returned by passive actions execution
      * @return mixed|Response
-     *
      * @throws ActionNotFoundException if requested action can't be found, in debug mode
      * @throws ActionForbiddenException if requested action is partial, passive or belongs to ErrorController, in debug mode
      */
@@ -139,7 +139,7 @@ final class Kernel
     }
 
     /**
-     * Handles HTTP errors, that may occurs on action execution stage
+     * Handles HTTP errors, that may occur on action execution stage
      *
      * @param Request  $request
      * @param Response $response Response returned by action execution

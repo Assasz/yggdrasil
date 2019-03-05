@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Class Router
  *
  * Finds route for requested action
- * Note that router doesn't care if provided route point to existing action - it's kernel responsibility
+ * Note that router doesn't care if provided route points to existing action - it's kernel responsibility
  *
  * @package Yggdrasil\Core\Routing
  * @author Paweł Antosiak <contact@pawelantosiak.com>
