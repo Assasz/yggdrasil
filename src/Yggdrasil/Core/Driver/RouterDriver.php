@@ -63,9 +63,8 @@ abstract class RouterDriver
     /**
      * Returns query map [Controller:action => query]
      *
-     * @param array $protected Controllers to skip
+     * @param array $protected Controllers to exclude form query map
      * @return array
-     *
      * @throws \Exception
      */
     public function getQueryMap(array $protected = ['Error']): array
@@ -74,10 +73,11 @@ abstract class RouterDriver
     }
 
     /**
-     * Returns alias of active action in lower case
+     * Returns alias of active action
      *
      * @param Request $request
      * @return string
+     * @throws \Exception
      */
     public function getActionAlias(Request $request): string
     {

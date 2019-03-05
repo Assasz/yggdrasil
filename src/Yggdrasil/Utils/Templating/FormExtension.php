@@ -117,9 +117,7 @@ class FormExtension extends \Twig_Extension
     public function addFormField(string $name): void
     {
         $options = $this->formOptions['fields'][$name];
-
         $wrapper = $this->createWrapper();
-
         $label = '';
 
         if (isset($options['label']['text'])) {
@@ -174,9 +172,7 @@ class FormExtension extends \Twig_Extension
     public function addTextArea(string $name): void
     {
         $options = $this->formOptions['fields'][$name];
-
         $wrapper = $this->createWrapper();
-
         $label = '';
 
         if (isset($options['label']['text'])) {
@@ -225,9 +221,7 @@ class FormExtension extends \Twig_Extension
     public function addSelectList(string $name, array $items = []): void
     {
         $options = $this->formOptions['fields'][$name];
-
         $wrapper = $this->createWrapper();
-
         $label = '';
 
         if (isset($options['label']['text'])) {
@@ -304,7 +298,6 @@ class FormExtension extends \Twig_Extension
      *
      * @param int $length Number of bytes to use to generate token
      * @return string
-     *
      * @throws \Exception
      */
     public function generateCsrfToken(int $length = 32): string

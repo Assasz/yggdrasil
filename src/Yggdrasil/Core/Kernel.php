@@ -50,7 +50,6 @@ final class Kernel
     public function handle(Request $request)
     {
         $response = new Response();
-
         $response = $this->executePassiveActions($request, $response);
         $response = $this->executeAction($request, $response);
 
@@ -91,7 +90,6 @@ final class Kernel
 
             $controllerName = $route->getController();
             $controller = new $controllerName($this->drivers, $request, $response);
-
             $response = $controller->{$route->getAction()}(...$route->getActionParams());
         }
 
@@ -99,7 +97,7 @@ final class Kernel
     }
 
     /**
-     * Executes action
+     * Executes active action
      *
      * @param Request  $request
      * @param Response $response Response returned by passive actions execution
@@ -141,7 +139,7 @@ final class Kernel
     }
 
     /**
-     * Handles HTTP errors
+     * Handles HTTP errors, that may occurs on action execution stage
      *
      * @param Request  $request
      * @param Response $response Response returned by action execution

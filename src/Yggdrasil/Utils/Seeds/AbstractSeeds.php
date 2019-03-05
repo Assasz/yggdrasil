@@ -65,8 +65,7 @@ abstract class AbstractSeeds
     /**
      * Clears given seeds storage
      *
-     * @param string? $storage Storage name, if NULL seeds name will be used to resolve storage name
-     *
+     * @param string? $storage Storage name, if NULL seeds class name will be used to resolve storage name
      * @throws \ReflectionException
      * @throws SeedsStorageException
      */

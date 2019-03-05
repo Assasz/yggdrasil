@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Class Router
  *
  * Finds route for requested action
+ * Note that router doesn't care if provided route point to existing action - it's kernel responsibility
  *
  * @package Yggdrasil\Core\Routing
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -130,9 +131,8 @@ final class Router
     /**
      * Returns query map [Controller:action => query]
      *
-     * @param array $protected Controllers to skip
+     * @param array $protected Controllers to exclude from query map
      * @return array
-     *
      * @throws \Exception
      */
     public function getQueryMap(array $protected = ['Error']): array
@@ -160,7 +160,6 @@ final class Router
 
                 $actionAlias = str_replace('Action', '', $action->getName());
                 $alias = $controllerAlias . ':' . $actionAlias;
-
                 $queryMap[$alias] = $this->getQuery($alias);
             }
         }
@@ -173,7 +172,6 @@ final class Router
      *
      * @param Request $request
      * @return string
-     *
      * @throws \Exception
      */
     public function getActionAlias(Request $request): string

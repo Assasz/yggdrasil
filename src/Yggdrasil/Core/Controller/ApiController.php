@@ -53,7 +53,6 @@ abstract class ApiController
      *
      * @param string $key
      * @return mixed
-     *
      * @throws \InvalidArgumentException if data specified by key doesn't exist
      */
     protected function fromBody(string $key)

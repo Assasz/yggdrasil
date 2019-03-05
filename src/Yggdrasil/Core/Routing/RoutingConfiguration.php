@@ -5,7 +5,7 @@ namespace Yggdrasil\Core\Routing;
 /**
  * Class RoutingConfiguration
  *
- * Provides configuration for routing
+ * Provides configuration for router
  *
  * @package Yggdrasil\Core\Routing
  * @author Paweł Antosiak <contact@pawelantosiak.com>

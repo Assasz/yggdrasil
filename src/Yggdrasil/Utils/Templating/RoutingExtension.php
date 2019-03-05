@@ -90,7 +90,7 @@ class RoutingExtension extends \Twig_Extension
     /**
      * Returns query map [Controller:action => query]
      *
-     * @param array $protected Controllers to skip
+     * @param array $protected Controllers to exclude from query map
      * @return array
      *
      * @throws \Exception

@@ -27,7 +27,6 @@ abstract class AbstractService
      * Loads drivers from configuration
      *
      * @param ConfigurationInterface $appConfiguration Configuration passed by ContainerDriver
-     *
      * @throws \ReflectionException
      */
     public function __construct(ConfigurationInterface $appConfiguration)
@@ -61,7 +60,6 @@ abstract class AbstractService
      * Returns contracts between service and external suppliers
      *
      * @example [EntityManagerInterface::class => $this->getEntityManager()]
-     *
      * @return array
      */
     abstract protected function getContracts(): array;

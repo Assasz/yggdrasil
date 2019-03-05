@@ -56,7 +56,6 @@ class ServiceDTOGenerateCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     *
      * @throws MissingConfigurationException if service_namespace is not configured
      */
     protected function execute(InputInterface $input, OutputInterface $output): void

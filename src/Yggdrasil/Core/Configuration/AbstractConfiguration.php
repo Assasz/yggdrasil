@@ -61,7 +61,6 @@ abstract class AbstractConfiguration
      *
      * @param string $key Name of driver
      * @return DriverInterface
-     *
      * @throws DriverNotFoundException if given driver doesn't exist
      */
     public function loadDriver(string $key): DriverInterface
@@ -114,7 +113,6 @@ abstract class AbstractConfiguration
      * Parses config.ini file into configuration array
      *
      * @return array
-     *
      * @throws ConfigurationNotFoundException if config.ini file doesn't exist in specified path
      */
     private function parseConfiguration(): array
@@ -139,7 +137,6 @@ abstract class AbstractConfiguration
      * Returns application drivers registry
      *
      * @example ['entityManager' => EntityManagerDriver::class]
-     *
      * @return array
      */
     abstract protected function getDriversRegistry(): array;

@@ -38,9 +38,7 @@ final class ExceptionLogger
     public function log(\Throwable $throwable): void
     {
         $date = (new \DateTime())->format('Y-m-d H:i:s');
-
         $log = "[$date] {$throwable->getMessage()} at line {$throwable->getLine()} in {$throwable->getFile()}" . PHP_EOL;
-
         $dirname = dirname($this->logPath);
 
         if (!is_dir($dirname)) {

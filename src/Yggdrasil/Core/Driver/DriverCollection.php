@@ -56,7 +56,6 @@ final class DriverCollection implements \Iterator, \Countable
      *
      * @param string $key Name of driver
      * @param string $driver
-     *
      * @throws NotDriverProvidedException if given object is of another instance than DriverInterface
      */
     public function add(string $key, string $driver): void
@@ -69,11 +68,11 @@ final class DriverCollection implements \Iterator, \Countable
     }
 
     /**
-     * Returns driver instance
+     * Returns configured driver instance
+     * This method in fact 'installs' driver in application
      *
      * @param string $key Name of driver
      * @return DriverInterface
-     *
      * @throws DriverNotFoundException if requested driver doesn't exist
      */
     public function get(string $key): DriverInterface
@@ -101,7 +100,6 @@ final class DriverCollection implements \Iterator, \Countable
      * Better way to do that is removing driver from AppConfiguration registry, but it was easy to implement
      *
      * @param string $key Name of driver
-     *
      * @throws DriverNotFoundException if requested driver doesn't exist
      */
     public function remove(string $key): void

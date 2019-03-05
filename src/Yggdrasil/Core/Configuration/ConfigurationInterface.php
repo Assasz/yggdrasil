@@ -28,7 +28,6 @@ interface ConfigurationInterface
      *
      * @param string $key Name of driver
      * @return DriverInterface
-     *
      * @throws DriverNotFoundException if given driver doesn't exist
      */
     public function loadDriver(string $key): DriverInterface;

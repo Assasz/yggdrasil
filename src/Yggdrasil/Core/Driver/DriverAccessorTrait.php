@@ -48,7 +48,6 @@ trait DriverAccessorTrait
      * Returns router driver instance
      *
      * @return RouterDriver
-     *
      * @throws DriverNotSupportedException
      */
     protected function getRouter(): RouterDriver
@@ -64,7 +63,6 @@ trait DriverAccessorTrait
      * Returns template engine driver instance
      *
      * @return TemplateEngineDriver
-     *
      * @throws DriverNotSupportedException
      */
     protected function getTemplateEngine(): TemplateEngineDriver

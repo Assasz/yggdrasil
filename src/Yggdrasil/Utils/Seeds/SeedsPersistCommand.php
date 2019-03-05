@@ -58,7 +58,6 @@ class SeedsPersistCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     *
      * @throws DriverNotFoundException if entity manager driver cannot be found
      * @throws MissingConfigurationException if seeds_namespace is not configured
      * @throws SeedsNotFoundException if seeds class cannot be found

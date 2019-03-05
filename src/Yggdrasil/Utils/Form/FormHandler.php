@@ -53,7 +53,6 @@ final class FormHandler
      * @param Request $request
      * @param string  $method Expected form HTTP method
      * @return bool
-     *
      * @throws InvalidCsrfTokenException if received CSRF token doesn't match token stored in session
      */
     public function handle(Request $request, string $method = self::HTTP_POST): bool
@@ -92,7 +91,6 @@ final class FormHandler
      *
      * @param string $key Key of form data, equivalent to input name
      * @return mixed
-     *
      * @throws \InvalidArgumentException if data can't be found
      */
     public function getData(string $key)
