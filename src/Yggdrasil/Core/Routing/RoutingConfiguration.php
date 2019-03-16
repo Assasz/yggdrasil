@@ -55,6 +55,13 @@ final class RoutingConfiguration
     private $passiveActions;
 
     /**
+     * Indicates if simple API routing is enabled
+     *
+     * @var bool
+     */
+    private $isSimpleApiRouting;
+
+    /**
      * Returns base URL
      *
      * @return string
@@ -188,6 +195,28 @@ final class RoutingConfiguration
     public function setPassiveActions(array $passiveActions): RoutingConfiguration
     {
         $this->passiveActions = $passiveActions;
+
+        return $this;
+    }
+
+    /**
+     * Return true if simple API routing is enabled, false otherwise
+     *
+     * @return bool
+     */
+    public function isSimpleApiRouting()
+    {
+        return $this->isSimpleApiRouting ?? false;
+    }
+
+    /**
+     * Enables simple API routing
+     *
+     * @return RoutingConfiguration
+     */
+    public function setSimpleApiRouting(): RoutingConfiguration
+    {
+        $this->isSimpleApiRouting = true;
 
         return $this;
     }
