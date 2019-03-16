@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @package Yggdrasil\Core\Routing
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-class SimpleApiRouter
+final class SimpleApiRouter
 {
     /**
      * Routing configuration
