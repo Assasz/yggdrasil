@@ -49,8 +49,8 @@ class SimpleApiRouter
     public function resolveRoute(): ?Route
     {
         $patterns = [
-            'with_identifier' => '#^/(?P<controller>[a-z]+)/(?P<id>[0-9]+)$#',
-            'no_identifier' => '#^/(?P<controller>[a-z]+)$#'
+            'with_identifier' => '#^(?P<controller>[a-z]+)/(?P<id>[0-9]+)$#',
+            'no_identifier' => '#^(?P<controller>[a-z]+)$#'
         ];
 
         $query = strtolower(rtrim($this->request->query->get('route'), '/'));
@@ -89,7 +89,7 @@ class SimpleApiRouter
             return null;
         }
 
-        $controller = $this->configuration->getControllerNamespace() . ucfirst($matches['controller']);
+        $controller = $this->configuration->getControllerNamespace() . ucfirst($matches['controller']) . 'Controller';
 
         return (new Route())
             ->setController($controller)
@@ -114,10 +114,11 @@ class SimpleApiRouter
             return null;
         }
 
-        $controller = $this->configuration->getControllerNamespace() . ucfirst($matches['controller']);
+        $controller = $this->configuration->getControllerNamespace() . ucfirst($matches['controller']) . 'Controller';
 
         return (new Route())
             ->setController($controller)
-            ->setAction($actions[$this->request->getMethod()]);
+            ->setAction($actions[$this->request->getMethod()])
+            ->setActionParams([]);
     }
 }

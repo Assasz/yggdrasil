@@ -131,6 +131,10 @@ final class Router
             }
         }
 
+        if ($this->configuration->isSimpleApiRouting() && isset($queryParams[1]) && in_array($queryParams[1], ['all', 'single', 'create', 'edit', 'destroy'])) {
+            unset($queryParams[1]);
+        }
+
         $query = implode('/', $queryParams);
 
         return $this->configuration->getBaseUrl() . $query;
