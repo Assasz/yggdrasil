@@ -81,7 +81,6 @@ class SimpleApiRouter
     {
         $actions = [
             'GET' => 'singleAction',
-            'POST' => 'createAction',
             'PUT' => 'editAction',
             'DELETE' => 'destroyAction'
         ];
@@ -106,7 +105,12 @@ class SimpleApiRouter
      */
     private function getRouteForNoIdentifierPattern(array $matches): ?Route
     {
-        if (!$this->request->isMethod('GET')) {
+        $actions = [
+            'GET' => 'allAction',
+            'POST' => 'createAction'
+        ];
+
+        if (!isset($actions[$this->request->getMethod()])) {
             return null;
         }
 
@@ -114,6 +118,6 @@ class SimpleApiRouter
 
         return (new Route())
             ->setController($controller)
-            ->setAction('allAction');
+            ->setAction($actions[$this->request->getMethod()]);
     }
 }
