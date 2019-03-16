@@ -63,10 +63,10 @@ final class Router
     public function getRoute(Request $request): Route
     {
         if ($this->configuration->isSimpleApiRouting()) {
-            $fastRoute = (new SimpleApiRouter($this->configuration))->resolveRoute($request);
+            $simpleRoute = (new SimpleApiRouter($this->configuration, $request))->resolveRoute();
 
-            if (!empty($fastRoute)) {
-                return $fastRoute;
+            if (!empty($simpleRoute)) {
+                return $simpleRoute;
             }
         }
 

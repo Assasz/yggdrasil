@@ -4,70 +4,116 @@ namespace Yggdrasil\Core\Routing;
 
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class SimpleApiRouter
+ *
+ * Finds route for requested action if simple API routing is enabled
+ * If route cannot be resolved, responsibility is delegated back to Router
+ *
+ * @package Yggdrasil\Core\Routing
+ * @author Paweł Antosiak <contact@pawelantosiak.com>
+ */
 class SimpleApiRouter
 {
+    /**
+     * Routing configuration
+     *
+     * @var RoutingConfiguration
+     */
     private $configuration;
 
-    public function __construct(RoutingConfiguration $configuration)
+    /**
+     * Request obtained from Router
+     *
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * SimpleApiRouter constructor.
+     *
+     * @param RoutingConfiguration $configuration
+     * @param Request $request
+     */
+    public function __construct(RoutingConfiguration $configuration, Request $request)
     {
         $this->configuration = $configuration;
+        $this->request = $request;
     }
 
-    public function resolveRoute(Request $request): ?Route
+    /**
+     * Resolves route for requested action
+     *
+     * @return Route?
+     */
+    public function resolveRoute(): ?Route
     {
-        $query = $request->query->get('route');
-        $routeParams = explode('/', trim($query, '/'));
+        $patterns = [
+            'with_identifier' => '#^/(?P<controller>[a-z]+)/(?P<id>[0-9]+)$#',
+            'no_identifier' => '#^/(?P<controller>[a-z]+)$#'
+        ];
 
-        if (empty($routeParams)) {
-            return null;
-        }
+        $query = strtolower(rtrim($this->request->query->get('route'), '/'));
 
-        if (isset($routeParams[1]) && !is_numeric($routeParams[1])) {
-            return null;
-        }
-
-        $controller = $this->configuration->getControllerNamespace() . $routeParams[0] . 'Controller';
-        $action = 'allAction';
-        $identifier = (isset($routeParams[1])) ? $routeParams[1] : null;
-
-        switch ($request->getMethod()) {
-            case 'GET':
-                if (isset($routeParams[1])) {
-                    $action = 'singleAction';
-                }
+        switch(true) {
+            case preg_match($patterns['with_identifier'], $query, $matches):
+                $route = $this->getRouteForWithIdentifierPattern($matches);
 
                 break;
-            case 'POST':
-                if (!isset($routeParams[1])) {
-                    return null;
-                }
-
-                $action = 'createAction';
-
-                break;
-            case 'PUT':
-                if (!isset($routeParams[1])) {
-                    return null;
-                }
-
-                $action = 'editAction';
-
-                break;
-            case 'DELETE':
-                if (!isset($routeParams[1])) {
-                    return null;
-                }
-
-                $action = 'destroyAction';
+            case preg_match($patterns['no_identifier'], $query, $matches):
+                $route = $this->getRouteForNoIdentifierPattern($matches);
 
                 break;
             default:
                 return null;
         }
 
+        return $route;
+    }
+
+    /**
+     * Return route for 'with_identifier' query pattern
+     *
+     * @param array $matches Result of regular expression match
+     * @return Route?
+     */
+    private function getRouteForWithIdentifierPattern(array $matches): ?Route
+    {
+        $actions = [
+            'GET' => 'singleAction',
+            'POST' => 'createAction',
+            'PUT' => 'editAction',
+            'DELETE' => 'destroyAction'
+        ];
+
+        if (!isset($actions[$this->request->getMethod()])) {
+            return null;
+        }
+
+        $controller = $this->configuration->getControllerNamespace() . ucfirst($matches['controller']);
+
         return (new Route())
             ->setController($controller)
-            ->setAction($action)
-            ->setActionParams((!empty($identifier)) ? [$identifier] : []);
+            ->setAction($actions[$this->request->getMethod()])
+            ->setActionParams([$matches['id']]);
+    }
+
+    /**
+     * Returns route for 'no_identifier' query pattern
+     *
+     * @param array $matches Result of regular expression match
+     * @return Route?
+     */
+    private function getRouteForNoIdentifierPattern(array $matches): ?Route
+    {
+        if (!$this->request->isMethod('GET')) {
+            return null;
+        }
+
+        $controller = $this->configuration->getControllerNamespace() . ucfirst($matches['controller']);
+
+        return (new Route())
+            ->setController($controller)
+            ->setAction('allAction');
     }
 }

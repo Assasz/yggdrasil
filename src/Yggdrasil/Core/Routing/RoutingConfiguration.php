@@ -54,6 +54,11 @@ final class RoutingConfiguration
      */
     private $passiveActions;
 
+    /**
+     * Indicates if simple API routing is enabled
+     *
+     * @var bool
+     */
     private $isSimpleApiRouting;
 
     /**
@@ -195,6 +200,8 @@ final class RoutingConfiguration
     }
 
     /**
+     * Return true if simple API routing is enabled, false otherwise
+     *
      * @return bool
      */
     public function isSimpleApiRouting()
@@ -203,6 +210,8 @@ final class RoutingConfiguration
     }
 
     /**
+     * Enables simple API routing
+     *
      * @return RoutingConfiguration
      */
     public function setSimpleApiRouting(): RoutingConfiguration
