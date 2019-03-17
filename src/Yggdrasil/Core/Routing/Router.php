@@ -66,7 +66,7 @@ final class Router
         if ($this->configuration->isSimpleApiRouting()) {
             $simpleRoute = SimpleApiRouter::getInstance($this->configuration, $request)->detectRoute();
 
-            if (!empty($simpleRoute)) {
+            if ($simpleRoute instanceof Route) {
                 return $simpleRoute;
             }
         }
