@@ -64,7 +64,7 @@ final class Router
     public function getRoute(Request $request): Route
     {
         if ($this->configuration->isSimpleApiRouting()) {
-            $simpleRoute = (new SimpleApiRouter($this->configuration, $request))->resolveRoute();
+            $simpleRoute = SimpleApiRouter::getInstance($this->configuration, $request)->detectRoute();
 
             if (!empty($simpleRoute)) {
                 return $simpleRoute;
@@ -131,7 +131,7 @@ final class Router
             }
         }
 
-        if ($this->configuration->isSimpleApiRouting() && isset($queryParams[1]) && in_array($queryParams[1], ['all', 'single', 'create', 'edit', 'destroy'])) {
+        if ($this->configuration->isSimpleApiRouting() && in_array($queryParams[1] ?? '', ['all', 'single', 'create', 'edit', 'destroy'])) {
             unset($queryParams[1]);
         }
 
