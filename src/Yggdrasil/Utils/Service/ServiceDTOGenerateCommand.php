@@ -9,7 +9,6 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
-use Yggdrasil\Core\Exception\MissingConfigurationException;
 
 /**
  * Class ServiceDTOGenerateCommand
@@ -56,14 +55,9 @@ class ServiceDTOGenerateCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @throws MissingConfigurationException if service_namespace is not configured
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        if (!$this->appConfiguration->isConfigured(['service_namespace'], 'container')) {
-            throw new MissingConfigurationException(['service_namespace'], 'container');
-        }
-
         $output->writeln([
             '----------------',
             'Service DTO generator',
@@ -86,7 +80,7 @@ class ServiceDTOGenerateCommand extends Command
         $properties = array_combine($propertyNames, $propertyTypes);
 
         $configuration    = $this->appConfiguration->getConfiguration();
-        $serviceNamespace = rtrim($configuration['container']['service_namespace'], '\\');
+        $serviceNamespace = $configuration['framework']['root_namespace'] . 'Application\Service';
 
         $serviceDTOData = [
             'namespace'  => $serviceNamespace,

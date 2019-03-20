@@ -6,6 +6,7 @@ use Yggdrasil\Core\Driver\DriverCollection;
 use Yggdrasil\Core\Driver\DriverInterface;
 use Yggdrasil\Core\Exception\ConfigurationNotFoundException;
 use Yggdrasil\Core\Exception\DriverNotFoundException;
+use Yggdrasil\Core\Exception\MissingConfigurationException;
 
 /**
  * Class AbstractConfiguration
@@ -36,7 +37,7 @@ abstract class AbstractConfiguration
      */
     public function __construct()
     {
-        $this->configuration = $this->parseConfiguration();
+        $this->parseConfiguration();
         $this->drivers = $this->getDriversRegistry();
     }
 
@@ -112,10 +113,10 @@ abstract class AbstractConfiguration
     /**
      * Parses config.ini file into configuration array
      *
-     * @return array
      * @throws ConfigurationNotFoundException if config.ini file doesn't exist in specified path
+     * @throws MissingConfigurationException if root_namespace or env is not configured
      */
-    private function parseConfiguration(): array
+    private function parseConfiguration(): void
     {
         $configFilePath = dirname(__DIR__, 7) . '/src/' . $this->getConfigPath() . '/config.ini';
 
@@ -123,7 +124,11 @@ abstract class AbstractConfiguration
             throw new ConfigurationNotFoundException('Configuration file in ' . $configFilePath . ' not found.');
         }
 
-        return parse_ini_file($configFilePath, true);
+        $this->configuration = parse_ini_file($configFilePath, true);
+
+        if (!$this->isConfigured(['root_namespace', 'env'], 'framework')) {
+            throw new MissingConfigurationException(['root_namespace', 'env'], 'framework');
+        }
     }
 
     /**

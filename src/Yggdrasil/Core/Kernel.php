@@ -26,6 +26,13 @@ final class Kernel
     use DriverAccessorTrait;
 
     /**
+     * Application configuration
+     *
+     * @var array
+     */
+    private $configuration;
+
+    /**
      * Kernel constructor.
      *
      * Initializes application
@@ -35,6 +42,7 @@ final class Kernel
     public function __construct(ConfigurationInterface $appConfiguration)
     {
         $this->drivers = $appConfiguration->loadDrivers();
+        $this->configuration = $appConfiguration->getConfiguration();
 
         if ($this->drivers->has('errorHandler')) {
             $this->drivers->get('errorHandler');
@@ -103,15 +111,15 @@ final class Kernel
      * @param Request  $request
      * @param Response $response Response returned by passive actions execution
      * @return mixed|Response
-     * @throws ActionNotFoundException if requested action can't be found, in debug mode
-     * @throws ActionForbiddenException if requested action is partial, passive or belongs to ErrorController, in debug mode
+     * @throws ActionNotFoundException if requested action can't be found in dev mode
+     * @throws ActionForbiddenException if requested action is partial, passive or belongs to ErrorController in dev mode
      */
     private function executeAction(Request $request, Response $response)
     {
         $route = $this->getRouter()->getRoute($request);
 
         if (!method_exists($route->getController(), $route->getAction())) {
-            if (!DEBUG) {
+            if ('prod' === $this->configuration['framework']['env']) {
                 return $response
                     ->setContent($this->getRouter()->getConfiguration()->getNotFoundMsg() ?? 'Not found.')
                     ->setStatusCode(Response::HTTP_NOT_FOUND);
@@ -123,7 +131,7 @@ final class Kernel
         $errorController = $this->getRouter()->getConfiguration()->getControllerNamespace() . 'ErrorController';
 
         if (1 === preg_match('(Partial|Passive)', $route->getAction()) || $errorController === $route->getController()) {
-            if (!DEBUG) {
+            if ('prod' === $this->configuration['framework']['env']) {
                 return $response
                     ->setContent('Forbidden.')
                     ->setStatusCode(Response::HTTP_FORBIDDEN);
