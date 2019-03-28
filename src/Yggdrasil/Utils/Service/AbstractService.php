@@ -45,6 +45,10 @@ abstract class AbstractService
     protected function registerContracts(): void
     {
         foreach ($this->getContracts() as $contract => $supplier) {
+            if (!is_object($supplier)) {
+                $supplier = $this->getDriver($supplier);
+            }
+
             if (!is_subclass_of($supplier, $contract)) {
                 throw new BrokenContractException($contract);
             }
@@ -58,9 +62,10 @@ abstract class AbstractService
 
     /**
      * Returns contracts between service and external suppliers
+     * Value passed to an array may be a valid driver name, object otherwise
      *
-     * @example [EntityManagerInterface::class => $this->getEntityManager()]
-     * @return array
+     * @example [EntityManagerInterface::class => 'entityManager']
+     * @return array Contract => supplier
      */
     abstract protected function getContracts(): array;
 }

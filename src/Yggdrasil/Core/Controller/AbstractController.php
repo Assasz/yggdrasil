@@ -46,8 +46,6 @@ abstract class AbstractController
         $this->drivers  = $drivers;
         $this->request  = $request;
         $this->response = $response;
-
-        $this->installDrivers();
     }
 
     /**

@@ -44,8 +44,6 @@ abstract class ApiController
         $this->drivers  = $drivers;
         $this->request  = $request;
         $this->response = $response;
-
-        $this->installDrivers();
     }
 
     /**

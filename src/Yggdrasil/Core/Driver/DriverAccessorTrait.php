@@ -77,11 +77,21 @@ trait DriverAccessorTrait
     /**
      * Installs drivers in class by generating magic properties
      * Hint type of these properties by using '@property' tag
+     *
+     * @param array $drivers Drivers names, if NULL, all drivers will be installed
      */
-    protected function installDrivers(): void
+    protected function installDrivers(array $drivers = null): void
     {
-        foreach ($this->drivers as $name => $driver) {
-            $this->{$name} = $this->drivers->get($name);
+        $drivers = $drivers ?? $this->drivers;
+
+        foreach ($drivers as $key => $driver) {
+            if ($drivers instanceof DriverCollection) {
+                $this->{$key} = $this->drivers->get($key);
+
+                continue;
+            }
+
+            $this->{$driver} = $this->drivers->get($driver);
         }
     }
 }
