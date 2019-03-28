@@ -5,7 +5,7 @@ namespace Yggdrasil\Core\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Yggdrasil\Utils\Entity\EntitySerializer;
+use Yggdrasil\Utils\Entity\EntityNormalizer;
 
 /**
  * Trait HttpManagerTrait
@@ -131,13 +131,13 @@ trait HttpManagerTrait
 
         foreach ($data as $key => $item) {
             if (is_array($item) && is_object($item[0])) {
-                $serializedData[$key] = EntitySerializer::toArray($item);
+                $serializedData[$key] = EntityNormalizer::normalize($item);
 
                 unset($data[$key]);
             }
 
             if (is_object($item)) {
-                $serializedData[$key] = EntitySerializer::toArray([$item])[0];
+                $serializedData[$key] = EntityNormalizer::normalize([$item])[0];
 
                 unset($data[$key]);
             }

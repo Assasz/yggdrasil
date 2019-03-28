@@ -3,23 +3,22 @@
 namespace Yggdrasil\Utils\Entity;
 
 /**
- * Class EntitySerializer
- *
- * Serializes domain entities
+ * Class EntityNormalizer
  *
  * @package Yggdrasil\Utils\Entity
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-abstract class EntitySerializer
+abstract class EntityNormalizer
 {
     /**
-     * Serializes entities into array
+     * Normalizes passed entities
+     * Works with DTOs with implemented getters as well
      *
-     * @param array $entities Array of entities to serialize
-     * @param int   $depth    Entity association depth to be pursued by serialization
+     * @param array $entities Array of entities to normalize
+     * @param int   $depth    Entity association depth to be pursued by normalization
      * @return array
      */
-    public static function toArray(array $entities, int $depth = 1): array
+    public static function normalize(array $entities, int $depth = 1): array
     {
         if ($depth < 0) {
             return null;
@@ -47,7 +46,7 @@ abstract class EntitySerializer
                 if (is_object($value)) {
                     ($value instanceof \DateTime) ?
                         $value = $value->format('Y-m-d H:i:s') :
-                        $value = self::toArray([$value], $depth);
+                        $value = self::normalize([$value], $depth);
                 }
 
                 $data[$i][$propertyName] = $value;
