@@ -3,12 +3,12 @@
 namespace Yggdrasil\Utils;
 
 /**
- * Class ExceptionLogger
+ * Class ErrorLogger
  *
  * @package Yggdrasil\Utils
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-final class ExceptionLogger
+final class ErrorLogger
 {
     /**
      * Log output file path
@@ -21,9 +21,9 @@ final class ExceptionLogger
      * Sets log output file path
      *
      * @param string $path
-     * @return ExceptionLogger
+     * @return ErrorLogger
      */
-    public function setLogPath(string $path): ExceptionLogger
+    public function setLogPath(string $path): ErrorLogger
     {
         $this->logPath = $path;
 

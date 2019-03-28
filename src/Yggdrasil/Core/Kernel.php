@@ -160,10 +160,6 @@ final class Kernel
 
         if (!method_exists($controllerName, $actionName)) {
             $actionName = 'defaultAction';
-
-            if (!method_exists($controllerName, $actionName)) {
-                return $response;
-            }
         }
 
         $controller = new $controllerName($this->drivers, $request, $response);
