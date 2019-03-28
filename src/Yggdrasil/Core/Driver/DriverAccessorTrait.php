@@ -75,6 +75,23 @@ trait DriverAccessorTrait
     }
 
     /**
+     * Returns repository provider instance
+     *
+     * @param string $driver
+     * @return RepositoryProviderInterface
+     */
+    protected function getRepositoryProvider(string $driver): RepositoryProviderInterface
+    {
+        $repositoryProvider = $this->drivers->get($driver);
+
+        if (!$repositoryProvider instanceof RepositoryProviderInterface) {
+            throw new \InvalidArgumentException('Given driver is not a repository provider.');
+        }
+
+        return $repositoryProvider;
+    }
+
+    /**
      * Installs drivers in class by generating magic properties
      * Hint type of these properties by using '@property' tag
      *
