@@ -8,6 +8,7 @@ namespace Yggdrasil\Core\Driver;
  * Driver able to provide repositories
  *
  * @package Yggdrasil\Core\Driver
+ * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 interface RepositoryProviderInterface
 {

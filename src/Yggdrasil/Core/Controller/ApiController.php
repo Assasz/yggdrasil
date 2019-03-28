@@ -38,12 +38,16 @@ abstract class ApiController
      * @param DriverCollection $drivers
      * @param Request $request
      * @param Response $response
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \ReflectionException
      */
     public function __construct(DriverCollection $drivers, Request $request, Response $response)
     {
         $this->drivers  = $drivers;
         $this->request  = $request;
         $this->response = $response;
+
+        $this->installDrivers();
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Core\Driver;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Yggdrasil\Core\Exception\DriverNotSupportedException;
 
 /**
@@ -92,14 +93,20 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Installs drivers in class by generating magic properties
+     * Installs drivers read from class annotation by generating magic properties
+     * If annotation does not exist, all drivers will be installed
      * Hint type of these properties by using '@property' tag
      *
-     * @param array $drivers Drivers names, if NULL, all drivers will be installed
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \ReflectionException
      */
-    protected function installDrivers(array $drivers = null): void
+    protected function installDrivers(): void
     {
-        $drivers = $drivers ?? $this->drivers;
+        $reflection = new \ReflectionClass($this);
+        $reader = new AnnotationReader();
+
+        $annotation = $reader->getClassAnnotation($reflection, 'Drivers');
+        $drivers = (!empty($annotation->install)) ? $annotation->install : $this->drivers;
 
         foreach ($drivers as $key => $driver) {
             if ($drivers instanceof DriverCollection) {

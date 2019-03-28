@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Core\Controller;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,12 +41,16 @@ abstract class AbstractController
      * @param DriverCollection $drivers Drivers passed by Kernel
      * @param Request $request
      * @param Response $response
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \ReflectionException
      */
     public function __construct(DriverCollection $drivers, Request $request, Response $response)
     {
         $this->drivers  = $drivers;
         $this->request  = $request;
         $this->response = $response;
+
+        $this->installDrivers();
     }
 
     /**
