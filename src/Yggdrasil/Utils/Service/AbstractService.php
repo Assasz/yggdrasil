@@ -67,7 +67,7 @@ abstract class AbstractService
             }
 
             if ($annotation instanceof Repository) {
-                $repository = $this->getRepositoryProvider($annotation->repositoryProvider)->getRepository($annotation->name);
+                $repository = $this->drivers->get($annotation->repositoryProvider)->getRepository($annotation->name);
 
                 if (!is_subclass_of($repository, $annotation->contract)) {
                     throw new BrokenContractException($annotation->contract);
