@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Core;
 
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
@@ -47,6 +48,8 @@ final class Kernel
         if ($this->drivers->has('errorHandler')) {
             $this->drivers->get('errorHandler');
         }
+
+        AnnotationRegistry::registerAutoloadNamespace("Yggdrasil\Core\Annotation", dirname(__DIR__, 2));
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Yggdrasil\Core\Controller;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Yggdrasil\Core\Annotation\CORS;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\DriverCollection;
 
@@ -129,7 +130,7 @@ abstract class ApiController
         $reflection = new \ReflectionClass($this);
         $reader = new AnnotationReader();
 
-        $annotation = $reader->getClassAnnotation($reflection, 'CORS');
+        $annotation = $reader->getClassAnnotation($reflection, CORS::class);
 
         if (empty($annotation)) {
             return;

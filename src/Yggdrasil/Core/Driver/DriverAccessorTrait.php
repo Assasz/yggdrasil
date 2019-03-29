@@ -3,6 +3,7 @@
 namespace Yggdrasil\Core\Driver;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Yggdrasil\Core\Annotation\Drivers;
 use Yggdrasil\Core\Exception\DriverNotSupportedException;
 
 /**
@@ -104,7 +105,7 @@ trait DriverAccessorTrait
         $reflection = new \ReflectionClass($this);
         $reader = new AnnotationReader();
 
-        $annotation = $reader->getClassAnnotation($reflection, 'Drivers');
+        $annotation = $reader->getClassAnnotation($reflection, Drivers::class);
 
         if (empty($annotation)) {
             return;
