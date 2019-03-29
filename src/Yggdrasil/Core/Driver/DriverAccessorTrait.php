@@ -3,7 +3,7 @@
 namespace Yggdrasil\Core\Driver;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Yggdrasil\Core\Annotation\Drivers;
+use Yggdrasil\Utils\Annotation\Drivers;
 use Yggdrasil\Core\Exception\DriverNotSupportedException;
 
 /**

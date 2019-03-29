@@ -5,7 +5,7 @@ namespace Yggdrasil\Core\Controller;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Yggdrasil\Core\Annotation\CORS;
+use Yggdrasil\Utils\Annotation\CORS;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\DriverCollection;
 
