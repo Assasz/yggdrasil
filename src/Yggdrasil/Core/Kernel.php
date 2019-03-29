@@ -6,6 +6,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
+use Yggdrasil\Core\Controller\ErrorControllerInterface;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
 use Yggdrasil\Core\Exception\ActionForbiddenException;
 use Yggdrasil\Core\Exception\ActionNotFoundException;
@@ -159,6 +160,11 @@ final class Kernel
     private function handleError(Request $request, Response $response)
     {
         $controllerName = $this->getRouter()->getConfiguration()->getControllerNamespace() . 'ErrorController';
+
+        if (!class_exists($controllerName)) {
+            return $response;
+        }
+
         $actionName = 'code' . $response->getStatusCode() . 'Action';
 
         if (!method_exists($controllerName, $actionName)) {
