@@ -2,8 +2,11 @@
 
 namespace Yggdrasil\Utils\Service;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
+use Yggdrasil\Utils\Annotation\Drivers;
+use Yggdrasil\Utils\Annotation\Repository;
 use Yggdrasil\Utils\Exception\BrokenContractException;
 
 /**
@@ -28,6 +31,7 @@ abstract class AbstractService
      *
      * @param ConfigurationInterface $appConfiguration Configuration passed by ContainerDriver
      * @throws \ReflectionException
+     * @throws \Doctrine\Common\Annotations\AnnotationException
      */
     public function __construct(ConfigurationInterface $appConfiguration)
     {
@@ -38,29 +42,42 @@ abstract class AbstractService
 
     /**
      * Registers contracts between service and external suppliers
+     * These contracts may include drivers and repositories and are read from class annotations
      *
      * @throws BrokenContractException
      * @throws \ReflectionException
+     * @throws \Doctrine\Common\Annotations\AnnotationException
      */
     protected function registerContracts(): void
     {
-        foreach ($this->getContracts() as $contract => $supplier) {
-            if (!is_subclass_of($supplier, $contract)) {
-                throw new BrokenContractException($contract);
+        $reflection = new \ReflectionClass($this);
+        $reader = new AnnotationReader();
+
+        foreach ($reader->getClassAnnotations($reflection) as $annotation) {
+            if ($annotation instanceof Drivers) {
+                foreach ($annotation->install as $contract => $driver) {
+                    $driverInstance = $this->drivers->get($driver);
+
+                    if (!is_subclass_of($driverInstance, $contract)) {
+                        throw new BrokenContractException($contract);
+                    }
+
+                    $this->{$driver} = $driverInstance;
+                }
             }
 
-            $reflection = new \ReflectionClass($contract);
-            $property = str_replace('Interface', '', $reflection->getShortName());
+            if ($annotation instanceof Repository) {
+                $repository = $this->getRepositoryProvider($annotation->repositoryProvider)->getRepository($annotation->name);
 
-            $this->{lcfirst($property)} = $supplier;
+                if (!is_subclass_of($repository, $annotation->contract)) {
+                    throw new BrokenContractException($annotation->contract);
+                }
+
+                $repositoryReflection = new \ReflectionClass($annotation->contract);
+                $property = str_replace('Interface', '', $repositoryReflection->getShortName());
+
+                $this->{lcfirst($property)} = $repository;
+            }
         }
     }
-
-    /**
-     * Returns contracts between service and external suppliers
-     *
-     * @example [EntityManagerInterface::class => $this->getDriver('entityManager')]
-     * @return array Contract => supplier
-     */
-    abstract protected function getContracts(): array;
 }

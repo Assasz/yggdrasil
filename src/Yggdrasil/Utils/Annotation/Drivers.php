@@ -18,6 +18,8 @@ use Doctrine\Common\Annotations\Annotation\Required;
 class Drivers
 {
     /**
+     * Drivers names to install
+     *
      * @var array<string>
      *
      * @Required
