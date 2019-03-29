@@ -93,28 +93,24 @@ trait DriverAccessorTrait
     }
 
     /**
-     * Installs drivers read from class annotation by generating magic properties
-     * If annotation does not exist, all drivers will be installed
+     * Installs drivers enabled by class annotation by generating magic properties
      * Hint type of these properties by using '@property' tag
      *
      * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \ReflectionException
      */
-    protected function installDrivers(): void
+    protected function installDriversIfEnabled(): void
     {
         $reflection = new \ReflectionClass($this);
         $reader = new AnnotationReader();
 
         $annotation = $reader->getClassAnnotation($reflection, 'Drivers');
-        $drivers = (!empty($annotation->install)) ? $annotation->install : $this->drivers;
 
-        foreach ($drivers as $key => $driver) {
-            if ($drivers instanceof DriverCollection) {
-                $this->{$key} = $this->drivers->get($key);
+        if (empty($annotation)) {
+            return;
+        }
 
-                continue;
-            }
-
+        foreach ($annotation->install as $driver) {
             $this->{$driver} = $this->drivers->get($driver);
         }
     }
