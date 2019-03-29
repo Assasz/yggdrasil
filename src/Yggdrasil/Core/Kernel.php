@@ -49,7 +49,7 @@ final class Kernel
             $this->drivers->get('errorHandler');
         }
 
-        AnnotationRegistry::registerAutoloadNamespace("Yggdrasil\Core\Annotation", dirname(__DIR__, 2));
+        AnnotationRegistry::registerAutoloadNamespace("Yggdrasil\Utils\Annotation", dirname(__DIR__, 2));
     }
 
     /**
