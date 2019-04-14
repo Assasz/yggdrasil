@@ -2,11 +2,9 @@
 
 namespace Yggdrasil\Core;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yggdrasil\Core\Configuration\ConfigurationInterface;
-use Yggdrasil\Core\Controller\ErrorControllerInterface;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
 use Yggdrasil\Core\Exception\ActionForbiddenException;
 use Yggdrasil\Core\Exception\ActionNotFoundException;
@@ -49,8 +47,6 @@ final class Kernel
         if ($this->drivers->has('errorHandler')) {
             $this->drivers->get('errorHandler');
         }
-
-        AnnotationRegistry::registerAutoloadNamespace("Yggdrasil\Utils\Annotation", dirname(__DIR__, 2));
     }
 
     /**
