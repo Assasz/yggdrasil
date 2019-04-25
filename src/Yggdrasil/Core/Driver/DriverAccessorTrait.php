@@ -13,7 +13,7 @@ use Yggdrasil\Core\Exception\DriverNotSupportedException;
  *
  * @see DriverCollection
  *
- * @package Yggdrasil\Core\Driver\Base
+ * @package Yggdrasil\Core\Driver
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 trait DriverAccessorTrait

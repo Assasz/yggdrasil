@@ -37,6 +37,20 @@ final class SimpleApiRouter
     private static $instance;
 
     /**
+     * Pattern /{controller}/{id}
+     *
+     * @var string
+     */
+    private const WITH_IDENTIFIER_PATTERN = '#^(?P<controller>[a-z]+)/(?P<id>[0-9]+)$#';
+
+    /**
+     * Pattern /{controller}
+     *
+     * @var string
+     */
+    private const NO_IDENTIFIER_PATTERN = '#^(?P<controller>[a-z]+)$#';
+
+    /**
      * SimpleApiRouter constructor.
      *
      * @param RoutingConfiguration $configuration
@@ -76,19 +90,14 @@ final class SimpleApiRouter
      */
     public function detectRoute(): ?Route
     {
-        $patterns = [
-            'with_identifier' => '#^(?P<controller>[a-z]+)/(?P<id>[0-9]+)$#',
-            'no_identifier' => '#^(?P<controller>[a-z]+)$#'
-        ];
-
         $query = strtolower(rtrim($this->request->query->get('route'), '/'));
 
         switch(true) {
-            case preg_match($patterns['with_identifier'], $query, $matches):
+            case preg_match(self::WITH_IDENTIFIER_PATTERN, $query, $matches):
                 $route = $this->detectRouteForWithIdentifierPattern($matches);
 
                 break;
-            case preg_match($patterns['no_identifier'], $query, $matches):
+            case preg_match(self::NO_IDENTIFIER_PATTERN, $query, $matches):
                 $route = $this->detectRouteForNoIdentifierPattern($matches);
 
                 break;
