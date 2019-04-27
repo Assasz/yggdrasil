@@ -76,7 +76,7 @@ class EntityGenerateCommand extends Command
         $properties = array_combine($propertyNames, $propertyTypes);
 
         $configuration   = $this->appConfiguration->getConfiguration();
-        $entityNamespace = rtrim($configuration['entity_manager']['entity_namespace'], '\\');
+        $entityNamespace = $configuration['framework']['root_namespace'] . 'Domain\Entity';
 
         $entityData = [
             'namespace'  => $entityNamespace,
