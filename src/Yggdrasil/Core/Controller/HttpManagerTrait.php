@@ -2,9 +2,11 @@
 
 namespace Yggdrasil\Core\Controller;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Yggdrasil\Utils\Annotation\CORS;
 use Yggdrasil\Utils\Entity\EntityNormalizer;
 
 /**
@@ -156,5 +158,35 @@ trait HttpManagerTrait
     protected function isYjaxRequest(): bool
     {
         return $this->getRequest()->headers->has('X-YJAX');
+    }
+
+    /**
+     * Configures CORS in controller if is enabled by annotation
+     *
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     * @throws \ReflectionException
+     */
+    protected function configureCorsIfEnabled(): void
+    {
+        $reflection = new \ReflectionClass($this);
+        $reader = new AnnotationReader();
+
+        $annotation = $reader->getClassAnnotation($reflection, CORS::class);
+
+        if (empty($annotation)) {
+            return;
+        }
+
+        $corsConfig = [
+            'Access-Control-Allow-Origin' => $annotation->origins ?? '*',
+            'Access-Control-Allow-Methods' => $annotation->methods ?? 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers' => $annotation->headers ?? '*',
+            'Access-Control-Allow-Credentials' => $annotation->credentials ?? true,
+            'Access-Control-Allow-Max-Age' => $annotation->maxAge ?? 3600
+        ];
+
+        foreach ($corsConfig as $key => $value) {
+            $this->getResponse()->headers->set($key, $value);
+        }
     }
 }

@@ -118,39 +118,4 @@ abstract class ApiController
 
         return $this->getTemplateEngine()->render($view, $params);
     }
-
-    /**
-     * Configures CORS in controller if is enabled by annotation
-     *
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \ReflectionException
-     */
-    private function configureCorsIfEnabled(): void
-    {
-        $reflection = new \ReflectionClass($this);
-        $reader = new AnnotationReader();
-
-        $annotation = $reader->getClassAnnotation($reflection, CORS::class);
-
-        if (empty($annotation)) {
-            return;
-        }
-
-        $corsConfig = [
-            'Access-Control-Allow-Origin'
-            => $annotation->origins ?? '*',
-            'Access-Control-Allow-Methods'
-            => $annotation->methods ?? 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers'
-            => $annotation->headers ?? '*',
-            'Access-Control-Allow-Credentials'
-            => $annotation->credentials ?? true,
-            'Access-Control-Allow-Max-Age'
-            => $annotation->maxAge ?? 3600
-        ];
-  
-        foreach ($corsConfig as $key => $value) {
-            $this->getResponse()->headers->set($key, $value);
-        }
-    }
 }

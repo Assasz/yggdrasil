@@ -63,7 +63,7 @@ abstract class RouterDriver
     /**
      * Returns query map [Controller:action => query]
      *
-     * @param array $protected Controllers to exclude form query map
+     * @param array $protected Controllers to exclude from query map
      * @return array
      * @throws \Exception
      */
