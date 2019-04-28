@@ -231,7 +231,7 @@ final class Router
         if (!empty($this->routeParams[0])) {
             $controllerName = implode('', array_map('ucfirst', explode('-', $this->routeParams[0])));
 
-            return $this->configuration->getControllerNamespace() . $controllerName;
+            return $this->configuration->getControllerNamespace() . $controllerName . 'Controller';
         }
 
         return $this->configuration->getControllerNamespace() . $this->configuration->getDefaultController() . 'Controller';
