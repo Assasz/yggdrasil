@@ -1,11 +1,11 @@
 <?php
 
-namespace Yggdrasil\Utils;
+namespace Yggdrasil\Utils\Logger;
 
 /**
  * Class ErrorLogger
  *
- * @package Yggdrasil\Utils
+ * @package Yggdrasil\Utils\Logger
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
 final class ErrorLogger

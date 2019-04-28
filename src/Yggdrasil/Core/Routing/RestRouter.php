@@ -5,15 +5,15 @@ namespace Yggdrasil\Core\Routing;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class SimpleApiRouter
+ * Class RestRouter
  *
- * Finds route for requested action if simple API routing is enabled
+ * Finds route for requested action if REST routing is enabled
  * If route cannot be resolved, responsibility is delegated back to Router
  *
  * @package Yggdrasil\Core\Routing
  * @author Paweł Antosiak <contact@pawelantosiak.com>
  */
-final class SimpleApiRouter
+final class RestRouter
 {
     /**
      * Routing configuration
@@ -32,7 +32,7 @@ final class SimpleApiRouter
     /**
      * Instance of router
      *
-     * @var SimpleApiRouter
+     * @var RestRouter
      */
     private static $instance;
 
@@ -51,7 +51,7 @@ final class SimpleApiRouter
     private const NO_IDENTIFIER_PATTERN = '#^(?P<controller>[a-z]+)$#';
 
     /**
-     * SimpleApiRouter constructor.
+     * RestRouter constructor.
      *
      * @param RoutingConfiguration $configuration
      * @param Request $request
@@ -72,23 +72,23 @@ final class SimpleApiRouter
      *
      * @param RoutingConfiguration $configuration
      * @param Request $request
-     * @return SimpleApiRouter
+     * @return RestRouter
      */
-    public static function getInstance(RoutingConfiguration $configuration, Request $request): SimpleApiRouter
+    public static function getInstance(RoutingConfiguration $configuration, Request $request): RestRouter
     {
         if (null === self::$instance) {
-            self::$instance = new SimpleApiRouter($configuration, $request);
+            self::$instance = new RestRouter($configuration, $request);
         }
 
         return self::$instance;
     }
 
     /**
-     * Detects route for requested action
+     * Resolves route for requested action
      *
      * @return Route? If route cannot be resolved, NULL is returned
      */
-    public function detectRoute(): ?Route
+    public function resolveRoute(): ?Route
     {
         $query = strtolower(rtrim($this->request->query->get('route'), '/'));
 
@@ -109,7 +109,7 @@ final class SimpleApiRouter
     }
 
     /**
-     * Returns route for 'with_identifier' query pattern
+     * Returns route for WITH_IDENTIFIER query pattern
      *
      * @param array $matches Result of regular expression match
      * @return Route?
@@ -135,7 +135,7 @@ final class SimpleApiRouter
     }
 
     /**
-     * Returns route for 'no_identifier' query pattern
+     * Returns route for NO_IDENTIFIER query pattern
      *
      * @param array $matches Result of regular expression match
      * @return Route?

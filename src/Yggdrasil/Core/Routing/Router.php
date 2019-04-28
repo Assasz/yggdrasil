@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Class Router
  *
  * Finds route for requested action
- * Note that router doesn't care if provided route points to existing action - it's kernel responsibility
+ * Note that router doesn't care if provided route points to existing action - it's kernel responsibility to do so
  *
  * @package Yggdrasil\Core\Routing
  * @author Paweł Antosiak <contact@pawelantosiak.com>
@@ -63,11 +63,11 @@ final class Router
      */
     public function getRoute(Request $request): Route
     {
-        if ($this->configuration->isSimpleApiRouting()) {
-            $simpleRoute = SimpleApiRouter::getInstance($this->configuration, $request)->detectRoute();
+        if ($this->configuration->isRestRouting()) {
+            $route = RestRouter::getInstance($this->configuration, $request)->resolveRoute();
 
-            if ($simpleRoute instanceof Route) {
-                return $simpleRoute;
+            if ($route instanceof Route) {
+                return $route;
             }
         }
 
@@ -131,7 +131,7 @@ final class Router
             }
         }
 
-        if ($this->configuration->isSimpleApiRouting() && in_array($queryParams[1] ?? '', ['all', 'single', 'create', 'edit', 'destroy'])) {
+        if ($this->configuration->isRestRouting() && in_array($queryParams[1] ?? '', ['all', 'single', 'create', 'edit', 'destroy'])) {
             unset($queryParams[1]);
         }
 

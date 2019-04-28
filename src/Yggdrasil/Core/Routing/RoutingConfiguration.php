@@ -55,11 +55,11 @@ final class RoutingConfiguration
     private $passiveActions;
 
     /**
-     * Indicates if simple API routing is enabled
+     * Indicates if REST routing is enabled or not
      *
      * @var bool
      */
-    private $isSimpleApiRouting;
+    private $isRestRouting;
 
     /**
      * Returns base URL
@@ -200,23 +200,23 @@ final class RoutingConfiguration
     }
 
     /**
-     * Return true if simple API routing is enabled, false otherwise
+     * Return true if REST routing is enabled, false otherwise
      *
      * @return bool
      */
-    public function isSimpleApiRouting()
+    public function isRestRouting()
     {
-        return $this->isSimpleApiRouting ?? false;
+        return $this->isRestRouting ?? false;
     }
 
     /**
-     * Enables simple API routing
+     * Enables REST routing
      *
      * @return RoutingConfiguration
      */
-    public function setSimpleApiRouting(): RoutingConfiguration
+    public function enableRestRouting(): RoutingConfiguration
     {
-        $this->isSimpleApiRouting = true;
+        $this->isRestRouting = true;
 
         return $this;
     }
