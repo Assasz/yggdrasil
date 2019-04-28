@@ -41,14 +41,14 @@ final class RestRouter
      *
      * @var string
      */
-    private const WITH_IDENTIFIER_PATTERN = '#^(?P<controller>[a-z]+)/(?P<id>[0-9]+)$#';
+    private const WITH_IDENTIFIER_PATTERN = '#^(?P<controller>[a-z-]+)/(?P<id>[0-9]+)$#';
 
     /**
      * Pattern /{controller}
      *
      * @var string
      */
-    private const NO_IDENTIFIER_PATTERN = '#^(?P<controller>[a-z]+)$#';
+    private const NO_IDENTIFIER_PATTERN = '#^(?P<controller>[a-z-]+)$#';
 
     /**
      * RestRouter constructor.
