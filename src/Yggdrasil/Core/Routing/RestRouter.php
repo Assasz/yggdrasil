@@ -126,7 +126,8 @@ final class RestRouter
             return null;
         }
 
-        $controller = $this->configuration->getControllerNamespace() . ucfirst($matches['controller']) . 'Controller';
+        $controllerName = implode('', array_map('ucfirst', explode('-', $matches['controller'])));
+        $controller = $this->configuration->getControllerNamespace() . $controllerName . 'Controller';
 
         return (new Route())
             ->setController($controller)
@@ -151,7 +152,8 @@ final class RestRouter
             return null;
         }
 
-        $controller = $this->configuration->getControllerNamespace() . ucfirst($matches['controller']) . 'Controller';
+        $controllerName = implode('', array_map('ucfirst', explode('-', $matches['controller'])));
+        $controller = $this->configuration->getControllerNamespace() . $controllerName . 'Controller';
 
         return (new Route())
             ->setController($controller)

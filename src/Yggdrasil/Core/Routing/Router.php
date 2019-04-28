@@ -228,11 +228,13 @@ final class Router
      */
     private function resolveController(): string
     {
-        $controller = (!empty($this->routeParams[0])) ?
-            $this->configuration->getControllerNamespace() . ucfirst($this->routeParams[0]) :
-            $this->configuration->getControllerNamespace() . $this->configuration->getDefaultController();
+        if (!empty($this->routeParams[0])) {
+            $controllerName = implode('', array_map('ucfirst', explode('-', $this->routeParams[0])));
 
-        return $controller . 'Controller';
+            return $this->configuration->getControllerNamespace() . $controllerName;
+        }
+
+        return $this->configuration->getControllerNamespace() . $this->configuration->getDefaultController() . 'Controller';
     }
 
     /**
@@ -242,11 +244,13 @@ final class Router
      */
     private function resolveAction(): string
     {
-        $action = (!empty($this->routeParams[1])) ?
-            $this->routeParams[1] :
-            $this->configuration->getDefaultAction();
+        if (!empty($this->routeParams[1])) {
+            $actionName = lcfirst(implode('', array_map('ucfirst', explode('-', $this->routeParams[1]))));
 
-        return $action . 'Action';
+            return $actionName . 'Action';
+        }
+
+        return $this->configuration->getDefaultAction() . 'Action';
     }
 
     /**
