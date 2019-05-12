@@ -132,7 +132,12 @@ trait HttpManagerTrait
         $serializedData = [];
 
         foreach ($data as $key => $item) {
+            if (empty($item)) {
+                continue;
+            }
+
             if (is_array($item) && is_object($item[0])) {
+
                 $serializedData[$key] = EntityNormalizer::normalize($item);
 
                 unset($data[$key]);
