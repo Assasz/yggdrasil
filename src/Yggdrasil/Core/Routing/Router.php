@@ -72,6 +72,11 @@ final class Router
         }
 
         $query = $request->query->get('route');
+
+        if ($this->configuration->isRestRouting()) {
+            $query = preg_replace('(/all|/single|/create|/edit|/destroy)', '', $query);
+        }
+
         $this->routeParams = explode('/', trim($query, '/'));
 
         $route = (new Route())
