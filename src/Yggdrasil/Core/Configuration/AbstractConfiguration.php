@@ -89,11 +89,11 @@ abstract class AbstractConfiguration
      *
      * @param string $key     Configuration key
      * @param string $section Name of configuration file section
-     * @return string
+     * @return string?
      */
-    public function get(string $key, string $section): string
+    public function get(string $key, string $section): ?string
     {
-        return $this->configuration[$section][$key];
+        return ($this->isConfigured([$key], $section)) ? $this->configuration[$section][$key] : null;
     }
 
     /**
