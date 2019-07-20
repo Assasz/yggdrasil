@@ -64,7 +64,7 @@ abstract class AbstractConfiguration
      * @return DriverInterface
      * @throws DriverNotFoundException if given driver doesn't exist
      */
-    public function loadDriver(string $key): DriverInterface
+    public function installDriver(string $key): DriverInterface
     {
         if (!$this->hasDriver($key)) {
             throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that ' . $key . ' driver is properly configured.');
@@ -85,13 +85,15 @@ abstract class AbstractConfiguration
     }
 
     /**
-     * Returns configuration
+     * Returns configuration by key
      *
-     * @return array
+     * @param string $key     Configuration key
+     * @param string $section Name of configuration file section
+     * @return string
      */
-    public function getConfiguration(): array
+    public function get(string $key, string $section): string
     {
-        return $this->configuration;
+        return $this->configuration[$section][$key];
     }
 
     /**

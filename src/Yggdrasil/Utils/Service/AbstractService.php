@@ -29,13 +29,13 @@ abstract class AbstractService
      *
      * Loads drivers from configuration
      *
-     * @param ConfigurationInterface $appConfiguration Configuration passed by ContainerDriver
+     * @param ConfigurationInterface $configuration Configuration passed by ContainerDriver
      * @throws \ReflectionException
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    public function __construct(ConfigurationInterface $appConfiguration)
+    public function __construct(ConfigurationInterface $configuration)
     {
-        $this->drivers = $appConfiguration->loadDrivers();
+        $this->drivers = $configuration->loadDrivers();
 
         $this->registerContracts();
     }

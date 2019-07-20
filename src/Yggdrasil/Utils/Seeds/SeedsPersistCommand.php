@@ -26,16 +26,16 @@ class SeedsPersistCommand extends Command
      *
      * @var ConfigurationInterface
      */
-    private $appConfiguration;
+    private $configuration;
 
     /**
      * EntityGenerateCommand constructor.
      *
-     * @param ConfigurationInterface $appConfiguration
+     * @param ConfigurationInterface $configuration
      */
-    public function __construct(ConfigurationInterface $appConfiguration)
+    public function __construct(ConfigurationInterface $configuration)
     {
-        $this->appConfiguration = $appConfiguration;
+        $this->configuration = $configuration;
 
         parent::__construct();
     }
@@ -63,18 +63,17 @@ class SeedsPersistCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        if (!$this->appConfiguration->hasDriver('entityManager')) {
+        if (!$this->configuration->hasDriver('entityManager')) {
             throw new DriverNotFoundException('To persist seeds entity manager driver is required.');
         }
 
-        $configuration = $this->appConfiguration->getConfiguration();
-        $seedsName = $configuration['framework']['root_namespace'] . 'Infrastructure\Seeds\\' . $input->getArgument('name') . 'Seeds';
+        $seedsName = $this->configuration->get('root_namespace', 'framework') . 'Infrastructure\Seeds\\' . $input->getArgument('name') . 'Seeds';
 
         if (!class_exists($seedsName)) {
             throw new SeedsNotFoundException($seedsName . ' class doesn\'t exist.');
         }
 
-        $seeds = new $seedsName($this->appConfiguration->loadDriver('entityManager'));
+        $seeds = new $seedsName($this->configuration->installDriver('entityManager'));
 
         if (!$seeds instanceof AbstractSeeds) {
             throw new InvalidSeedsException($seedsName . ' class is not a valid seeds class');

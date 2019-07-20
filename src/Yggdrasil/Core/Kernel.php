@@ -28,7 +28,7 @@ final class Kernel
     /**
      * Application configuration
      *
-     * @var array
+     * @var ConfigurationInterface
      */
     private $configuration;
 
@@ -37,12 +37,12 @@ final class Kernel
      *
      * Initializes application
      *
-     * @param ConfigurationInterface $appConfiguration
+     * @param ConfigurationInterface $configuration
      */
-    public function __construct(ConfigurationInterface $appConfiguration)
+    public function __construct(ConfigurationInterface $configuration)
     {
-        $this->drivers = $appConfiguration->loadDrivers();
-        $this->configuration = $appConfiguration->getConfiguration();
+        $this->configuration = $configuration;
+        $this->drivers = $this->configuration->loadDrivers();
 
         if ($this->drivers->has('errorHandler')) {
             $this->drivers->get('errorHandler');
@@ -119,7 +119,7 @@ final class Kernel
         $route = $this->getRouter()->getRoute($request);
 
         if (!method_exists($route->getController(), $route->getAction())) {
-            if ('prod' === $this->configuration['framework']['env']) {
+            if ('prod' === $this->configuration->get('env', 'framework')) {
                 return $response
                     ->setContent($this->getRouter()->getConfiguration()->getNotFoundMsg() ?? 'Not found.')
                     ->setStatusCode(Response::HTTP_NOT_FOUND);
@@ -131,7 +131,7 @@ final class Kernel
         $errorController = $this->getRouter()->getConfiguration()->getControllerNamespace() . 'ErrorController';
 
         if (1 === preg_match('(Partial|Passive)', $route->getAction()) || $errorController === $route->getController()) {
-            if ('prod' === $this->configuration['framework']['env']) {
+            if ('prod' === $this->configuration->get('env', 'framework')) {
                 return $response
                     ->setContent('Forbidden.')
                     ->setStatusCode(Response::HTTP_FORBIDDEN);

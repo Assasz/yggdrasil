@@ -24,16 +24,16 @@ class EntityGenerateCommand extends Command
      *
      * @var ConfigurationInterface
      */
-    private $appConfiguration;
+    private $configuration;
 
     /**
      * EntityGenerateCommand constructor.
      *
-     * @param ConfigurationInterface $appConfiguration
+     * @param ConfigurationInterface $configuration
      */
-    public function __construct(ConfigurationInterface $appConfiguration)
+    public function __construct(ConfigurationInterface $configuration)
     {
-        $this->appConfiguration = $appConfiguration;
+        $this->configuration = $configuration;
 
         parent::__construct();
     }
@@ -74,9 +74,7 @@ class EntityGenerateCommand extends Command
         } while ($helper->ask($input, $output, $questionSet['continue']));
 
         $properties = array_combine($propertyNames, $propertyTypes);
-
-        $configuration   = $this->appConfiguration->getConfiguration();
-        $entityNamespace = $configuration['framework']['root_namespace'] . 'Domain\Entity';
+        $entityNamespace = $this->configuration->get('root_namespace', 'framework') . 'Domain\Entity';
 
         $entityData = [
             'namespace'  => $entityNamespace,

@@ -28,17 +28,17 @@ final class DriverCollection implements \Iterator, \Countable
      *
      * @var ConfigurationInterface
      */
-    private $appConfiguration;
+    private $configuration;
 
     /**
      * DriverCollection constructor.
      *
-     * @param ConfigurationInterface $appConfiguration
+     * @param ConfigurationInterface $configuration
      */
-    public function __construct(ConfigurationInterface $appConfiguration)
+    public function __construct(ConfigurationInterface $configuration)
     {
         $this->drivers = [];
-        $this->appConfiguration = $appConfiguration;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -81,7 +81,7 @@ final class DriverCollection implements \Iterator, \Countable
             throw new DriverNotFoundException('Driver you are looking for doesn\'t exist. Make sure that ' . $key . ' driver is properly configured.');
         }
 
-        return $this->drivers[$key]::install($this->appConfiguration);
+        return $this->drivers[$key]::install($this->configuration);
     }
 
     /**

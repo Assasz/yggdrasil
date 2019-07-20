@@ -24,13 +24,13 @@ interface ConfigurationInterface
     public function loadDrivers(): DriverCollection;
 
     /**
-     * Returns instance of given driver
+     * Returns configured instance of given driver
      *
      * @param string $key Name of driver
      * @return DriverInterface
      * @throws DriverNotFoundException if given driver doesn't exist
      */
-    public function loadDriver(string $key): DriverInterface;
+    public function installDriver(string $key): DriverInterface;
 
     /**
      * Checks if given driver exist in registry
@@ -41,11 +41,13 @@ interface ConfigurationInterface
     public function hasDriver(string $key): bool;
 
     /**
-     * Returns configuration
+     * Returns configuration by key
      *
-     * @return array
+     * @param string $key     Configuration key
+     * @param string $section Name of configuration file section
+     * @return string
      */
-    public function getConfiguration(): array;
+    public function get(string $key, string $section): string;
 
     /**
      * Checks if given data exist in configuration

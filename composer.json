@@ -20,6 +20,7 @@
     "haydenpierce/class-finder": "^0.0.2",
     "airmanbzh/php-html-generator": "^1.0",
     "symfony/console": "^4.2",
-    "symfony/yaml": "^4.2"
+    "symfony/yaml": "^4.2",
+    "doctrine/annotations": "^1.6"
   }
 }
