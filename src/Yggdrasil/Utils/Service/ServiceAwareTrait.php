@@ -35,9 +35,11 @@ trait ServiceAwareTrait
             return;
         }
 
-        foreach ($annotation->install as $module => $service) {
+        foreach ($annotation->install as $service) {
             $serviceReflection = new \ReflectionClass($service);
-            $this->{lcfirst($module) . $serviceReflection->getShortName()} = new $service($configuration);
+            $prefix = lcfirst(str_replace('Module', '', explode('\\', $serviceReflection->getNamespaceName())[3]));
+
+            $this->{$prefix . $serviceReflection->getShortName()} = new $service($configuration);
         }
     }
 }
