@@ -45,9 +45,9 @@ interface ConfigurationInterface
      *
      * @param string $key     Configuration key
      * @param string $section Name of configuration file section
-     * @return string
+     * @return string?
      */
-    public function get(string $key, string $section): string;
+    public function get(string $key, string $section): ?string;
 
     /**
      * Checks if given data exist in configuration
