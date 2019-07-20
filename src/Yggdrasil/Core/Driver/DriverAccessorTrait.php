@@ -90,7 +90,7 @@ trait DriverAccessorTrait
 
         $annotation = $reader->getClassAnnotation($reflection, Drivers::class);
 
-        if (empty($annotation)) {
+        if (!$annotation instanceof Drivers) {
             return;
         }
 

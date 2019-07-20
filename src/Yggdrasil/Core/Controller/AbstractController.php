@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\DriverCollection;
+use Yggdrasil\Utils\Service\ServiceAwareTrait;
 
 /**
  * Class AbstractController
@@ -36,6 +37,11 @@ abstract class AbstractController
     use DriverAccessorTrait;
 
     /**
+     * Enables services installation
+     */
+    use ServiceAwareTrait;
+
+    /**
      * AbstractController constructor.
      *
      * @param DriverCollection $drivers Drivers passed by Kernel
@@ -51,6 +57,7 @@ abstract class AbstractController
         $this->response = $response;
 
         $this->installDriversIfEnabled();
+        $this->installServicesIfEnabled($this->drivers->getConfiguration());
     }
 
     /**

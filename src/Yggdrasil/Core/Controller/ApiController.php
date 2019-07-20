@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Yggdrasil\Utils\Annotation\CORS;
 use Yggdrasil\Core\Driver\DriverAccessorTrait;
 use Yggdrasil\Core\Driver\DriverCollection;
+use Yggdrasil\Utils\Service\ServiceAwareTrait;
 
 /**
  * Class ApiController
@@ -35,6 +36,11 @@ abstract class ApiController
     use DriverAccessorTrait;
 
     /**
+     * Enables services installation
+     */
+    use ServiceAwareTrait;
+
+    /**
      * ApiController constructor.
      *
      * @param DriverCollection $drivers
@@ -50,6 +56,7 @@ abstract class ApiController
         $this->response = $response;
 
         $this->installDriversIfEnabled();
+        $this->installServicesIfEnabled($this->drivers->getConfiguration());
         $this->configureCorsIfEnabled();
     }
 

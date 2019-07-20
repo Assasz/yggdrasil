@@ -166,4 +166,14 @@ final class DriverCollection implements \Iterator, \Countable
     {
         return key($this->drivers) !== null;
     }
+
+    /**
+     * Returns application configuration
+     *
+     * @return ConfigurationInterface
+     */
+    public function getConfiguration(): ConfigurationInterface
+    {
+        return $this->configuration;
+    }
 }
