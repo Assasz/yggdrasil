@@ -178,7 +178,7 @@ trait HttpManagerTrait
 
         $annotation = $reader->getClassAnnotation($reflection, CORS::class);
 
-        if (empty($annotation)) {
+        if (!$annotation instanceof CORS) {
             return;
         }
 

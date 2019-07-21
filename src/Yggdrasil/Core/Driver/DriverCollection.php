@@ -54,14 +54,14 @@ final class DriverCollection implements \Iterator, \Countable
     /**
      * Adds driver to collection
      *
-     * @param string $key Name of driver
-     * @param string $driver
+     * @param string $key    Name of driver
+     * @param string $driver Driver class name
      * @throws NotDriverProvidedException if given object is of another instance than DriverInterface
      */
     public function add(string $key, string $driver): void
     {
         if (!in_array(DriverInterface::class, class_implements($driver))) {
-            throw new NotDriverProvidedException($key . ' is not a driver.');
+            throw new NotDriverProvidedException('Provided ' . $key . ' is not a valid driver.');
         }
 
         $this->drivers[$key] = $driver;
